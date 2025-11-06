@@ -9,7 +9,6 @@ const firebaseConfig = {
   authDomain: "studio-7345835072-fa19b.firebaseapp.com",
   measurementId: "",
   messagingSenderId: "137171377701",
-  storageBucket: "studio-7345835072-fa19b.appspot.com",
 };
 
 // Initialize Firebase
