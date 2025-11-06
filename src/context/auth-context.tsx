@@ -7,6 +7,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useFirebase } from '@/context/firebase-provider';
 import type { UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Loader2 } from 'lucide-react';
 
 interface AuthContextType {
   user: FirebaseUser | null;
@@ -27,16 +28,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!auth || !db) return;
+    if (firebaseLoading || !auth || !db) return;
 
+    setLoading(true);
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
-        const userDocRef = doc(db, 'users', firebaseUser.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          setUserProfile(userDoc.data() as UserProfile);
-        } else {
+        try {
+          const userDocRef = doc(db, 'users', firebaseUser.uid);
+          const userDoc = await getDoc(userDocRef);
+          if (userDoc.exists()) {
+            setUserProfile(userDoc.data() as UserProfile);
+          } else {
+            setUserProfile(null);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
           setUserProfile(null);
         }
       } else {
@@ -47,24 +54,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, [auth, db]);
+  }, [auth, db, firebaseLoading]);
 
-  const authAndFirebaseLoading = loading || firebaseLoading;
+  const combinedLoading = firebaseLoading || loading;
 
-  if (authAndFirebaseLoading) {
+  if (combinedLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
-        <div className="w-1/2 space-y-4">
-            <Skeleton className="h-12 w-full" />
-            <Skeleton className="h-32 w-full" />
-            <Skeleton className="h-8 w-1/4" />
-        </div>
+        <Loader2 className="h-12 w-12 animate-spin text-accent" />
       </div>
     )
   }
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading: authAndFirebaseLoading }}>
+    <AuthContext.Provider value={{ user, userProfile, loading: combinedLoading }}>
       {children}
     </AuthContext.Provider>
   );
