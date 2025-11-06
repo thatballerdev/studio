@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
@@ -159,8 +158,7 @@ export default function OnboardingPage() {
                       <FormItem>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-2">
                           {countries.map((country) => (
-                            <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field })_ => {
-                              return (
+                            <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field }) => (
                                 <FormItem key={country.code} className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary">
                                     <FormControl>
                                         <Checkbox
@@ -179,7 +177,7 @@ export default function OnboardingPage() {
                                     <FormLabel className="font-normal">{country.name}</FormLabel>
                                 </FormItem>
                               )
-                            }} />
+                            } />
                           ))}
                         </div>
                         <FormMessage className="pt-2" />
