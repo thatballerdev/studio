@@ -6,7 +6,7 @@ export const universityData: University[] = [
     name: 'Charles University',
     country: 'Prague, Czech Republic',
     countryCode: 'CZ',
-    annualCost: 8000,
+    annualCost: 6000,
     highlights: ['Top Engineering Program', 'Research Focused', 'Vibrant Student Life'],
     imageId: 'university-1',
     motto: "Excellence in Research and Teaching",

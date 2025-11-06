@@ -39,8 +39,14 @@ export default function UniversityCard({ university }: UniversityCardProps) {
       <CardContent className="p-4 space-y-3">
         <p className="italic text-muted-foreground">"{university.motto}"</p>
         <div className="flex items-center text-lg font-semibold text-accent">
-          <DollarSign className="h-5 w-5 mr-2" />
-          <span>{university.annualCost.toLocaleString()} / year (est.)</span>
+          {university.id === '1' ? (
+            <span>€2,000 - €6,000 / year (est.)</span>
+          ) : (
+            <>
+              <DollarSign className="h-5 w-5 mr-2" />
+              <span>{university.annualCost.toLocaleString()} / year (est.)</span>
+            </>
+          )}
         </div>
         <div>
           <h4 className="font-semibold mb-2 flex items-center">
