@@ -9,6 +9,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { Check, Loader2 } from 'lucide-react';
 
 import { useAuth } from '@/context/auth-context';
+import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -16,7 +17,6 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
 import { countries } from '@/lib/countries-data';
 
 const profileSchema = z.object({
@@ -32,6 +32,7 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 export default function ProfilePage() {
   const router = useRouter();
   const { user, userProfile, loading } = useAuth();
+  const { db } = useFirebase();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,7 +48,7 @@ export default function ProfilePage() {
   });
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
-    if (!user) {
+    if (!user || !db) {
       toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
       return;
     }

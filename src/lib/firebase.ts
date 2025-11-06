@@ -1,6 +1,6 @@
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore, enableIndexedDbPersistence } from "firebase/firestore";
+import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
+import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, enableIndexedDbPersistence, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   projectId: "studio-7345835072-fa19b",
@@ -11,27 +11,35 @@ const firebaseConfig = {
   messagingSenderId: "137171377701",
 };
 
-// Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Enable offline persistence
-if (typeof window !== 'undefined') {
-  enableIndexedDbPersistence(db)
-    .catch((err) => {
-      if (err.code == 'failed-precondition') {
-        // Multiple tabs open, persistence can only be enabled
-        // in one tab at a time.
-        console.warn('Firestore persistence failed: multiple tabs open.');
-      } else if (err.code == 'unimplemented') {
-        // The current browser does not support all of the
-        // features required to enable persistence.
-        console.warn('Firestore persistence not available in this browser.');
-      }
-    });
+interface FirebaseInstances {
+    app: FirebaseApp;
+    auth: Auth;
+    db: Firestore;
 }
 
+let firebaseInstances: FirebaseInstances | null = null;
 
-export { app, auth, db };
+export const initializeFirebase = async (): Promise<FirebaseInstances> => {
+    if (firebaseInstances) {
+        return firebaseInstances;
+    }
+
+    const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    if (typeof window !== 'undefined') {
+        try {
+            await enableIndexedDbPersistence(db);
+        } catch (err: any) {
+            if (err.code == 'failed-precondition') {
+                console.warn('Firestore persistence failed: multiple tabs open.');
+            } else if (err.code == 'unimplemented') {
+                console.warn('Firestore persistence not available in this browser.');
+            }
+        }
+    }
+    
+    firebaseInstances = { app, auth, db };
+    return firebaseInstances;
+};

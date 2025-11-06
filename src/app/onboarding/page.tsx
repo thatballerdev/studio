@@ -9,6 +9,7 @@ import { doc, updateDoc } from 'firebase/firestore';
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react';
 
 import { useAuth } from '@/context/auth-context';
+import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -16,7 +17,6 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { db } from '@/lib/firebase';
 import AuthCheck from '@/components/auth-check';
 import { countries } from '@/lib/countries-data';
 import Logo from '@/components/logo';
@@ -51,6 +51,7 @@ const steps = [
 export default function OnboardingPage() {
   const router = useRouter();
   const { user, userProfile } = useAuth();
+  const { db } = useFirebase();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -76,7 +77,7 @@ export default function OnboardingPage() {
   };
   
   const handleSubmit = async () => {
-    if (!user) {
+    if (!user || !db) {
       toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
       return;
     }

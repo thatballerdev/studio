@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { LayoutGrid, LogOut, User, Menu } from 'lucide-react';
 
-import { auth } from '@/lib/firebase';
+import { useFirebase } from '@/context/firebase-provider';
 import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import {
@@ -22,9 +22,11 @@ import Logo from '@/components/logo';
 
 export default function Header() {
   const { user, userProfile } = useAuth();
+  const { auth } = useFirebase();
   const router = useRouter();
 
   const handleLogout = async () => {
+    if (!auth) return;
     await signOut(auth);
     router.push('/');
   };

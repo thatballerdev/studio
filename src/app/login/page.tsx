@@ -15,7 +15,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { auth, db } from '@/lib/firebase';
+import { useFirebase } from '@/context/firebase-provider';
 import Logo from '@/components/logo';
 import type { UserProfile } from '@/lib/types';
 import { useAuth } from '@/context/auth-context';
@@ -32,12 +32,13 @@ export default function LoginPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const { user, loading } = useAuth();
+  const { auth, db } = useFirebase();
 
   useEffect(() => {
-    if (user) {
+    if (!loading && user) {
       router.push('/dashboard');
     }
-  }, [user, router]);
+  }, [user, loading, router]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -45,6 +46,7 @@ export default function LoginPage() {
   });
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    if (!auth || !db) return;
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);

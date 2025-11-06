@@ -4,7 +4,7 @@ import { createContext, useState, useEffect, ReactNode, useContext } from 'react
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 
-import { auth, db } from '@/lib/firebase';
+import { useFirebase } from '@/context/firebase-provider';
 import type { UserProfile } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -21,11 +21,14 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const { auth, db, loading: firebaseLoading } = useFirebase();
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth || !db) return;
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
@@ -34,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (userDoc.exists()) {
           setUserProfile(userDoc.data() as UserProfile);
         } else {
-          // Profile not created yet (e.g., during sign-up)
           setUserProfile(null);
         }
       } else {
@@ -45,9 +47,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [auth, db]);
 
-  if (loading) {
+  const authAndFirebaseLoading = loading || firebaseLoading;
+
+  if (authAndFirebaseLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <div className="w-1/2 space-y-4">
@@ -60,7 +64,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, userProfile, loading }}>
+    <AuthContext.Provider value={{ user, userProfile, loading: authAndFirebaseLoading }}>
       {children}
     </AuthContext.Provider>
   );
