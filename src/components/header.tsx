@@ -6,7 +6,6 @@ import { signOut } from 'firebase/auth';
 import { LayoutGrid, LogOut, User, Menu } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
-import { useAuth } from '@/context/auth-context';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -21,8 +20,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
 
 export default function Header() {
-  const { user, userProfile } = useAuth();
-  const { auth } = useFirebase();
+  const { user, userProfile, auth } = useFirebase();
   const router = useRouter();
 
   const handleLogout = async () => {

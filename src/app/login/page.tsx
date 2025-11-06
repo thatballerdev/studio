@@ -18,7 +18,6 @@ import { useToast } from '@/hooks/use-toast';
 import { useFirebase } from '@/context/firebase-provider';
 import Logo from '@/components/logo';
 import type { UserProfile } from '@/lib/types';
-import { useAuth } from '@/context/auth-context';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email.' }),
@@ -31,8 +30,7 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { user, loading } = useAuth();
-  const { auth, db } = useFirebase();
+  const { user, loading, auth, db } = useFirebase();
 
   useEffect(() => {
     if (!loading && user) {

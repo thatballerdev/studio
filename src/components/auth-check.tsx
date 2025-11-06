@@ -2,11 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useAuth } from '@/context/auth-context';
+import { useFirebase } from '@/context/firebase-provider';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthCheck({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useAuth();
+  const { user, loading } = useFirebase();
   const router = useRouter();
 
   useEffect(() => {

@@ -17,7 +17,6 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useFirebase } from '@/context/firebase-provider';
 import Logo from '@/components/logo';
-import { useAuth } from '@/context/auth-context';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -31,8 +30,7 @@ export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { user, loading } = useAuth();
-  const { auth, db } = useFirebase();
+  const { user, loading, auth, db } = useFirebase();
 
   useEffect(() => {
     if (!loading && user) {

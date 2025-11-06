@@ -8,7 +8,6 @@ import * as z from 'zod';
 import { doc, updateDoc } from 'firebase/firestore';
 import { ArrowLeft, ArrowRight, Check, Loader2 } from 'lucide-react';
 
-import { useAuth } from '@/context/auth-context';
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -50,8 +49,7 @@ const steps = [
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user, userProfile } = useAuth();
-  const { db } = useFirebase();
+  const { user, userProfile, db } = useFirebase();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);

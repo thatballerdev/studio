@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from '@/context/auth-context';
+import { useFirebase } from '@/context/firebase-provider';
 import { universityData } from '@/lib/university-data';
 import UniversityCard from '@/components/university-card';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -9,7 +9,7 @@ import { Loader2, Telescope } from 'lucide-react';
 import Link from 'next/link';
 
 export default function DashboardPage() {
-  const { userProfile, loading } = useAuth();
+  const { userProfile, loading } = useFirebase();
 
   if (loading) {
     return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;

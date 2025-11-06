@@ -8,7 +8,6 @@ import * as z from 'zod';
 import { doc, updateDoc } from 'firebase/firestore';
 import { Check, Loader2 } from 'lucide-react';
 
-import { useAuth } from '@/context/auth-context';
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,8 +30,7 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, userProfile, loading } = useAuth();
-  const { db } = useFirebase();
+  const { user, userProfile, loading, db } = useFirebase();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
