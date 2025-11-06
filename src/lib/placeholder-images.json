@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "Students studying in a library",
+      "imageUrl": "https://images.unsplash.com/photo-1637068302763-a8284115e920?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGxpYnJhcnl8ZW58MHx8fHwxNzYyNDE2NTI2fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "students library"
+    },
+    {
+      "id": "university-1",
+      "description": "A modern university campus building",
+      "imageUrl": "https://images.unsplash.com/photo-1559135197-8a45ea74d367?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dW5pdmVyc2l0eSUyMGNhbXB1c3xlbnwwfHx8fDE3NjIzODM3NDV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university campus"
+    },
+    {
+      "id": "university-2",
+      "description": "A classic university building with columns",
+      "imageUrl": "https://images.unsplash.com/photo-1574958269340-fa927503f3dd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx1bml2ZXJzaXR5JTIwYnVpbGRpbmd8ZW58MHx8fHwxNzYyNDAyNDA5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university building"
+    },
+    {
+      "id": "university-3",
+      "description": "Students walking on campus",
+      "imageUrl": "https://images.unsplash.com/photo-1693010909469-aace53ce1cc2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxzdHVkZW50cyUyMGNhbXB1c3xlbnwwfHx8fDE3NjI0NTU2NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "students campus"
+    },
+    {
+      "id": "university-4",
+      "description": "An aerial view of a university campus",
+      "imageUrl": "https://images.unsplash.com/photo-1601840698412-cbecc8039e6b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx1bml2ZXJzaXR5JTIwYWVyaWFsfGVufDB8fHx8MTc2MjQ2MjcwM3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university aerial"
+    }
+  ]
 }
