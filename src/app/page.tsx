@@ -89,6 +89,8 @@ export default function Home() {
                         <p className="text-muted-foreground">{uni.country}</p>
                         {uni.id === '1' ? (
                           <p className="font-semibold text-primary mt-4">€2,000 to €6,000 per year for non-medical fields</p>
+                        ) : uni.id === '2' ? (
+                          <p className="font-semibold text-primary mt-4">€2,000 to €10,000 per year</p>
                         ) : (
                           <p className="font-semibold text-primary mt-4">${uni.annualCost.toLocaleString()} / year</p>
                         )}
