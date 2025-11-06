@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
@@ -31,7 +31,13 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/dashboard');
+    }
+  }, [user, router]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -43,7 +49,6 @@ export default function LoginPage() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       
-      // Check if onboarding is complete
       const userDocRef = doc(db, 'users', userCredential.user.uid);
       const userDoc = await getDoc(userDocRef);
 
@@ -55,8 +60,6 @@ export default function LoginPage() {
           router.push('/onboarding');
         }
       } else {
-        // This case should ideally not happen for a logging-in user
-        // But as a fallback, send to onboarding
         router.push('/onboarding');
       }
 
@@ -71,9 +74,12 @@ export default function LoginPage() {
     }
   };
 
-  if (user) {
-    router.push('/dashboard');
-    return null;
+  if (loading || user) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-12 w-12 animate-spin text-accent" />
+      </div>
+    );
   }
 
   return (
@@ -108,7 +114,7 @@ export default function LoginPage() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>rolling
+                      <FormLabel>Password</FormLabel>
                       <FormControl>
                         <Input type="password" placeholder="••••••••" {...field} />
                       </FormControl>
