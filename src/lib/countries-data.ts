@@ -21,4 +21,5 @@ export const countries = [
   { code: 'IT', name: 'Italy' },
   { code: 'CZ', name: 'Czech Republic' },
   { code: 'PL', name: 'Poland' },
+  { code: 'AT', name: 'Austria' },
 ];

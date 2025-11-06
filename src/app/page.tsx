@@ -92,7 +92,7 @@ export default function Home() {
                         ) : uni.id === '2' ? (
                           <p className="font-semibold text-primary mt-4">€2,000 to €10,000 per year for non-medical fields</p>
                         ) : (
-                          <p className="font-semibold text-primary mt-4">€2,000–€5,000/year for Non Medical Field</p>
+                          <p className="font-semibold text-primary mt-4">€726.72 per semester for non-medical fields</p>
                         )}
                       </CardContent>
                     </Card>

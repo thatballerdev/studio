@@ -43,6 +43,8 @@ export default function UniversityCard({ university }: UniversityCardProps) {
             <span>€2,000 - €6,000 / year (est.)</span>
           ) : university.id === '2' ? (
             <span>€2,000 - €10,000 / year for non-medical fields (est.)</span>
+          ) : university.id === '3' ? (
+            <span>€726.72 per semester for non-medical fields</span>
           ) : (
             <>
               <DollarSign className="h-5 w-5 mr-2" />
