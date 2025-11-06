@@ -60,6 +60,7 @@ export default function LoginPage() {
           router.push('/onboarding');
         }
       } else {
+        // This case should ideally not happen if signup is correct
         router.push('/onboarding');
       }
 
@@ -74,23 +75,23 @@ export default function LoginPage() {
     }
   };
 
-  if (loading || user) {
+  if (loading || (!loading && user)) {
     return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-accent" />
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 animate-in fade-in duration-500">
+    <div className="flex min-h-screen items-center justify-center bg-secondary/50 p-4 animate-in fade-in duration-500">
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl">
+        <Card className="shadow-2xl border-2 border-transparent hover:border-primary/20 transition-all">
           <CardHeader className="text-center">
             <Link href="/" className="flex justify-center items-center gap-2 mb-4">
                 <Logo className="h-10 w-10"/>
             </Link>
-            <CardTitle className="text-2xl font-headline">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl">Welcome Back</CardTitle>
             <CardDescription>Enter your credentials to access your account</CardDescription>
           </CardHeader>
           <CardContent>
@@ -129,7 +130,7 @@ export default function LoginPage() {
             </Form>
             <p className="mt-6 text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="font-semibold text-accent hover:underline">
+              <Link href="/signup" className="font-semibold text-primary hover:underline">
                 Sign up <ArrowRight className="inline h-4 w-4"/>
               </Link>
             </p>

@@ -3,7 +3,6 @@
 import { useFirebase } from '@/context/firebase-provider';
 import { universityData } from '@/lib/university-data';
 import UniversityCard from '@/components/university-card';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Loader2, Telescope } from 'lucide-react';
 import Link from 'next/link';
@@ -12,13 +11,13 @@ export default function DashboardPage() {
   const { userProfile, loading } = useFirebase();
 
   if (loading) {
-    return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
 
   if (!userProfile?.onboardingComplete) {
     return (
-      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm">
-        <div className="flex flex-col items-center gap-2 text-center">
+      <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm bg-card animate-in fade-in duration-500">
+        <div className="flex flex-col items-center gap-2 text-center p-8">
             <Telescope className="h-12 w-12 text-muted-foreground" />
             <h3 className="text-2xl font-bold tracking-tight">Complete your profile</h3>
             <p className="text-sm text-muted-foreground mb-4">Tell us your preferences to discover universities.</p>
@@ -30,14 +29,14 @@ export default function DashboardPage() {
 
   const filteredUniversities = universityData.filter(uni => {
     const budgetMatch = userProfile.budget ? uni.annualCost <= userProfile.budget : true;
-    const countryMatch = userProfile.preferredCountries ? userProfile.preferredCountries.includes(uni.countryCode) : true;
+    const countryMatch = userProfile.preferredCountries ? userProfile.preferredCountries.some(c => uni.countryCode === c) : true;
     return budgetMatch && countryMatch;
   });
 
   return (
     <div className="container mx-auto">
       <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <h1 className="text-3xl font-bold font-headline">Your University Feed</h1>
+        <h1 className="text-3xl font-bold">Your University Feed</h1>
         <p className="text-muted-foreground">Education with purpose, not pressure.</p>
       </div>
 
@@ -50,8 +49,8 @@ export default function DashboardPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm py-24 animate-in fade-in duration-500">
-            <div className="flex flex-col items-center gap-2 text-center">
+        <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm bg-card py-24 animate-in fade-in duration-500">
+            <div className="flex flex-col items-center gap-2 text-center p-8">
                 <h3 className="text-2xl font-bold tracking-tight">No Matches Found</h3>
                 <p className="text-sm text-muted-foreground mb-4">Try adjusting your preferences to see more universities.</p>
                 <Button asChild><Link href="/profile">Edit Preferences</Link></Button>

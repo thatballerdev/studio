@@ -20,7 +20,7 @@ import AuthCheck from '@/components/auth-check';
 import { countries } from '@/lib/countries-data';
 import Logo from '@/components/logo';
 import { Progress } from '@/components/ui/progress';
-
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const step1Schema = z.object({
   profession: z.string().min(2, "Please enter your profession."),
@@ -69,6 +69,7 @@ export default function OnboardingPage() {
   const processStep: SubmitHandler<Partial<FormValues>> = (data) => {
     if (currentStep < steps.length) {
       setCurrentStep(step => step + 1);
+      form.trigger(); // Trigger validation for the next step
     } else {
       handleSubmit();
     }
@@ -100,26 +101,26 @@ export default function OnboardingPage() {
 
   return (
     <AuthCheck>
-      <div className="flex min-h-screen flex-col items-center justify-center p-4">
-        <Link href="/" className="flex items-center gap-2 mb-8">
+      <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-secondary/50">
+        <div className="flex items-center gap-2 mb-8">
             <Logo className="h-10 w-10"/>
             <span className="font-bold text-xl">Northway</span>
-        </Link>
+        </div>
         <Card className="w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-500">
           <CardHeader>
-            <Progress value={progress} className="mb-4" />
-            <CardTitle className="font-headline">Step {currentStep}: {steps[currentStep - 1].title}</CardTitle>
+            <Progress value={progress} className="mb-4 h-2" />
+            <CardTitle>Step {currentStep}: {steps[currentStep - 1].title}</CardTitle>
             <CardDescription>{steps[currentStep - 1].description}</CardDescription>
           </CardHeader>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(processStep)}>
-              <CardContent className="min-h-[220px]">
+              <CardContent className="min-h-[260px]">
                 {currentStep === 1 && (
-                  <div className="space-y-4">
+                  <div className="space-y-4 animate-in fade-in duration-300">
                     <FormField control={form.control} name="profession" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Current Profession</FormLabel>
-                        <FormControl><Input placeholder="e.g., Software Engineer" {...field} /></FormControl>
+                        <FormControl><Input autoFocus placeholder="e.g., Software Engineer" {...field} /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )} />
@@ -133,7 +134,7 @@ export default function OnboardingPage() {
                   </div>
                 )}
                 {currentStep === 2 && (
-                  <div className="space-y-6 pt-2">
+                  <div className="space-y-6 pt-2 animate-in fade-in duration-300">
                     <FormField control={form.control} name="budget" render={({ field }) => (
                       <FormItem>
                         <FormLabel>Annual Budget: ${field.value.toLocaleString()}</FormLabel>
@@ -152,33 +153,33 @@ export default function OnboardingPage() {
                   </div>
                 )}
                 {currentStep === 3 && (
-                  <div className="space-y-2">
-                    <FormField control={form.control} name="preferredCountries" render={() => (
+                  <div className="space-y-2 animate-in fade-in duration-300">
+                    <FormField control={form.control} name="preferredCountries" render={({ field }) => (
                       <FormItem>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 max-h-64 overflow-y-auto pr-2">
-                          {countries.map((country) => (
-                            <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field }) => (
-                                <FormItem key={country.code} className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary">
+                         <ScrollArea className="h-64">
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 pr-4">
+                            {countries.map((country) => (
+                                <FormItem key={country.code} className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary transition-colors">
                                     <FormControl>
                                         <Checkbox
                                         checked={field.value?.includes(country.code)}
                                         onCheckedChange={(checked) => {
+                                            const currentValues = field.value || [];
                                             return checked
-                                            ? field.onChange([...(field.value || []), country.code])
+                                            ? field.onChange([...currentValues, country.code])
                                             : field.onChange(
-                                                field.value?.filter(
+                                                currentValues.filter(
                                                 (value) => value !== country.code
                                                 )
                                             )
                                         }}
                                         />
                                     </FormControl>
-                                    <FormLabel className="font-normal">{country.name}</FormLabel>
+                                    <FormLabel className="font-normal cursor-pointer">{country.name}</FormLabel>
                                 </FormItem>
-                              )
-                            } />
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        </ScrollArea>
                         <FormMessage className="pt-2" />
                       </FormItem>
                     )} />

@@ -4,7 +4,7 @@ export const universityData: University[] = [
   {
     id: '1',
     name: 'Charles University',
-    country: 'Prague, Czech Republic',
+    country: 'Czech Republic',
     countryCode: 'CZ',
     annualCost: 6000,
     highlights: ['Top Engineering Program', 'Research Focused', 'Vibrant Student Life'],
@@ -14,7 +14,7 @@ export const universityData: University[] = [
   {
     id: '2',
     name: 'University of Warsaw',
-    country: 'Warsaw, Poland',
+    country: 'Poland',
     countryCode: 'PL',
     annualCost: 10000,
     highlights: ['Arts & Humanities', 'Historic Campus', 'Located in Warsaw'],
@@ -24,9 +24,9 @@ export const universityData: University[] = [
   {
     id: '3',
     name: 'University of Vienna',
-    country: 'Vienna, Austria',
+    country: 'Austria',
     countryCode: 'AT',
-    annualCost: 1454,
+    annualCost: 1500,
     highlights: ['Diverse Programs', 'Historical Significance', 'Major research university'],
     imageId: 'university-3',
     motto: "Alma Mater Rudolphina Vindobonensis",

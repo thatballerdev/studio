@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
 
 export default function Header() {
@@ -32,10 +32,10 @@ export default function Header() {
   const getInitials = (name?: string) => {
     if (!name) return 'U';
     const names = name.split(' ');
-    if (names.length > 1) {
+    if (names.length > 1 && names[0] && names[1]) {
       return `${names[0][0]}${names[1][0]}`;
     }
-    return names[0].substring(0, 2);
+    return name.substring(0, 2);
   };
 
   const navItems = (
@@ -52,6 +52,23 @@ export default function Header() {
           Profile
         </Link>
       </Button>
+    </>
+  );
+  
+  const mobileNavItems = (
+    <>
+      <SheetClose asChild>
+        <Link href="/dashboard" className="flex items-center gap-2 p-2 rounded-md hover:bg-secondary">
+          <LayoutGrid className="mr-2 h-4 w-4" />
+          Dashboard
+        </Link>
+      </SheetClose>
+      <SheetClose asChild>
+        <Link href="/profile" className="flex items-center gap-2 p-2 rounded-md hover:bg-secondary">
+          <User className="mr-2 h-4 w-4" />
+          Profile
+        </Link>
+      </SheetClose>
     </>
   );
 
@@ -73,14 +90,16 @@ export default function Header() {
               <span className="sr-only">Toggle Navigation</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-72">
-            <div className="flex flex-col p-6">
-                <Link href="/dashboard" className="flex items-center gap-2 mb-6">
-                    <Logo />
-                    <span className="font-bold">Northway</span>
-                </Link>
-                <nav className="flex flex-col gap-2">
-                    {navItems}
+          <SheetContent side="left" className="w-72 p-0">
+            <div className="flex flex-col h-full">
+                <div className="p-6 border-b">
+                  <Link href="/dashboard" className="flex items-center gap-2">
+                      <Logo />
+                      <span className="font-bold">Northway</span>
+                  </Link>
+                </div>
+                <nav className="flex flex-col gap-2 p-4">
+                    {mobileNavItems}
                 </nav>
             </div>
           </SheetContent>
@@ -97,7 +116,7 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-                <Avatar>
+                <Avatar className="h-9 w-9">
                   <AvatarImage src={user?.photoURL || undefined} alt="User avatar" />
                   <AvatarFallback>{getInitials(userProfile?.name)}</AvatarFallback>
                 </Avatar>

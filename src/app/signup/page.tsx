@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { ArrowRight, Loader2 } from 'lucide-react';
 
@@ -49,7 +49,11 @@ export default function SignupPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
       const { user } = userCredential;
+
+      // Also update the user's profile in Firebase Auth
+      await updateProfile(user, { displayName: data.name });
       
+      // Create user document in Firestore
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         email: user.email,
@@ -67,30 +71,32 @@ export default function SignupPage() {
       toast({
         variant: 'destructive',
         title: 'Sign Up Failed',
-        description: error.message || 'An unknown error occurred. Please try again.',
+        description: error.code === 'auth/email-already-in-use' 
+          ? 'This email is already in use. Please log in.'
+          : error.message || 'An unknown error occurred.',
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (loading || user) {
+  if (loading || (!loading && user)) {
      return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <Loader2 className="h-12 w-12 animate-spin text-accent" />
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 dark:bg-gray-900 p-4 animate-in fade-in duration-500">
+    <div className="flex min-h-screen items-center justify-center bg-secondary/50 p-4 animate-in fade-in duration-500">
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl">
+        <Card className="shadow-2xl border-2 border-transparent hover:border-primary/20 transition-all">
           <CardHeader className="text-center">
              <Link href="/" className="flex justify-center items-center gap-2 mb-4">
                 <Logo className="h-10 w-10"/>
             </Link>
-            <CardTitle className="text-2xl font-headline">Create an Account</CardTitle>
+            <CardTitle className="text-2xl">Create an Account</CardTitle>
             <CardDescription>Join Northway and find your perfect university</CardDescription>
           </CardHeader>
           <CardContent>
@@ -142,7 +148,7 @@ export default function SignupPage() {
             </Form>
             <p className="mt-6 text-center text-sm text-muted-foreground">
               Already have an account?{' '}
-              <Link href="/login" className="font-semibold text-accent hover:underline">
+              <Link href="/login" className="font-semibold text-primary hover:underline">
                 Log in <ArrowRight className="inline h-4 w-4"/>
               </Link>
             </p>

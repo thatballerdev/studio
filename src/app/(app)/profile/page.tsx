@@ -17,6 +17,7 @@ import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import { countries } from '@/lib/countries-data';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -69,7 +70,7 @@ export default function ProfilePage() {
 
   return (
     <div className="container mx-auto max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <h1 className="text-3xl font-bold font-headline mb-2">Profile Settings</h1>
+      <h1 className="text-3xl font-bold mb-2">Profile Settings</h1>
       <p className="text-muted-foreground mb-8">Manage your personal information and university preferences.</p>
       
       <Form {...form}>
@@ -125,25 +126,27 @@ export default function ProfilePage() {
               <FormField control={form.control} name="preferredCountries" render={() => (
                 <FormItem>
                   <FormLabel>Preferred Countries</FormLabel>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {countries.map((country) => (
-                      <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field }) => (
-                        <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value?.includes(country.code)}
-                              onCheckedChange={(checked) => (
-                                checked
-                                  ? field.onChange([...field.value, country.code])
-                                  : field.onChange(field.value?.filter(v => v !== country.code))
-                              )}
-                            />
-                          </FormControl>
-                          <FormLabel className="font-normal">{country.name}</FormLabel>
-                        </FormItem>
-                      )} />
-                    ))}
-                  </div>
+                  <ScrollArea className="h-48">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 pr-4">
+                      {countries.map((country) => (
+                        <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field }) => (
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary transition-colors">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value?.includes(country.code)}
+                                onCheckedChange={(checked) => (
+                                  checked
+                                    ? field.onChange([...field.value, country.code])
+                                    : field.onChange(field.value?.filter(v => v !== country.code))
+                                )}
+                              />
+                            </FormControl>
+                            <FormLabel className="font-normal cursor-pointer">{country.name}</FormLabel>
+                          </FormItem>
+                        )} />
+                      ))}
+                    </div>
+                  </ScrollArea>
                   <FormMessage />
                 </FormItem>
               )} />
