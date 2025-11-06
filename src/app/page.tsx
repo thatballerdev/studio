@@ -1,69 +1,56 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, DollarSign, Globe } from 'lucide-react';
+import { ArrowRight, BookOpen, Twitter, Linkedin, Facebook } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import Logo from '@/components/logo';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-
-const features = [
-  {
-    icon: <Globe className="h-8 w-8 text-accent" />,
-    title: 'Global Opportunities',
-    description: 'Explore affordable universities from around the world, tailored to your preferences.',
-  },
-  {
-    icon: <DollarSign className="h-8 w-8 text-accent" />,
-    title: 'Budget-Friendly',
-    description: 'Our focus is on providing options that meet your financial needs without sacrificing quality.',
-  },
-  {
-    icon: <BookOpen className="h-8 w-8 text-accent" />,
-    title: 'Personalized Feed',
-    description: 'Get a custom-curated list of universities that match your profession, interests, and goals.',
-  },
-];
+import { universityData } from '@/lib/university-data';
+import { getFlagEmoji } from '@/lib/utils';
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero');
+
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container h-14 flex items-center">
+        <div className="container h-16 flex items-center">
           <Link href="/" className="flex items-center gap-2">
             <Logo />
             <span className="font-bold text-lg">Northway</span>
           </Link>
-          <nav className="ml-auto flex items-center gap-2">
+          <nav className="ml-auto flex items-center gap-4">
+            <Button variant="ghost" asChild>
+              <Link href="#">About</Link>
+            </Button>
+            <Button variant="ghost" asChild>
+              <Link href="#">Programs</Link>
+            </Button>
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>
-            <Button asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-              <Link href="/signup">Sign Up <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Button asChild>
+              <Link href="/signup">Sign Up</Link>
             </Button>
           </nav>
         </div>
       </header>
+
       <main className="flex-1">
-        <section className="relative w-full py-20 md:py-32 lg:py-40">
+        <section className="relative w-full py-24 md:py-32 lg:py-48">
           <div className="container mx-auto text-center px-4">
-            <div
-              className="absolute inset-0 -z-10 bg-cover bg-center opacity-10"
-              style={{ backgroundImage: heroImage ? `url(${heroImage.imageUrl})` : '' }}
-              data-ai-hint={heroImage?.imageHint}
-            ></div>
-            <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-background/80 to-background"></div>
+            <div className="absolute inset-0 -z-10 h-full w-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#E3F2FD_100%)]"></div>
             <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tighter mb-4">
-                Find Your Path, Not Your Debt
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-bold tracking-tight mb-6">
+                Your Global Education Awaits
               </h1>
-              <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
-                Education with purpose, not pressure. Discover affordable universities that align with your dreams.
+              <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground mb-10">
+                Discover affordable, high-quality university programs from around the world. Your future starts here.
               </p>
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
+              <Button size="lg" asChild>
                 <Link href="/signup">
-                  Get Started for Free
+                  Get Started
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
@@ -74,57 +61,70 @@ export default function Home() {
         <section className="w-full py-16 md:py-24 bg-card">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-headline font-bold">How Northway Works</h2>
+              <h2 className="text-3xl md:text-4xl font-headline font-bold">Featured Universities</h2>
               <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
-                A simple, personalized journey to your ideal university.
+                Explore top institutions that offer quality education at an affordable price.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {features.map((feature, index) => (
-                <div key={index} className="animate-in fade-in slide-in-from-bottom-12 duration-1000" style={{ animationDelay: `${index * 200}ms` }}>
-                  <Card className="h-full text-center hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-2">
-                    <CardHeader className="items-center">
-                      <div className="bg-primary/20 p-4 rounded-full">
-                        {feature.icon}
-                      </div>
-                      <CardTitle className="mt-4">{feature.title}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{feature.description}</p>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {universityData.slice(0, 3).map((uni, index) => {
+                const placeholderImage = PlaceHolderImages.find(p => p.id === uni.imageId);
+                return (
+                  <div key={index} className="animate-in fade-in slide-in-from-bottom-12 duration-1000" style={{ animationDelay: `${index * 200}ms` }}>
+                    <Card className="h-full overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                      <CardHeader className="p-0">
+                        {placeholderImage && (
+                           <Image
+                            src={placeholderImage.imageUrl}
+                            alt={`Campus of ${uni.name}`}
+                            width={600}
+                            height={400}
+                            className="object-cover w-full h-48"
+                            data-ai-hint={placeholderImage.imageHint}
+                          />
+                        )}
+                      </CardHeader>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-bold mb-2 flex items-center">{getFlagEmoji(uni.countryCode)}<span className="ml-2">{uni.name}</span></h3>
+                        <p className="text-muted-foreground">{uni.country}</p>
+                        <p className="font-semibold text-primary mt-4">${uni.annualCost.toLocaleString()} / year</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </section>
 
-        <section className="w-full py-16 md:py-24">
-          <div className="container mx-auto text-center px-4">
-            <div className="animate-in fade-in slide-in-from-bottom-16 duration-1000">
-              <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4">Ready to Begin Your Journey?</h2>
-              <p className="text-muted-foreground mb-8">
-                Sign up today and take the first step towards a brighter, debt-free future.
-              </p>
-              <Button size="lg" asChild className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <Link href="/signup">
-                  Find My University
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
+        <section className="w-full py-20">
+            <div className="container mx-auto px-4 text-center">
+                 <div className="animate-in fade-in slide-in-from-bottom-16 duration-1000">
+                    <h2 className="text-3xl md:text-4xl font-headline font-bold mb-4">Start Your Journey Today</h2>
+                    <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+                        Create an account to get personalized university recommendations and start applying.
+                    </p>
+                    <Button size="lg" asChild>
+                        <Link href="/signup">
+                        Sign Up for Free
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                        </Link>
+                    </Button>
+                </div>
             </div>
-          </div>
         </section>
+
       </main>
-      <footer className="py-6 border-t bg-card">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <div className="flex items-center gap-2">
+      <footer className="py-8 border-t bg-card">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+          <div className="flex items-center gap-2 mb-4 md:mb-0">
             <Logo />
-            <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Northway. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Northway. Contact: info@northway.com</p>
           </div>
-          <div className="flex gap-4">
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Privacy Policy</Link>
-            <Link href="#" className="text-sm text-muted-foreground hover:text-foreground">Terms of Service</Link>
+          <div className="flex gap-4 text-muted-foreground">
+            <Link href="#" className="hover:text-foreground"><Twitter size={20} /></Link>
+            <Link href="#" className="hover:text-foreground"><Linkedin size={20} /></Link>
+            <Link href="#" className="hover:text-foreground"><Facebook size={20} /></Link>
           </div>
         </div>
       </footer>
