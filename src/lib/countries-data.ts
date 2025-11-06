@@ -19,4 +19,5 @@ export const countries = [
   { code: 'KR', name: 'South Korea' },
   { code: 'ES', name: 'Spain' },
   { code: 'IT', name: 'Italy' },
+  { code: 'CZ', name: 'Czech Republic' },
 ];

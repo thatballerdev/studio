@@ -3,9 +3,9 @@ import type { University } from './types';
 export const universityData: University[] = [
   {
     id: '1',
-    name: 'University of Munich',
-    country: 'Germany',
-    countryCode: 'DE',
+    name: 'Charles University',
+    country: 'Prague, Czech Republic',
+    countryCode: 'CZ',
     annualCost: 8000,
     highlights: ['Top Engineering Program', 'Research Focused', 'Vibrant Student Life'],
     imageId: 'university-1',
