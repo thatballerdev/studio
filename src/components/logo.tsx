@@ -4,12 +4,12 @@ import { cn } from '@/lib/utils';
 const Logo = ({ className }: { className?: string }) => {
   return (
     <Image
-      src="https://picsum.photos/seed/logo/40/40"
+      src="https://images.unsplash.com/photo-1762507078313-1259fc0c6a12?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=500"
       alt="Northway Logo"
       width={40}
       height={40}
       className={cn('rounded-md', className)}
-      data-ai-hint="logo"
+      data-ai-hint="logo abstract"
     />
   );
 };
