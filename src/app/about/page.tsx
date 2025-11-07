@@ -165,10 +165,10 @@ export default function AboutPage() {
                     data-ai-hint={founderAmerican.imageHint}
                   />
                 )}
-                <h3 className="text-2xl font-bold font-heading">James Smith</h3>
+                <h3 className="text-2xl font-bold font-heading">Edmund Amos</h3>
                 <p className="text-primary font-semibold mb-2">Co-Founder & CTO</p>
                 <p className="text-foreground/70 mb-4">
-                  The architect of our platform, James is passionate about using technology to solve real-world problems. He’s on a mission to build the tools that make affording an education simpler and more transparent.
+                  The architect of our platform, Edmund is passionate about using technology to solve real-world problems. He’s on a mission to build the tools that make affording an education simpler and more transparent.
                 </p>
               </motion.div>
             </div>
