@@ -3,15 +3,15 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, type SubmitHandler, type FieldValues, FieldPath } from 'react-hook-form';
+import { useForm, type SubmitHandler, type FieldValues, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star, User } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,35 +25,53 @@ import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { allSubjects } from '@/lib/program-data';
+import type { UserProfile } from '@/lib/types';
 
-const schemas = [
-  z.object({ fullName: z.string().min(2, "Please enter your full name.") }),
-  z.object({ currentEducation: z.string().min(1, "Please select your education level.") }),
-  z.object({ targetDegree: z.string().min(1, "Please select your target degree.") }),
-  z.object({ fieldInterest: z.array(z.string()).min(1, "Please select at least one field.") }),
-  z.object({ budgetRangeUSD: z.string().min(1, "Please select your budget.") }),
-  z.object({ englishOnly: z.boolean().default(true) }),
-  z.object({ regionPreference: z.string().min(1, "Please select a region.") }),
-  z.object({ desiredStartDate: z.string().min(4, "Please enter a valid start date.") }),
-  z.object({ careerGoal: z.string().optional() }),
-  z.object({ scholarshipInterest: z.boolean().default(false) }),
-  z.object({ studyMode: z.string().min(1, "Please select a study mode.") }),
-  z.object({ priorityFactors: z.array(z.string()).min(1, "Please select at least one priority.") })
-];
+const fullNameSchema = z.object({ fullName: z.string().min(2, "Please enter your full name.") });
+const currentEducationSchema = z.object({ currentEducation: z.string().min(1, "Please select your education level.") });
+const targetDegreeSchema = z.object({ targetDegree: z.string().min(1, "Please select your target degree.") });
+const fieldInterestSchema = z.object({ fieldInterest: z.array(z.string()).min(1, "Please select at least one field.") });
+const budgetSchema = z.object({ budgetRangeUSD: z.string().min(1, "Please select your budget.") });
+const languageSchema = z.object({ englishOnly: z.boolean().default(true) });
+const regionSchema = z.object({ regionPreference: z.string().min(1, "Please select a region.") });
+const startDateSchema = z.object({ desiredStartDate: z.string().min(4, "Please enter a valid start date.") });
+const careerGoalSchema = z.object({ careerGoal: z.string().optional() });
+const scholarshipSchema = z.object({ scholarshipInterest: z.boolean().default(false) });
+const studyModeSchema = z.object({ studyMode: z.string().min(1, "Please select a study mode.") });
+const prioritiesSchema = z.object({ priorityFactors: z
+    .array(z.string())
+    .min(1, "Please select at least one priority.")
+});
+
+const allSchemas = z.object({
+    fullName: z.string().min(2, "Please enter your full name."),
+    currentEducation: z.string().min(1, "Please select your education level."),
+    targetDegree: z.string().min(1, "Please select your target degree."),
+    fieldInterest: z.array(z.string()).min(1, "Please select at least one field."),
+    budgetRangeUSD: z.string().min(1, "Please select your budget."),
+    englishOnly: z.boolean().default(true),
+    regionPreference: z.string().min(1, "Please select a region."),
+    desiredStartDate: z.string().min(4, "Please enter a valid start date."),
+    careerGoal: z.string().optional(),
+    scholarshipInterest: z.boolean().default(false),
+    studyMode: z.string().min(1, "Please select a study mode."),
+    priorityFactors: z.array(z.string()).min(1, "Please select at least one priority.")
+});
+
 
 const steps = [
-  { id: 1, title: 'Your Name', schema: schemas[0], icon: User, fields: ['fullName'] as FieldPath<any>[] },
-  { id: 2, title: 'Current Education', schema: schemas[1], icon: BookOpen, fields: ['currentEducation'] as FieldPath<any>[] },
-  { id: 3, title: 'Target Degree', schema: schemas[2], icon: Target, fields: ['targetDegree'] as FieldPath<any>[] },
-  { id: 4, title: 'Field of Interest', schema: schemas[3], icon: Briefcase, fields: ['fieldInterest'] as FieldPath<any>[] },
-  { id: 5, title: 'Annual Budget', schema: schemas[4], icon: DollarSign, fields: ['budgetRangeUSD'] as FieldPath<any>[] },
-  { id: 6, title: 'Language Preference', schema: schemas[5], icon: Globe, fields: ['englishOnly'] as FieldPath<any>[] },
-  { id: 7, title: 'Preferred Region', schema: schemas[6], icon: Globe, fields: ['regionPreference'] as FieldPath<any>[] },
-  { id: 8, 'title': 'Start Date', schema: schemas[7], icon: Calendar, fields: ['desiredStartDate'] as FieldPath<any>[] },
-  { id: 9, 'title': 'Career Goals', schema: schemas[8], icon: Briefcase, fields: ['careerGoal'] as FieldPath<any>[] },
-  { id: 10, 'title': 'Scholarships', schema: schemas[9], icon: Award, fields: ['scholarshipInterest'] as FieldPath<any>[] },
-  { id: 11, 'title': 'Study Mode', schema: schemas[10], icon: Monitor, fields: ['studyMode'] as FieldPath<any>[] },
-  { id: 12, 'title': 'Your Priorities', schema: schemas[11], icon: Star, fields: ['priorityFactors'] as FieldPath<any>[] },
+  { id: 0, title: 'Your Name', schema: fullNameSchema, icon: User, fields: ['fullName'] as FieldPath<FieldValues>[] },
+  { id: 1, title: 'Current Education', schema: currentEducationSchema, icon: BookOpen, fields: ['currentEducation'] as FieldPath<FieldValues>[] },
+  { id: 2, title: 'Target Degree', schema: targetDegreeSchema, icon: Target, fields: ['targetDegree'] as FieldPath<FieldValues>[] },
+  { id: 3, title: 'Field of Interest', schema: fieldInterestSchema, icon: Briefcase, fields: ['fieldInterest'] as FieldPath<FieldValues>[] },
+  { id: 4, title: 'Annual Budget', schema: budgetSchema, icon: DollarSign, fields: ['budgetRangeUSD'] as FieldPath<FieldValues>[] },
+  { id: 5, title: 'Language Preference', schema: languageSchema, icon: Globe, fields: ['englishOnly'] as FieldPath<FieldValues>[] },
+  { id: 6, title: 'Preferred Region', schema: regionSchema, icon: Globe, fields: ['regionPreference'] as FieldPath<FieldValues>[] },
+  { id: 7, title: 'Start Date', schema: startDateSchema, icon: Calendar, fields: ['desiredStartDate'] as FieldPath<FieldValues>[] },
+  { id: 8, title: 'Career Goals', schema: careerGoalSchema, icon: Briefcase, fields: ['careerGoal'] as FieldPath<FieldValues>[] },
+  { id: 9, title: 'Scholarships', schema: scholarshipSchema, icon: Award, fields: ['scholarshipInterest'] as FieldPath<FieldValues>[] },
+  { id: 10, title: 'Study Mode', schema: studyModeSchema, icon: Monitor, fields: ['studyMode'] as FieldPath<FieldValues>[] },
+  { id: 11, title: 'Your Priorities', schema: prioritiesSchema, icon: Star, fields: ['priorityFactors'] as FieldPath<FieldValues>[] },
 ];
 
 const quotes = [
@@ -71,7 +89,6 @@ const quotes = [
     "What matters most to you?"
 ];
 
-
 export default function OnboardingPage() {
   const router = useRouter();
   const { user, userProfile, db } = useFirebase();
@@ -80,11 +97,9 @@ export default function OnboardingPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [direction, setDirection] = useState(1);
   
-  const currentSchema = steps[currentStep].schema;
-
-  const form = useForm<FieldValues>({
-    resolver: zodResolver(currentSchema),
-    values: {
+  const form = useForm<z.infer<typeof allSchemas>>({
+    resolver: zodResolver(allSchemas),
+    defaultValues: {
       fullName: userProfile?.fullName || userProfile?.name || '',
       currentEducation: userProfile?.currentEducation || '',
       targetDegree: userProfile?.targetDegree || '',
@@ -98,31 +113,45 @@ export default function OnboardingPage() {
       studyMode: userProfile?.studyMode || '',
       priorityFactors: userProfile?.priorityFactors || [],
     },
-    mode: 'onChange',
   });
-  
-  const processStep: SubmitHandler<FieldValues> = async (data) => {
+
+  const processForm: SubmitHandler<z.infer<typeof allSchemas>> = async (data) => {
+    if (!user || !db) {
+      toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
+      return;
+    }
+    setIsLoading(true);
+
+    const finalData = { ...data, onboardingComplete: true };
+
     try {
-      if (user && db) {
-        await updateDoc(doc(db, 'users', user.uid), data, { merge: true });
-      }
-      if (currentStep < steps.length - 1) {
-        setDirection(1);
-        setCurrentStep(step => step + 1);
-      } else {
-        await handleFinalSubmit(data);
-      }
-    } catch (error) {
-      console.error("Failed to save or process step", error);
-      toast({ variant: 'destructive', title: 'Error', description: 'Could not save your progress.' });
+      await setDoc(doc(db, 'users', user.uid), finalData, { merge: true });
+      toast({ title: 'Setup Complete!', description: "We're finding the best universities for you." });
+      router.push('/dashboard');
+      router.refresh();
+    } catch (error: any) {
+      toast({ variant: 'destructive', title: 'Update Failed', description: error.message });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const nextStep = async () => {
-    const fieldsToValidate = steps[currentStep].fields;
-    const isValid = await form.trigger(fieldsToValidate);
-    if (isValid) {
-      await form.handleSubmit(processStep)();
+    const fields = steps[currentStep].fields;
+    const output = await form.trigger(fields, { shouldFocus: true });
+
+    if (!output) return;
+
+    if (currentStep < steps.length - 1) {
+      // Save progress to Firestore without blocking UI
+      if (user && db) {
+        const currentData = form.getValues();
+        setDoc(doc(db, 'users', user.uid), currentData, { merge: true }).catch(err => {
+            console.warn("Could not save onboarding progress", err);
+        });
+      }
+      setDirection(1);
+      setCurrentStep(step => step + 1);
     }
   };
 
@@ -133,26 +162,6 @@ export default function OnboardingPage() {
     }
   }
 
-  const handleFinalSubmit = async (finalData: FieldValues) => {
-    if (!user || !db) {
-      toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
-      return;
-    }
-    setIsLoading(true);
-    const allData = { ...form.getValues(), ...finalData, onboardingComplete: true };
-
-    try {
-      await updateDoc(doc(db, 'users', user.uid), allData);
-
-      toast({ title: 'Setup Complete!', description: "We're finding the best universities for you." });
-      router.push('/dashboard');
-    } catch (error: any) {
-      toast({ variant: 'destructive', title: 'Update Failed', description: error.message });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  
   const progress = ((currentStep + 1) / steps.length) * 100;
   
   return (
@@ -172,7 +181,7 @@ export default function OnboardingPage() {
             </div>
           </CardHeader>
           <Form {...form}>
-            <form onSubmit={e => e.preventDefault()} className="min-h-[350px] flex flex-col">
+            <form onSubmit={form.handleSubmit(processForm)} className="min-h-[350px] flex flex-col">
               <CardContent className="flex-grow">
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
@@ -187,7 +196,7 @@ export default function OnboardingPage() {
                       <FormField control={form.control} name="fullName" render={({ field }) => (
                         <FormItem>
                           <FormLabel>What’s your full name?</FormLabel>
-                          <FormControl><Input autoFocus placeholder="e.g., John Doe" {...field} /></FormControl>
+                          <FormControl><Input autoFocus placeholder="e.g., Jane Doe" {...field} /></FormControl>
                           <FormMessage />
                         </FormItem>
                       )} />
@@ -236,11 +245,11 @@ export default function OnboardingPage() {
                               <FormItem key={item} className="flex flex-row items-start space-x-3 space-y-0">
                                 <FormControl>
                                   <Checkbox
-                                    checked={field.value.includes(item)}
+                                    checked={field.value?.includes(item)}
                                     onCheckedChange={(checked) => {
                                       return checked
-                                        ? field.onChange([...field.value, item])
-                                        : field.onChange(field.value.filter((value) => value !== item));
+                                        ? field.onChange([...(field.value || []), item])
+                                        : field.onChange((field.value || []).filter((value) => value !== item));
                                     }}
                                   />
                                 </FormControl>
@@ -283,7 +292,6 @@ export default function OnboardingPage() {
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                           <div className="space-y-0.5">
                             <FormLabel className="text-base">Do you prefer to study in English-only programs?</FormLabel>
-                            <CardDescription>We'll prioritize programs taught entirely in English.</CardDescription>
                           </div>
                           <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                         </FormItem>
@@ -330,7 +338,6 @@ export default function OnboardingPage() {
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                           <div className="space-y-0.5">
                             <FormLabel className="text-base">Interested in scholarship options?</FormLabel>
-                            <CardDescription>We'll highlight programs with available scholarships.</CardDescription>
                           </div>
                           <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
                         </FormItem>
@@ -356,7 +363,6 @@ export default function OnboardingPage() {
                       <FormField control={form.control} name="priorityFactors" render={() => (
                         <FormItem>
                             <FormLabel>What matters most to you?</FormLabel>
-                            <CardDescription>Select your top priorities.</CardDescription>
                             <div className="space-y-2 pt-2">
                                 {["Affordable tuition", "English-taught courses", "City life", "International ranking", "Career prospects"].map((item) => (
                                 <FormField
@@ -401,7 +407,7 @@ export default function OnboardingPage() {
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 ) : (
-                  <Button type="button" onClick={form.handleSubmit(processStep)} disabled={isLoading}>
+                  <Button type="submit" disabled={isLoading}>
                     {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Finish Setup <Check className="ml-2 h-4 w-4" /></>}
                   </Button>
                 )}

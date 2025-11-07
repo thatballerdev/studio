@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -43,32 +43,52 @@ export default function ProfilePage() {
   const router = useRouter();
   const { user, userProfile, loading, db } = useFirebase();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
-    values: {
-      fullName: userProfile?.fullName || userProfile?.name || '',
-      currentEducation: userProfile?.currentEducation || '',
-      targetDegree: userProfile?.targetDegree || '',
-      fieldInterest: userProfile?.fieldInterest || [],
-      budgetRangeUSD: userProfile?.budgetRangeUSD || '',
-      englishOnly: userProfile?.englishOnly ?? true,
-      regionPreference: userProfile?.regionPreference || '',
-      desiredStartDate: userProfile?.desiredStartDate || '',
-      careerGoal: userProfile?.careerGoal || '',
-      scholarshipInterest: userProfile?.scholarshipInterest ?? false,
-      studyMode: userProfile?.studyMode || '',
-      priorityFactors: userProfile?.priorityFactors || [],
+    defaultValues: {
+      fullName: '',
+      currentEducation: '',
+      targetDegree: '',
+      fieldInterest: [],
+      budgetRangeUSD: '',
+      englishOnly: true,
+      regionPreference: '',
+      desiredStartDate: '',
+      careerGoal: '',
+      scholarshipInterest: false,
+      studyMode: '',
+      priorityFactors: [],
     },
   });
+
+  useEffect(() => {
+    if (userProfile) {
+      form.reset({
+        fullName: userProfile.fullName || userProfile.name || '',
+        currentEducation: userProfile.currentEducation || '',
+        targetDegree: userProfile.targetDegree || '',
+        fieldInterest: userProfile.fieldInterest || [],
+        budgetRangeUSD: userProfile.budgetRangeUSD || '',
+        englishOnly: userProfile.englishOnly ?? true,
+        regionPreference: userProfile.regionPreference || '',
+        desiredStartDate: userProfile.desiredStartDate || '',
+        careerGoal: userProfile.careerGoal || '',
+        scholarshipInterest: userProfile.scholarshipInterest ?? false,
+        studyMode: userProfile.studyMode || '',
+        priorityFactors: userProfile.priorityFactors || [],
+      });
+    }
+  }, [userProfile, form]);
+
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
     if (!user || !db) {
       toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
       return;
     }
-    setIsLoading(true);
+    setIsSubmitting(true);
 
     try {
       await updateDoc(doc(db, 'users', user.uid), data);
@@ -77,14 +97,14 @@ export default function ProfilePage() {
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Update Failed', description: error.message });
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   if (loading) {
-    return <div className="flex justify-center"><Loader2 className="h-8 w-8 animate-spin" /></div>;
+    return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
-
+  
   return (
     <div className="container mx-auto max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h1 className="text-3xl font-bold mb-2">Profile Settings</h1>
@@ -116,7 +136,7 @@ export default function ProfilePage() {
                <FormField control={form.control} name="currentEducation" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Current level of education</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl><SelectTrigger><SelectValue placeholder="Select level..." /></SelectTrigger></FormControl>
                     <SelectContent>
                       <SelectItem value="High School">High School</SelectItem>
@@ -132,7 +152,7 @@ export default function ProfilePage() {
               <FormField control={form.control} name="targetDegree" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Target degree</FormLabel>
-                   <Select onValueChange={field.onChange} defaultValue={field.value}>
+                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl><SelectTrigger><SelectValue placeholder="Select degree..." /></SelectTrigger></FormControl>
                     <SelectContent>
                       <SelectItem value="BSc">Bachelor’s / Undergraduate</SelectItem>
@@ -144,24 +164,45 @@ export default function ProfilePage() {
                   <FormMessage />
                 </FormItem>
               )} />
-               <FormField control={form.control} name="fieldInterest" render={({ field }) => (
+               <FormField control={form.control} name="fieldInterest" render={() => (
                 <FormItem>
                   <FormLabel>Field of interest</FormLabel>
                   <div className="grid grid-cols-2 gap-2 h-64 overflow-auto p-2 border rounded-md">
                     {allSubjects.map((item) => (
-                      <FormItem key={item} className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value.includes(item)}
-                            onCheckedChange={(checked) => {
-                              return checked
-                                ? field.onChange([...field.value, item])
-                                : field.onChange(field.value.filter((value) => value !== item));
-                            }}
-                          />
-                        </FormControl>
-                        <FormLabel className="font-normal">{item}</FormLabel>
-                      </FormItem>
+                      <FormField
+                        key={item}
+                        control={form.control}
+                        name="fieldInterest"
+                        render={({ field }) => {
+                          return (
+                            <FormItem
+                              key={item}
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes(item)}
+                                  onCheckedChange={(checked) => {
+                                    return checked
+                                      ? field.onChange([
+                                          ...(field.value || []),
+                                          item,
+                                        ])
+                                      : field.onChange(
+                                          (field.value || [])?.filter(
+                                            (value) => value !== item
+                                          )
+                                        );
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {item}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
                     ))}
                   </div>
                   <FormMessage />
@@ -170,7 +211,7 @@ export default function ProfilePage() {
               <FormField control={form.control} name="budgetRangeUSD" render={({ field }) => (
                  <FormItem>
                     <FormLabel>Annual tuition budget (in USD)</FormLabel>
-                     <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-2">
+                     <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
                         <FormItem className="flex items-center space-x-3 space-y-0">
                             <FormControl><RadioGroupItem value="<5000" /></FormControl>
                             <FormLabel className="font-normal">&lt; $5,000</FormLabel>
@@ -202,7 +243,7 @@ export default function ProfilePage() {
               <FormField control={form.control} name="regionPreference" render={({ field }) => (
                    <FormItem>
                       <FormLabel>Preferred region</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl><SelectTrigger><SelectValue placeholder="Select region..." /></SelectTrigger></FormControl>
                           <SelectContent>
                               <SelectItem value="Eastern Europe">Eastern Europe</SelectItem>
@@ -240,7 +281,7 @@ export default function ProfilePage() {
                <FormField control={form.control} name="studyMode" render={({ field }) => (
                   <FormItem>
                       <FormLabel>Preferred study mode</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} value={field.value}>
                           <FormControl><SelectTrigger><SelectValue placeholder="Select mode..." /></SelectTrigger></FormControl>
                           <SelectContent>
                               <SelectItem value="On-campus">On-campus</SelectItem>
@@ -289,8 +330,8 @@ export default function ProfilePage() {
           </Card>
           
           <div className="flex justify-end">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Save Changes <Check className="ml-2 h-4 w-4" /></>}
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Save Changes <Check className="ml-2 h-4 w-4" /></>}
             </Button>
           </div>
         </form>
