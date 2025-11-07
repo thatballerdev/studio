@@ -99,20 +99,20 @@ export default function OnboardingPage() {
   
   const form = useForm<z.infer<typeof allSchemas>>({
     resolver: zodResolver(allSchemas),
-    defaultValues: {
-      fullName: userProfile?.fullName || userProfile?.name || '',
-      currentEducation: userProfile?.currentEducation || '',
-      targetDegree: userProfile?.targetDegree || '',
-      fieldInterest: userProfile?.fieldInterest || [],
-      budgetRangeUSD: userProfile?.budgetRangeUSD || '',
-      englishOnly: userProfile?.englishOnly ?? true,
-      regionPreference: userProfile?.regionPreference || '',
-      desiredStartDate: userProfile?.desiredStartDate || '',
-      careerGoal: userProfile?.careerGoal || '',
-      scholarshipInterest: userProfile?.scholarshipInterest ?? false,
-      studyMode: userProfile?.studyMode || '',
-      priorityFactors: userProfile?.priorityFactors || [],
-    },
+    values: {
+        fullName: userProfile?.fullName || userProfile?.name || '',
+        currentEducation: userProfile?.currentEducation || '',
+        targetDegree: userProfile?.targetDegree || '',
+        fieldInterest: userProfile?.fieldInterest || [],
+        budgetRangeUSD: userProfile?.budgetRangeUSD || '',
+        englishOnly: userProfile?.englishOnly ?? true,
+        regionPreference: userProfile?.regionPreference || '',
+        desiredStartDate: userProfile?.desiredStartDate || '',
+        careerGoal: userProfile?.careerGoal || '',
+        scholarshipInterest: userProfile?.scholarshipInterest ?? false,
+        studyMode: userProfile?.studyMode || '',
+        priorityFactors: userProfile?.priorityFactors || [],
+      },
   });
 
   const processForm: SubmitHandler<z.infer<typeof allSchemas>> = async (data) => {
@@ -136,20 +136,21 @@ export default function OnboardingPage() {
     }
   };
 
-  const nextStep = async () => {
+  const handleNext = async () => {
     const fields = steps[currentStep].fields;
     const output = await form.trigger(fields, { shouldFocus: true });
 
     if (!output) return;
 
+    // Save progress to Firestore without blocking UI
+    if (user && db) {
+      const currentData = form.getValues(fields[0]);
+      setDoc(doc(db, 'users', user.uid), {[fields[0]]: currentData}, { merge: true }).catch(err => {
+          console.warn("Could not save onboarding progress", err);
+      });
+    }
+
     if (currentStep < steps.length - 1) {
-      // Save progress to Firestore without blocking UI
-      if (user && db) {
-        const currentData = form.getValues();
-        setDoc(doc(db, 'users', user.uid), currentData, { merge: true }).catch(err => {
-            console.warn("Could not save onboarding progress", err);
-        });
-      }
       setDirection(1);
       setCurrentStep(step => step + 1);
     }
@@ -403,7 +404,7 @@ export default function OnboardingPage() {
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 {currentStep < steps.length - 1 ? (
-                  <Button type="button" onClick={nextStep}>
+                  <Button type="button" onClick={handleNext}>
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 ) : (
