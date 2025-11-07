@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler, type FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -55,18 +55,18 @@ type FormValues = z.infer<typeof schemas[0]> &
   z.infer<typeof schemas[11]>;
 
 const steps = [
-  { id: 1, title: 'Your Name', schema: schemas[0], icon: User },
-  { id: 2, title: 'Current Education', schema: schemas[1], icon: BookOpen },
-  { id: 3, title: 'Target Degree', schema: schemas[2], icon: Target },
-  { id: 4, title: 'Field of Interest', schema: schemas[3], icon: Briefcase },
-  { id: 5, title: 'Annual Budget', schema: schemas[4], icon: DollarSign },
-  { id: 6, title: 'Language Preference', schema: schemas[5], icon: Globe },
-  { id: 7, title: 'Preferred Region', schema: schemas[6], icon: Globe },
-  { id: 8, title: 'Start Date', schema: schemas[7], icon: Calendar },
-  { id: 9, title: 'Career Goals', schema: schemas[8], icon: Briefcase },
-  { id: 10, title: 'Scholarships', schema: schemas[9], icon: Award },
-  { id: 11, title: 'Study Mode', schema: schemas[10], icon: Monitor },
-  { id: 12, title: 'Your Priorities', schema: schemas[11], icon: Star },
+  { id: 1, title: 'Your Name', schema: schemas[0], icon: User, fields: ['fullName'] },
+  { id: 2, title: 'Current Education', schema: schemas[1], icon: BookOpen, fields: ['currentEducation'] },
+  { id: 3, title: 'Target Degree', schema: schemas[2], icon: Target, fields: ['targetDegree'] },
+  { id: 4, title: 'Field of Interest', schema: schemas[3], icon: Briefcase, fields: ['fieldInterest'] },
+  { id: 5, title: 'Annual Budget', schema: schemas[4], icon: DollarSign, fields: ['budgetRangeUSD'] },
+  { id: 6, title: 'Language Preference', schema: schemas[5], icon: Globe, fields: ['englishOnly'] },
+  { id: 7, title: 'Preferred Region', schema: schemas[6], icon: Globe, fields: ['regionPreference'] },
+  { id: 8, title: 'Start Date', schema: schemas[7], icon: Calendar, fields: ['desiredStartDate'] },
+  { id: 9, title: 'Career Goals', schema: schemas[8], icon: Briefcase, fields: ['careerGoal'] },
+  { id: 10, title: 'Scholarships', schema: schemas[9], icon: Award, fields: ['scholarshipInterest'] },
+  { id: 11, title: 'Study Mode', schema: schemas[10], icon: Monitor, fields: ['studyMode'] },
+  { id: 12, title: 'Your Priorities', schema: schemas[11], icon: Star, fields: ['priorityFactors'] },
 ];
 
 const quotes = [
@@ -92,26 +92,25 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [direction, setDirection] = useState(1);
+  const [formData, setFormData] = useState({});
 
-  const form = useForm<FormValues>({
-    resolver: zodResolver(steps[currentStep].schema),
-    defaultValues: {
-      fullName: userProfile?.name || '',
-      currentEducation: userProfile?.currentEducation || '',
-      targetDegree: userProfile?.targetDegree || '',
-      fieldInterest: userProfile?.fieldInterest || [],
-      budgetRangeUSD: userProfile?.budgetRangeUSD || '',
-      englishOnly: userProfile?.englishOnly ?? true,
-      regionPreference: userProfile?.regionPreference || '',
-      desiredStartDate: userProfile?.desiredStartDate || '',
-      careerGoal: userProfile?.careerGoal || '',
-      scholarshipInterest: userProfile?.scholarshipInterest ?? false,
-      studyMode: userProfile?.studyMode || '',
-      priorityFactors: userProfile?.priorityFactors || [],
-    },
+  const currentSchema = steps[currentStep].schema;
+
+  const form = useForm({
+    resolver: zodResolver(currentSchema),
+    mode: 'onChange',
   });
 
+  useEffect(() => {
+    // When the step changes, reset the form with a new resolver
+    form.reset(undefined, { keepValues: true });
+  }, [currentStep, form]);
+
+
   const processStep = async (data: FieldValues) => {
+    const updatedData = { ...formData, ...data };
+    setFormData(updatedData);
+
     try {
       if (user && db) {
         await updateDoc(doc(db, 'users', user.uid), data, { merge: true });
@@ -124,9 +123,8 @@ export default function OnboardingPage() {
     if (currentStep < steps.length - 1) {
       setDirection(1);
       setCurrentStep(step => step + 1);
-      form.trigger();
     } else {
-      await handleSubmit();
+      await handleSubmit(updatedData);
     }
   };
 
@@ -137,7 +135,7 @@ export default function OnboardingPage() {
     }
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (finalData: FieldValues) => {
     if (!user || !db) {
       toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
       return;
@@ -146,6 +144,7 @@ export default function OnboardingPage() {
 
     try {
       await updateDoc(doc(db, 'users', user.uid), {
+        ...finalData,
         onboardingComplete: true,
       });
 
@@ -157,10 +156,30 @@ export default function OnboardingPage() {
       setIsLoading(false);
     }
   };
+  
+  useEffect(() => {
+    if (userProfile) {
+        form.reset({
+            fullName: userProfile.name || '',
+            currentEducation: userProfile.currentEducation || '',
+            targetDegree: userProfile.targetDegree || '',
+            fieldInterest: userProfile.fieldInterest || [],
+            budgetRangeUSD: userProfile.budgetRangeUSD || '',
+            englishOnly: userProfile.englishOnly ?? true,
+            regionPreference: userProfile.regionPreference || '',
+            desiredStartDate: userProfile.desiredStartDate || '',
+            careerGoal: userProfile.careerGoal || '',
+            scholarshipInterest: userProfile.scholarshipInterest ?? false,
+            studyMode: userProfile.studyMode || '',
+            priorityFactors: userProfile.priorityFactors || [],
+        });
+        setFormData(form.getValues());
+    }
+  }, [userProfile, form]);
+
 
   const progress = ((currentStep + 1) / steps.length) * 100;
-  const CurrentIcon = steps[currentStep].icon;
-
+  
   return (
     <AuthCheck>
       <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-background">
