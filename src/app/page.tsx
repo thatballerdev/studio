@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart } from 'lucide-react';
+import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart, Twitter, Linkedin, Facebook } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
