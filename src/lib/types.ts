@@ -53,4 +53,11 @@ export interface Program {
   lastVerified: string;
 }
 
-    
+export interface CareerApplication {
+    id?: string;
+    applicantName: string;
+    applicantEmail: string;
+    applicantDetails: string;
+    cvUrl: string;
+    applicationDate: any; // Using 'any' for Firebase's serverTimestamp()
+}

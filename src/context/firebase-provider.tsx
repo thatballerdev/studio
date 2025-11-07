@@ -1,9 +1,11 @@
+
 "use client";
 
 import { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, type Auth, type User } from "firebase/auth";
 import { getFirestore, doc, getDoc, onSnapshot, enableIndexedDbPersistence, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 import type { UserProfile } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
 
@@ -13,11 +15,13 @@ const firebaseConfig = {
   appId: "1:137171377701:web:b28aa4b1b92cef85fba9cc",
   apiKey: "AIzaSyCBGJUC8au0t659e_dNQyGfTrBaqMX_OMQ",
   authDomain: "studio-7345835072-fa19b.firebaseapp.com",
+  storageBucket: "studio-7345835072-fa19b.appspot.com",
 };
 
 interface FirebaseContextType {
   auth: Auth;
   db: Firestore;
+  storage: FirebaseStorage;
   user: User | null;
   userProfile: UserProfile | null;
   loading: boolean;
@@ -29,11 +33,13 @@ const FirebaseContext = createContext<FirebaseContextType>(null!);
 let firebaseApp: FirebaseApp;
 let auth: Auth;
 let db: Firestore;
+let storage: FirebaseStorage;
 
 if (getApps().length === 0) {
   firebaseApp = initializeApp(firebaseConfig);
   auth = getAuth(firebaseApp);
   db = getFirestore(firebaseApp);
+  storage = getStorage(firebaseApp);
   enableIndexedDbPersistence(db).catch((err: any) => {
     if (err.code == 'failed-precondition') {
       console.warn('Firestore persistence failed: multiple tabs open.');
@@ -45,6 +51,7 @@ if (getApps().length === 0) {
   firebaseApp = getApp();
   auth = getAuth(firebaseApp);
   db = getFirestore(firebaseApp);
+  storage = getStorage(firebaseApp);
 }
 
 
@@ -100,7 +107,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <FirebaseContext.Provider value={{ auth, db, user, userProfile, loading }}>
+    <FirebaseContext.Provider value={{ auth, db, storage, user, userProfile, loading }}>
       {!loading && children}
     </FirebaseContext.Provider>
   );

@@ -31,12 +31,9 @@ service cloud.firestore {
      * @deny (get, update, delete) User with ID 'user456' cannot access /users/user123/profile.
      * @principle Enforces document ownership for all operations on the user profile.
      */
-    match /users/{userId}/profile {
-      allow get: if isSignedIn() && isOwner(userId);
-      allow list: if false;
-      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
-      allow update: if isSignedIn() && isExistingOwner(userId) && request.resource.data.id == resource.data.id;
-      allow delete: if isSignedIn() && isExistingOwner(userId);
+    match /users/{userId} {
+      allow read, update, delete: if isSignedIn() && isOwner(userId);
+      allow create: if isSignedIn() && isOwner(userId);
     }
 
     /**
@@ -48,24 +45,21 @@ service cloud.firestore {
      */
     match /universities/{universityId} {
       allow get, list: if true;
-      allow create: if false;
-      allow update: if false;
-      allow delete: if false;
+      allow write: if false;
     }
 
     /**
-     * @description Allows any user to submit a career application, but with write access restrictions to prevent abuse.
+     * @description Allows any signed-in user to submit a career application, but with write access restrictions to prevent abuse.
+     * Validates that the submitted data matches the expected schema for a CareerApplication.
      * @path /careerApplications/{applicationId}
-     * @allow (create) Any signed-in user can create a career application.
+     * @allow (create) Any signed-in user can create a career application if the data is valid.
      * @deny (update, delete) No user can update or delete a career application.
-     * @principle Allows open submission but restricts modification and deletion of applications.
+     * @principle Allows open submission but restricts modification and deletion, and ensures data integrity.
      */
     match /careerApplications/{applicationId} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if isSignedIn();
-      allow update: if false;
-      allow delete: if false;
+      allow read: if true;
+      allow create: if isSignedIn() && isValidApplication();
+      allow update, delete: if false;
     }
 
     // --- Helper Functions ---
@@ -86,14 +80,21 @@ service cloud.firestore {
     function isOwner(userId) {
       return request.auth.uid == userId;
     }
-
+    
     /**
-     * @description Checks if the authenticated user is the owner of the existing document.
-     * @param {string} userId The user ID to compare against the authenticated user's ID.
-     * @return True if the user IDs match and the resource exists, false otherwise.
-     */
-    function isExistingOwner(userId) {
-      return isSignedIn() && isOwner(userId) && resource != null;
+    * @description Validates the structure and content of a new career application.
+    * Ensures all required fields are present and have the correct data types.
+    * Limits the size of string inputs to prevent abuse.
+    * @return True if the application data is valid, false otherwise.
+    */
+    function isValidApplication() {
+      let data = request.resource.data;
+      return 
+        data.applicantName is string && data.applicantName.size() < 100 &&
+        data.applicantEmail is string && data.applicantEmail.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$') &&
+        data.applicantDetails is string && data.applicantDetails.size() < 5000 &&
+        data.cvUrl is string && data.cvUrl.matches('^https://firebasestorage.googleapis.com/.*') &&
+        data.applicationDate == request.time;
     }
   }
 }
