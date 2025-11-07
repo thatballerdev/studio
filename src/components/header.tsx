@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { LayoutGrid, LogOut, User, Menu } from 'lucide-react';
+import { LayoutGrid, LogOut, User, Menu, FileText } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
@@ -19,7 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
 
-export default function Header() {
+export default function Header({ children }: { children?: React.ReactNode}) {
   const { user, userProfile, auth } = useFirebase();
   const router = useRouter();
 
@@ -37,35 +37,24 @@ export default function Header() {
     }
     return name.substring(0, 2);
   };
-
-  const navItems = (
-    <>
-      <Button variant="ghost" asChild className="justify-start">
-        <Link href="/dashboard">
-          <LayoutGrid className="mr-2 h-4 w-4" />
-          Dashboard
-        </Link>
-      </Button>
-      <Button variant="ghost" asChild className="justify-start">
-        <Link href="/profile">
-          <User className="mr-2 h-4 w-4" />
-          Profile
-        </Link>
-      </Button>
-    </>
-  );
   
   const mobileNavItems = (
     <>
       <SheetClose asChild>
-        <Link href="/dashboard" className="flex items-center gap-2 p-2 rounded-md hover:bg-secondary">
-          <LayoutGrid className="mr-2 h-4 w-4" />
+        <Link href="/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
+          <LayoutGrid className="mr-2 h-5 w-5" />
           Dashboard
         </Link>
       </SheetClose>
       <SheetClose asChild>
-        <Link href="/profile" className="flex items-center gap-2 p-2 rounded-md hover:bg-secondary">
-          <User className="mr-2 h-4 w-4" />
+        <Link href="/programs" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
+          <FileText className="mr-2 h-5 w-5" />
+          Programs
+        </Link>
+      </SheetClose>
+      <SheetClose asChild>
+        <Link href="/profile" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
+          <User className="mr-2 h-5 w-5" />
           Profile
         </Link>
       </SheetClose>
@@ -104,9 +93,7 @@ export default function Header() {
         </Sheet>
         
         <div className="items-center flex-1 hidden md:flex">
-            <nav className="flex items-center gap-4 text-sm font-medium">
-                {navItems}
-            </nav>
+            {children}
         </div>
 
 
@@ -131,6 +118,10 @@ export default function Header() {
               <DropdownMenuItem onClick={() => router.push('/dashboard')}>
                 <LayoutGrid className="mr-2 h-4 w-4" />
                 <span>Dashboard</span>
+              </DropdownMenuItem>
+               <DropdownMenuItem onClick={() => router.push('/programs')}>
+                <FileText className="mr-2 h-4 w-4" />
+                <span>Programs</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push('/profile')}>
                 <User className="mr-2 h-4 w-4" />

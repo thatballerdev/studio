@@ -19,3 +19,18 @@ export interface University {
   imageId: string;
   motto: string;
 }
+
+export interface Program {
+  courseId: string;
+  degreeLevel: 'BSc' | 'MSc';
+  subject: string;
+  tuitionRangeEUR: { min: number; max: number };
+  typicalLanguage: 'English' | 'English + Local' | 'Local Language';
+  notes: string;
+  estTotalCost: {
+    easternEurope: { min: number; max: number };
+    westernEurope: { min: number; max: number };
+  };
+  commonDurationYears: number;
+  lastVerified: string;
+}

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Briefcase, DollarSign, Globe, Heart, MessageSquare, Search, Star, Twitter, Linkedin, Facebook, CheckCircle, MapPin, Milestone } from 'lucide-react';
+import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
@@ -8,7 +8,6 @@ import Logo from '@/components/logo';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { universityData } from '@/lib/university-data';
 import { getFlagEmoji } from '@/lib/utils';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 
 export default function Home() {
@@ -24,7 +23,7 @@ export default function Home() {
           </Link>
           <nav className="ml-10 hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
-            <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
+            <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
@@ -61,7 +60,7 @@ export default function Home() {
                                 </Link>
                             </Button>
                             <Button size="lg" variant="outline" asChild className="font-bold text-base">
-                                <Link href="#">
+                                <Link href="/programs">
                                 Explore Programs
                                 </Link>
                             </Button>
@@ -90,7 +89,7 @@ export default function Home() {
         </section>
         
         {/* How It Works Section */}
-        <section className="w-full py-20 md:py-28 bg-white border-y">
+        <section className="w-full py-20 md:py-28 bg-card border-y">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16 animate-fade-up">
               <h2 className="text-4xl md:text-5xl font-bold font-heading">How It Works</h2>
@@ -170,7 +169,7 @@ export default function Home() {
         </section>
 
         {/* CTA Strip */}
-        <section className="w-full py-20 bg-white border-y">
+        <section className="w-full py-20 bg-card border-y">
             <div className="container mx-auto px-4 text-center">
                  <div className="animate-fade-up">
                     <h2 className="text-3xl md:text-4xl font-bold mb-4 font-heading max-w-2xl mx-auto">Create a free account and get 5 verified program matches in minutes.</h2>
@@ -188,7 +187,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="py-12 border-t bg-card">
+      <footer className="py-12 border-t bg-background">
         <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-5 gap-8">
             <div className="col-span-2 md:col-span-1">
                 <Logo width={100} height={40}/>
