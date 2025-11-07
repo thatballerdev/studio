@@ -1,49 +1,16 @@
-import { cn } from "@/lib/utils";
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const Logo = ({ className }: { className?: string }) => {
   return (
-    <svg
-      className={cn("h-8 w-8", className)}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M12 2L2 7V17L12 22L22 17V7L12 2Z"
-        className="stroke-accent"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M2 7L12 12"
-        className="stroke-primary"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M12 22V12"
-        className="stroke-primary"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M22 7L12 12"
-        className="stroke-primary"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M17 4.5L7 9.5"
-        className="stroke-primary"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <Image
+      src="https://picsum.photos/seed/logo/40/40"
+      alt="Northway Logo"
+      width={40}
+      height={40}
+      className={cn('rounded-md', className)}
+      data-ai-hint="logo"
+    />
   );
 };
 
