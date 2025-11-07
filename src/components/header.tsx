@@ -74,10 +74,10 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center">
+      <div className="container flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Logo />
+            <Logo width={100} height={40} />
           </Link>
         </div>
 
@@ -93,7 +93,7 @@ export default function Header() {
             <div className="flex flex-col h-full">
                 <div className="p-6 border-b">
                   <Link href="/dashboard" className="flex items-center gap-2">
-                      <Logo />
+                      <Logo width={100} height={40}/>
                   </Link>
                 </div>
                 <nav className="flex flex-col gap-2 p-4">
@@ -104,7 +104,7 @@ export default function Header() {
         </Sheet>
         
         <div className="items-center flex-1 hidden md:flex">
-            <nav className="flex items-center gap-2 text-sm">
+            <nav className="flex items-center gap-4 text-sm font-medium">
                 {navItems}
             </nav>
         </div>

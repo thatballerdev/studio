@@ -14,7 +14,7 @@ export default function UniversityCard({ university }: UniversityCardProps) {
   const placeholderImage = PlaceHolderImages.find(p => p.id === university.imageId);
 
   return (
-    <Card className="w-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card">
+    <Card className="w-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card rounded-xl">
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
           {placeholderImage && (

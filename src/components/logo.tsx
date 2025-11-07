@@ -16,7 +16,7 @@ const Logo = ({
       alt="Northway Logo"
       width={width}
       height={height}
-      className={cn('rounded-md object-contain', className)}
+      className={cn('object-contain', className)}
       data-ai-hint="logo abstract"
       priority
     />
