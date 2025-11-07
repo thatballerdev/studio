@@ -18,7 +18,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
 import AuthCheck from '@/components/auth-check';
 import { countries } from '@/lib/countries-data';
-import Logo from '@/components/logo';
+import Image from 'next/image';
 import { Progress } from '@/components/ui/progress';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -103,7 +103,7 @@ export default function OnboardingPage() {
     <AuthCheck>
       <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-secondary/50">
         <div className="flex items-center gap-2 mb-8">
-            <Logo className="h-10 w-10"/>
+            <Image src="https://picsum.photos/seed/logo/40/40" alt="Logo" width={40} height={40} className="rounded-md" data-ai-hint="logo" />
             <span className="font-bold text-xl">Northway</span>
         </div>
         <Card className="w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-500">

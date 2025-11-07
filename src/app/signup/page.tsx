@@ -16,7 +16,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useFirebase } from '@/context/firebase-provider';
-import Logo from '@/components/logo';
+import Image from 'next/image';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -94,7 +94,7 @@ export default function SignupPage() {
         <Card className="shadow-2xl border-2 border-transparent hover:border-primary/20 transition-all">
           <CardHeader className="text-center">
              <Link href="/" className="flex justify-center items-center gap-2 mb-4">
-                <Logo className="h-10 w-10"/>
+                <Image src="https://picsum.photos/seed/logo/40/40" alt="Logo" width={40} height={40} className="rounded-md" data-ai-hint="logo" />
             </Link>
             <CardTitle className="text-2xl">Create an Account</CardTitle>
             <CardDescription>Join Northway and find your perfect university</CardDescription>
