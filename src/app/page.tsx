@@ -33,7 +33,11 @@ export default function Home() {
       <main className="flex-1">
         <section className="w-full py-24 md:py-32 lg:py-48">
           <div className="container mx-auto text-center px-4">
-            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
+            <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 flex flex-col items-center">
+                <Logo width={200} height={80} className="mb-6"/>
+                <p className="text-xl md:text-2xl text-muted-foreground mb-10 italic">
+                    Education with purpose, not pressure.
+                </p>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
                 Your Global Education Awaits
               </h1>
