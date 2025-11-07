@@ -1,3 +1,4 @@
+
 {
   "entities": {
     "UserProfile": {
@@ -105,6 +106,10 @@
           "type": "string",
           "description": "Additional details or cover letter provided by the applicant."
         },
+        "studentsPerMonth": {
+          "type": "string",
+          "description": "Estimated number of students the applicant can bring to the platform per month."
+        },
         "cvUrl": {
           "type": "string",
           "description": "URL of the uploaded CV in Firebase Storage.",
@@ -120,6 +125,7 @@
         "applicantName",
         "applicantEmail",
         "applicantDetails",
+        "studentsPerMonth",
         "cvUrl",
         "applicationDate"
       ]
@@ -185,3 +191,5 @@
     "reasoning": "The Firestore data structure is designed to support the Northway application, focusing on user profiles, university data, and career applications, with an emphasis on security and scalability. Authorization Independence: The structure ensures authorization independence by avoiding hierarchical `get()` calls in security rules. User-specific data is stored under the `/users/{userId}` path, enabling direct access control based on `request.auth.uid` without needing to traverse parent documents. The CareerApplication data is stored directly under a top-level `/careerApplications` collection. Ownership is not a concern in this case, and all writes are governed by security rules that determine who can create the applications. Structural Segregation (Homogeneous Security Posture): The design uses distinct collections to maintain a homogeneous security posture. User profiles are stored in `/users/{userId}`, ensuring that only the authenticated user can access their data. University data is stored in `/universities`, which can be configured for read access by all users. Career applications are stored in `/careerApplications`, and the write access to this collection will be configured to limit the data writes. Access Modeling: The structure utilizes path-based ownership for user profiles (`/users/{userId}/profile`) to ensure that only the authenticated user can modify their profile. The career application submission is open to all, but will be validated by security rules."
   }
 }
+
+    

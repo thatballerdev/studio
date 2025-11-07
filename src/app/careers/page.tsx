@@ -27,6 +27,7 @@ const applicationSchema = z.object({
   applicantName: z.string().min(2, 'Please enter your full name.'),
   applicantEmail: z.string().email('Please enter a valid email address.'),
   applicantDetails: z.string().min(10, 'Please tell us a bit about yourself.').max(5000),
+  studentsPerMonth: z.string().min(1, 'Please provide an estimate.'),
   cv: z.any()
     .refine((files) => files?.length === 1, 'CV is required.')
     .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, 'Max file size is 5MB.')
@@ -53,6 +54,7 @@ export default function CareersPage() {
       applicantName: '',
       applicantEmail: '',
       applicantDetails: '',
+      studentsPerMonth: '',
     },
   });
 
@@ -70,6 +72,7 @@ export default function CareersPage() {
         applicantName: data.applicantName,
         applicantEmail: data.applicantEmail,
         applicantDetails: data.applicantDetails,
+        studentsPerMonth: data.studentsPerMonth,
         cvUrl,
         applicationDate: serverTimestamp(),
       });
@@ -129,7 +132,7 @@ export default function CareersPage() {
               Join Our Mission
             </h1>
             <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Help us empower the next generation of Nigerian leaders.
+              Help us show American students a world of affordable education.
             </p>
           </div>
         </motion.section>
@@ -139,27 +142,25 @@ export default function CareersPage() {
                 <div className="md:col-span-3">
                     <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, amount: 0.3 }} transition={{ duration: 0.7 }}>
                         <h2 className="text-3xl font-bold font-heading mb-2">Student Ambassador Program</h2>
-                        <p className="text-muted-foreground mb-8">Part-time & Remote</p>
+                        <p className="text-muted-foreground mb-8">Part-time & Remote (U.S. Based)</p>
 
                         <div className="prose prose-lg dark:prose-invert max-w-none text-foreground/80 space-y-6">
-                            <p>Are you passionate about education and helping your peers achieve their dreams? We are looking for motivated and well-connected students to join our team as Student Ambassadors. This is a unique opportunity to be part of a mission-driven company dedicated to making international education accessible and affordable for Nigerian students.</p>
+                            <p>Are you a well-connected student in the U.S. who is passionate about global travel and smarter financial choices? Join Northway's mission to show American students that a world-class international education can be more affordable than they think. This is a unique opportunity to build your network, gain marketing experience, and be part of a team disrupting the student debt crisis.</p>
 
                             <h3 className="text-2xl font-bold font-heading mt-10 mb-4">What You'll Do:</h3>
                             <ul>
-                                <li><strong>Be the Face of Northway:</strong> Represent Northway in your university and local community, sharing our mission to eradicate student debt.</li>
-                                <li><strong>Educate and Inform:</strong> Conduct info-sessions and workshops to guide students on the opportunities available for affordable international education.</li>
-                                <li><strong>Content Creation:</strong> Create engaging content (videos, blog posts, social media updates) sharing tips and insights about studying abroad affordably.</li>
-                                <li><strong>Community Building:</strong> Build a community of aspiring students, providing them with support, resources, and encouragement through their application journey.</li>
-                                <li><strong>Market Research:</strong> Gather feedback and insights from students to help us improve our platform and services.</li>
+                                <li><strong>Be the Voice of Northway:</strong> Represent Northway on your campus. You’ll be the go-to person for students interested in studying abroad without breaking the bank.</li>
+                                <li><strong>Drive Registrations:</strong> Your primary goal is to get students to sign up and explore their options on the Northway platform. You’ll host info-sessions, share resources, and use your network to bring new users to the platform.</li>
+                                <li><strong>Content & Community:</strong> Create engaging content (social media posts, videos, flyers) that highlights the benefits of affordable international degrees and build a campus community around the idea.</li>
+                                <li><strong>Provide Feedback:</strong> Act as a bridge between the student body and our product team, providing valuable insights to help us improve the Northway experience for American users.</li>
                             </ul>
 
                             <h3 className="text-2xl font-bold font-heading mt-10 mb-4">Who You Are:</h3>
                             <ul>
-                                <li>Currently enrolled in a Nigerian university or a recent graduate.</li>
-                                <li>An excellent communicator with strong public speaking and interpersonal skills.</li>
-                                <li>Active on social media with a good understanding of what engages a student audience.</li>
-                                <li>Self-motivated, organized, and able to work independently.</li>
-                                <li>Passionate about our mission and knowledgeable about the challenges Nigerian students face.</li>
+                                <li>Currently enrolled in a university within the United States.</li>
+                                <li>A natural networker with strong communication and social media skills. You know how to get people interested and excited.</li>
+                                <li>Creative, self-motivated, and results-oriented. You’re passionate about our mission to make education accessible and are driven to meet your goals.</li>
+                                <li>You believe that student debt is a major problem and want to be part of the solution.</li>
                             </ul>
                         </div>
                     </motion.div>
@@ -177,7 +178,7 @@ export default function CareersPage() {
                                         <FormField control={form.control} name="applicantName" render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Full Name</FormLabel>
-                                                <FormControl><Input placeholder="e.g., Ada Okoro" {...field} /></FormControl>
+                                                <FormControl><Input placeholder="e.g., Alex Johnson" {...field} /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )} />
@@ -191,7 +192,14 @@ export default function CareersPage() {
                                         <FormField control={form.control} name="applicantDetails" render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>Why are you a good fit?</FormLabel>
-                                                <FormControl><Textarea placeholder="Tell us about your passion for this mission and your relevant experience..." {...field} rows={5} /></FormControl>
+                                                <FormControl><Textarea placeholder="Tell us about your network and your passion for this mission..." {...field} rows={5} /></FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )} />
+                                        <FormField control={form.control} name="studentsPerMonth" render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>How many students can you confidently bring per month?</FormLabel>
+                                                <FormControl><Input placeholder="e.g., 10-15" {...field} /></FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )} />
@@ -201,7 +209,7 @@ export default function CareersPage() {
                                             name="cv"
                                             render={() => (
                                                 <FormItem>
-                                                    <FormLabel>Upload Your CV</FormLabel>
+                                                    <FormLabel>Upload Your CV/Resume</FormLabel>
                                                     <FormControl>
                                                         <label htmlFor="cv-upload" className="relative flex w-full items-center justify-center rounded-md border-2 border-dashed border-muted-foreground/50 bg-background hover:bg-muted/50 cursor-pointer p-4 transition-colors">
                                                             <div className="flex flex-col items-center gap-2 text-center text-sm text-muted-foreground">
@@ -261,3 +269,5 @@ export default function CareersPage() {
     </div>
   );
 }
+
+    

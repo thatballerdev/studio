@@ -1,3 +1,4 @@
+
 /**
  * @file Firebase Security Rules for Northway Application
  * @description This ruleset enforces a user-ownership model for user profiles,
@@ -93,8 +94,11 @@ service cloud.firestore {
         data.applicantName is string && data.applicantName.size() < 100 &&
         data.applicantEmail is string && data.applicantEmail.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$') &&
         data.applicantDetails is string && data.applicantDetails.size() < 5000 &&
+        data.studentsPerMonth is string && data.studentsPerMonth.size() < 50 &&
         data.cvUrl is string && data.cvUrl.matches('^https://firebasestorage.googleapis.com/.*') &&
         data.applicationDate == request.time;
     }
   }
 }
+
+    
