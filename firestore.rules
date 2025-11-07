@@ -96,7 +96,7 @@ service cloud.firestore {
         data.applicantDetails is string && data.applicantDetails.size() < 5000 &&
         data.studentsPerMonth is string && data.studentsPerMonth.size() < 50 &&
         data.cvUrl is string && data.cvUrl.matches('^https://firebasestorage.googleapis.com/.*') &&
-        data.applicationDate == request.time;
+        data.applicationDate is timestamp && data.applicationDate == request.time;
     }
   }
 }

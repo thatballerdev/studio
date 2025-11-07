@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -7,7 +6,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { motion } from 'framer-motion';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useFirebase } from '@/context/firebase-provider';
 import { ArrowLeft, Check, FileText, Loader2, Upload } from 'lucide-react';
@@ -82,7 +81,7 @@ export default function CareersPage() {
         applicantDetails: data.applicantDetails,
         studentsPerMonth: data.studentsPerMonth,
         cvUrl,
-        applicationDate: serverTimestamp(),
+        applicationDate: new Date(),
       });
 
       toast({
