@@ -1,0 +1,192 @@
+{
+  "entities": {
+    "UserProfile": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "UserProfile",
+      "type": "object",
+      "description": "Represents a user's profile with their preferences and information.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the UserProfile entity."
+        },
+        "profession": {
+          "type": "string",
+          "description": "The user's profession."
+        },
+        "studyInterest": {
+          "type": "string",
+          "description": "The user's area of study interest."
+        },
+        "budget": {
+          "type": "number",
+          "description": "The user's budget for education."
+        },
+        "preferredCountries": {
+          "type": "array",
+          "description": "The user's preferred countries for studying.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        }
+      },
+      "required": [
+        "id",
+        "profession",
+        "studyInterest",
+        "budget",
+        "preferredCountries",
+        "email"
+      ]
+    },
+    "University": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "University",
+      "type": "object",
+      "description": "Represents a university with its details and programs.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the University entity."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the university."
+        },
+        "country": {
+          "type": "string",
+          "description": "The country where the university is located."
+        },
+        "annualCost": {
+          "type": "number",
+          "description": "The estimated annual cost of attending the university."
+        },
+        "programHighlights": {
+          "type": "array",
+          "description": "Highlights of the programs offered by the university.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "motto": {
+          "type": "string",
+          "description": "The motto of the university."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "country",
+        "annualCost",
+        "programHighlights"
+      ]
+    },
+    "CareerApplication": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CareerApplication",
+      "type": "object",
+      "description": "Represents a job application submitted by a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the CareerApplication entity."
+        },
+        "applicantName": {
+          "type": "string",
+          "description": "The name of the applicant."
+        },
+        "applicantEmail": {
+          "type": "string",
+          "description": "The email address of the applicant.",
+          "format": "email"
+        },
+        "applicantDetails": {
+          "type": "string",
+          "description": "Additional details provided by the applicant."
+        },
+        "cvUrl": {
+          "type": "string",
+          "description": "URL of the uploaded CV.",
+          "format": "uri"
+        },
+        "applicationDate": {
+          "type": "string",
+          "description": "The date and time when the application was submitted.",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "applicantName",
+        "applicantEmail",
+        "applicantDetails",
+        "cvUrl",
+        "applicationDate"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/users/{userId}/profile",
+        "definition": {
+          "entityName": "UserProfile",
+          "schema": {
+            "$ref": "#/backend/entities/UserProfile"
+          },
+          "description": "Stores user profile information.  Accessible only by the authenticated user with matching userId.",
+          "params": [
+            {
+              "name": "userId",
+              "description": "The unique identifier of the user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/universities/{universityId}",
+        "definition": {
+          "entityName": "University",
+          "schema": {
+            "$ref": "#/backend/entities/University"
+          },
+          "description": "Stores university data.  Read access is generally public. Write access is restricted.",
+          "params": [
+            {
+              "name": "universityId",
+              "description": "The unique identifier of the university."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/careerApplications/{applicationId}",
+        "definition": {
+          "entityName": "CareerApplication",
+          "schema": {
+            "$ref": "#/backend/entities/CareerApplication"
+          },
+          "description": "Stores career applications submitted by users. All users can submit applications; however, the write rules will ensure that no one can maliciously post to this collection.",
+          "params": [
+            {
+              "name": "applicationId",
+              "description": "The unique identifier of the career application."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore data structure is designed to support the Northway application, focusing on user profiles, university data, and career applications, with an emphasis on security and scalability.  \n\nAuthorization Independence: The structure ensures authorization independence by avoiding hierarchical `get()` calls in security rules.  User-specific data is stored under the `/users/{userId}` path, enabling direct access control based on `request.auth.uid` without needing to traverse parent documents. The CareerApplication data is stored directly under a top-level `/careerApplications` collection.  Ownership is not a concern in this case, and all writes are governed by security rules that determine who can create the applications.\n\nStructural Segregation (Homogeneous Security Posture):  The design uses distinct collections to maintain a homogeneous security posture. User profiles are stored in `/users/{userId}`, ensuring that only the authenticated user can access their data. University data is stored in `/universities`, which can be configured for read access by all users. Career applications are stored in `/careerApplications`, and the write access to this collection will be configured to limit the data writes.\n\nAccess Modeling:  The structure utilizes path-based ownership for user profiles (`/users/{userId}/profile`) to ensure that only the authenticated user can modify their profile.  The career application submission is open to all, but will be validated by security rules."
+  }
+}

@@ -1,0 +1,99 @@
+/**
+ * @file Firebase Security Rules for Northway Application
+ * @description This ruleset enforces a user-ownership model for user profiles,
+ * allows public read access to university data, and restricts write access.
+ * Career applications are open for submission but with restricted write access.
+ *
+ * Data Structure:
+ * - /users/{userId}/profile: User profile information, accessible only by the user.
+ * - /universities/{universityId}: Publicly readable university data.
+ * - /careerApplications/{applicationId}: Career applications.
+ *
+ * Key Security Decisions:
+ * - User profiles are strictly owned by the authenticated user.
+ * - University data is publicly readable, but write access is restricted.
+ * - Career applications are open for submission, and write access is restricted to avoid malicious usage of the collection.
+ *
+ * Denormalization for Authorization:
+ *   No denormalization is used in this simple example.
+ *
+ * Structural Segregation:
+ *   User profiles are stored in a private subcollection, while university data is in a public top-level collection.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Secures user profile data, ensuring only the authenticated user can access their own profile.
+     * @path /users/{userId}/profile
+     * @allow (get, update, delete) User with ID 'user123' can access /users/user123/profile.
+     * @deny (get, update, delete) User with ID 'user456' cannot access /users/user123/profile.
+     * @principle Enforces document ownership for all operations on the user profile.
+     */
+    match /users/{userId}/profile {
+      allow get: if isSignedIn() && isOwner(userId);
+      allow list: if false;
+      allow create: if isSignedIn() && isOwner(userId) && request.resource.data.id == userId;
+      allow update: if isSignedIn() && isExistingOwner(userId) && request.resource.data.id == resource.data.id;
+      allow delete: if isSignedIn() && isExistingOwner(userId);
+    }
+
+    /**
+     * @description Makes university data publicly readable while restricting write access.
+     * @path /universities/{universityId}
+     * @allow (get, list) Any user (signed in or not) can read university data.
+     * @deny (create, update, delete) No one can create, update, or delete university data without proper authorization (not implemented here).
+     * @principle Allows public read access but restricts write access to authorized users (not defined).
+     */
+    match /universities/{universityId} {
+      allow get, list: if true;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    /**
+     * @description Allows any user to submit a career application, but with write access restrictions to prevent abuse.
+     * @path /careerApplications/{applicationId}
+     * @allow (create) Any signed-in user can create a career application.
+     * @deny (update, delete) No user can update or delete a career application.
+     * @principle Allows open submission but restricts modification and deletion of applications.
+     */
+    match /careerApplications/{applicationId} {
+      allow get: if true;
+      allow list: if true;
+      allow create: if isSignedIn();
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    // --- Helper Functions ---
+
+    /**
+     * @description Checks if the user is signed in.
+     * @return True if the user is authenticated, false otherwise.
+     */
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    /**
+     * @description Checks if the authenticated user ID matches the provided user ID.
+     * @param {string} userId The user ID to compare against the authenticated user's ID.
+     * @return True if the user IDs match, false otherwise.
+     */
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+
+    /**
+     * @description Checks if the authenticated user is the owner of the existing document.
+     * @param {string} userId The user ID to compare against the authenticated user's ID.
+     * @return True if the user IDs match and the resource exists, false otherwise.
+     */
+    function isExistingOwner(userId) {
+      return isSignedIn() && isOwner(userId) && resource != null;
+    }
+  }
+}
