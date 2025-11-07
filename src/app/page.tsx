@@ -18,7 +18,6 @@ export default function Home() {
         <div className="container h-16 flex items-center">
           <Link href="/" className="flex items-center gap-2">
             <Logo />
-            <span className="font-bold text-lg">Northway</span>
           </Link>
           <nav className="ml-auto flex items-center gap-2">
             <Button variant="ghost" asChild>

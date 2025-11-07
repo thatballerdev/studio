@@ -105,7 +105,6 @@ export default function OnboardingPage() {
       <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-secondary">
         <div className="flex items-center gap-2 mb-8">
             <Logo />
-            <span className="font-bold text-xl">Northway</span>
         </div>
         <Card className="w-full max-w-lg shadow-lg animate-in fade-in zoom-in-95 duration-500 border-border/50">
           <CardHeader>

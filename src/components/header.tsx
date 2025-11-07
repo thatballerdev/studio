@@ -78,7 +78,6 @@ export default function Header() {
         <div className="mr-4 hidden md:flex">
           <Link href="/dashboard" className="flex items-center gap-2">
             <Logo />
-            <span className="font-bold">Northway</span>
           </Link>
         </div>
 
@@ -95,7 +94,6 @@ export default function Header() {
                 <div className="p-6 border-b">
                   <Link href="/dashboard" className="flex items-center gap-2">
                       <Logo />
-                      <span className="font-bold">Northway</span>
                   </Link>
                 </div>
                 <nav className="flex flex-col gap-2 p-4">
