@@ -1,13 +1,31 @@
+
 export interface UserProfile {
   uid: string;
   email: string;
   name?: string;
+  onboardingComplete: boolean;
+
+  // Old onboarding fields
   profession?: string;
   studyInterest?: string;
   budget?: number;
   preferredCountries?: string[];
-  onboardingComplete: boolean;
+
+  // New detailed onboarding fields
+  fullName?: string;
+  currentEducation?: string;
+  targetDegree?: string;
+  fieldInterest?: string[];
+  budgetRangeUSD?: string;
+  englishOnly?: boolean;
+  regionPreference?: string;
+  desiredStartDate?: string;
+  careerGoal?: string;
+  scholarshipInterest?: boolean;
+  studyMode?: string;
+  priorityFactors?: string[];
 }
+
 
 export interface University {
   id: string;
@@ -34,3 +52,5 @@ export interface Program {
   commonDurationYears: number;
   lastVerified: string;
 }
+
+    

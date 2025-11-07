@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useFirebase } from '@/context/firebase-provider';
@@ -6,6 +7,13 @@ import UniversityCard from '@/components/university-card';
 import { Button } from '@/components/ui/button';
 import { Loader2, Telescope } from 'lucide-react';
 import Link from 'next/link';
+
+function budgetToNumber(budgetRange?: string): number {
+    if (!budgetRange) return 100000;
+    if (budgetRange.includes('+')) return 100000;
+    const numbers = budgetRange.split('-').map(s => parseInt(s, 10));
+    return numbers[1] || 100000;
+}
 
 export default function DashboardPage() {
   const { userProfile, loading } = useFirebase();
@@ -28,8 +36,14 @@ export default function DashboardPage() {
   }
 
   const filteredUniversities = universityData.filter(uni => {
-    const budgetMatch = userProfile.budget ? uni.annualCost <= userProfile.budget : true;
+    // New budget logic
+    const userBudgetMax = budgetToNumber(userProfile.budgetRangeUSD);
+    const budgetMatch = userProfile.budgetRangeUSD ? uni.annualCost <= userBudgetMax : true;
+    
+    // Legacy country logic
     const countryMatch = userProfile.preferredCountries ? userProfile.preferredCountries.some(c => uni.countryCode === c) : true;
+
+    // TODO: Add more filtering based on new preferences like region, etc.
     return budgetMatch && countryMatch;
   });
 
@@ -60,3 +74,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
