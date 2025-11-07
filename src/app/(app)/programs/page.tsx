@@ -9,6 +9,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectGroup,
+  SelectLabel
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
@@ -79,11 +81,12 @@ export default function ProgramsPage() {
                         <SelectContent>
                         <SelectItem value="all">All Subjects</SelectItem>
                         {Object.entries(courseCategories).map(([category, subjects]) => (
-                            <optgroup key={category} label={category} className="font-semibold pt-2">
-                            {subjects.map((s) => (
-                                <SelectItem key={s} value={s}>{s}</SelectItem>
-                            ))}
-                            </optgroup>
+                            <SelectGroup key={category}>
+                                <SelectLabel>{category}</SelectLabel>
+                                {subjects.map((s) => (
+                                    <SelectItem key={s} value={s}>{s}</SelectItem>
+                                ))}
+                            </SelectGroup>
                         ))}
                         </SelectContent>
                     </Select>
