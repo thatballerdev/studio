@@ -3,8 +3,8 @@
     {
       "id": "hero",
       "description": "Students studying in a library",
-      "imageUrl": "https://images.unsplash.com/photo-1637068302763-a8284115e920?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGxpYnJhcnl8ZW58MHx8fHwxNzYyNDE2NTI2fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "students library"
+      "imageUrl": "https://images.unsplash.com/20/cambridge.JPG?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5fGVufDB8fHx8MTc2MjU1MDQxMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university campus classic"
     },
     {
       "id": "university-1",
