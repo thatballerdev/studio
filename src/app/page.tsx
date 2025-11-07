@@ -34,7 +34,7 @@ export default function Home() {
         <section className="w-full py-24 md:py-32 lg:py-48">
           <div className="container mx-auto text-center px-4">
             <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000 flex flex-col items-center">
-                <Logo width={200} height={80} className="mb-6"/>
+                <Logo width={200} height={80} className="mb-4"/>
                 <p className="text-xl md:text-2xl text-muted-foreground mb-10 italic">
                     Education with purpose, not pressure.
                 </p>
