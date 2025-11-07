@@ -4,7 +4,7 @@
 import { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import { initializeApp, getApps, getApp, type FirebaseApp } from "firebase/app";
 import { getAuth, onAuthStateChanged, type Auth, type User } from "firebase/auth";
-import { getFirestore, doc, getDoc, onSnapshot, enableIndexedDbPersistence, type Firestore } from "firebase/firestore";
+import { getFirestore, doc, onSnapshot, enableIndexedDbPersistence, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 import type { UserProfile } from '@/lib/types';
 import { Loader2 } from 'lucide-react';
@@ -37,21 +37,23 @@ let storage: FirebaseStorage;
 
 if (getApps().length === 0) {
   firebaseApp = initializeApp(firebaseConfig);
-  auth = getAuth(firebaseApp);
-  db = getFirestore(firebaseApp);
-  storage = getStorage(firebaseApp);
-  enableIndexedDbPersistence(db).catch((err: any) => {
+} else {
+  firebaseApp = getApp();
+}
+
+// Always get the latest instances of the services
+auth = getAuth(firebaseApp);
+db = getFirestore(firebaseApp);
+storage = getStorage(firebaseApp);
+
+try {
+    enableIndexedDbPersistence(db);
+} catch (err: any) {
     if (err.code == 'failed-precondition') {
       console.warn('Firestore persistence failed: multiple tabs open.');
     } else if (err.code == 'unimplemented') {
       console.warn('Firestore persistence not available in this browser.');
     }
-  });
-} else {
-  firebaseApp = getApp();
-  auth = getAuth(firebaseApp);
-  db = getFirestore(firebaseApp);
-  storage = getStorage(firebaseApp);
 }
 
 
@@ -98,7 +100,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribeProfile();
   }, [user]);
 
-  if (loading) {
+  if (loading && !userProfile) {
      return (
       <div className="flex h-screen w-screen items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
