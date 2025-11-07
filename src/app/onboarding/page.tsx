@@ -7,7 +7,7 @@ import { useForm, type SubmitHandler, type FieldValues } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, updateDoc } from 'firebase/firestore';
-import { ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star } from 'lucide-react';
+import { User, ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
