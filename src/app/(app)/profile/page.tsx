@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -13,18 +14,27 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
-import { countries } from '@/lib/countries-data';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { allSubjects } from '@/lib/program-data';
+import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 
 const profileSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters."),
-  profession: z.string().min(2, "Please enter your profession."),
-  studyInterest: z.string().min(2, "Please enter your field of study."),
-  budget: z.number().min(1000).max(200000),
-  preferredCountries: z.array(z.string()).min(1, "Please select at least one country."),
+  fullName: z.string().min(2, "Please enter your full name."),
+  currentEducation: z.string().min(1, "Please select your education level."),
+  targetDegree: z.string().min(1, "Please select your target degree."),
+  fieldInterest: z.array(z.string()).min(1, "Please select at least one field."),
+  budgetRangeUSD: z.string().min(1, "Please select your budget."),
+  englishOnly: z.boolean().default(true),
+  regionPreference: z.string().min(1, "Please select a region."),
+  desiredStartDate: z.string().min(4, "Please enter a valid start date."),
+  careerGoal: z.string().optional(),
+  scholarshipInterest: z.boolean().default(false),
+  studyMode: z.string().min(1, "Please select a study mode."),
+  priorityFactors: z.array(z.string()).min(1, "Please select at least one priority.")
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -38,11 +48,18 @@ export default function ProfilePage() {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     values: {
-      name: userProfile?.name || '',
-      profession: userProfile?.profession || '',
-      studyInterest: userProfile?.studyInterest || '',
-      budget: userProfile?.budget || 20000,
-      preferredCountries: userProfile?.preferredCountries || [],
+      fullName: userProfile?.fullName || userProfile?.name || '',
+      currentEducation: userProfile?.currentEducation || '',
+      targetDegree: userProfile?.targetDegree || '',
+      fieldInterest: userProfile?.fieldInterest || [],
+      budgetRangeUSD: userProfile?.budgetRangeUSD || '',
+      englishOnly: userProfile?.englishOnly ?? true,
+      regionPreference: userProfile?.regionPreference || '',
+      desiredStartDate: userProfile?.desiredStartDate || '',
+      careerGoal: userProfile?.careerGoal || '',
+      scholarshipInterest: userProfile?.scholarshipInterest ?? false,
+      studyMode: userProfile?.studyMode || '',
+      priorityFactors: userProfile?.priorityFactors || [],
     },
   });
 
@@ -80,7 +97,7 @@ export default function ProfilePage() {
               <CardTitle>Personal Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <FormField control={form.control} name="name" render={({ field }) => (
+              <FormField control={form.control} name="fullName" render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
@@ -96,58 +113,176 @@ export default function ProfilePage() {
               <CardDescription>These settings help us personalize your university feed.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <FormField control={form.control} name="profession" render={({ field }) => (
+               <FormField control={form.control} name="currentEducation" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Current Profession</FormLabel>
-                  <FormControl><Input placeholder="e.g., Software Engineer" {...field} /></FormControl>
+                  <FormLabel>Current level of education</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl><SelectTrigger><SelectValue placeholder="Select level..." /></SelectTrigger></FormControl>
+                    <SelectContent>
+                      <SelectItem value="High School">High School</SelectItem>
+                      <SelectItem value="Associate Degree">Associate Degree</SelectItem>
+                      <SelectItem value="Bachelor's">Bachelor’s</SelectItem>
+                      <SelectItem value="Master's">Master’s</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="studyInterest" render={({ field }) => (
+              <FormField control={form.control} name="targetDegree" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Field of Study Interest</FormLabel>
-                  <FormControl><Input placeholder="e.g., Computer Science" {...field} /></FormControl>
+                  <FormLabel>Target degree</FormLabel>
+                   <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl><SelectTrigger><SelectValue placeholder="Select degree..." /></SelectTrigger></FormControl>
+                    <SelectContent>
+                      <SelectItem value="BSc">Bachelor’s / Undergraduate</SelectItem>
+                      <SelectItem value="MSc">Master’s / Graduate</SelectItem>
+                      <SelectItem value="MD">Medicine / MD</SelectItem>
+                      <SelectItem value="Diploma">Diploma</SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="budget" render={({ field }) => (
+               <FormField control={form.control} name="fieldInterest" render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Annual Budget: ${field.value.toLocaleString()}</FormLabel>
-                  <FormControl>
-                    <Slider
-                      min={1000} max={200000} step={1000}
-                      value={[field.value]}
-                      onValueChange={(values) => field.onChange(values[0])}
-                    />
-                  </FormControl>
+                  <FormLabel>Field of interest</FormLabel>
+                  <div className="grid grid-cols-2 gap-2 h-64 overflow-auto p-2 border rounded-md">
+                    {allSubjects.map((item) => (
+                      <FormItem key={item} className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value.includes(item)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...field.value, item])
+                                : field.onChange(field.value.filter((value) => value !== item));
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel className="font-normal">{item}</FormLabel>
+                      </FormItem>
+                    ))}
+                  </div>
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="preferredCountries" render={() => (
+              <FormField control={form.control} name="budgetRangeUSD" render={({ field }) => (
+                 <FormItem>
+                    <FormLabel>Annual tuition budget (in USD)</FormLabel>
+                     <RadioGroup onValueChange={field.onChange} defaultValue={field.value} className="space-y-2">
+                        <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl><RadioGroupItem value="<5000" /></FormControl>
+                            <FormLabel className="font-normal">&lt; $5,000</FormLabel>
+                        </FormItem>
+                         <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl><RadioGroupItem value="5000-10000" /></FormControl>
+                            <FormLabel className="font-normal">$5,000 – $10,000</FormLabel>
+                        </FormItem>
+                         <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl><RadioGroupItem value="10000-15000" /></FormControl>
+                            <FormLabel className="font-normal">$10,000 – $15,000</FormLabel>
+                        </FormItem>
+                         <FormItem className="flex items-center space-x-3 space-y-0">
+                            <FormControl><RadioGroupItem value="15000+" /></FormControl>
+                            <FormLabel className="font-normal">$15,000+</FormLabel>
+                        </FormItem>
+                    </RadioGroup>
+                     <FormMessage />
+                </FormItem>
+              )} />
+               <FormField control={form.control} name="englishOnly" render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel className="text-base">English-only programs</FormLabel>
+                  </div>
+                  <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="regionPreference" render={({ field }) => (
+                   <FormItem>
+                      <FormLabel>Preferred region</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select region..." /></SelectTrigger></FormControl>
+                          <SelectContent>
+                              <SelectItem value="Eastern Europe">Eastern Europe</SelectItem>
+                              <SelectItem value="Western Europe">Western Europe</SelectItem>
+                              <SelectItem value="Central Europe">Central Europe</SelectItem>
+                              <SelectItem value="Nordic">Nordic</SelectItem>
+                              <SelectItem value="No Preference">No Preference</SelectItem>
+                          </SelectContent>
+                      </Select>
+                      <FormMessage />
+                  </FormItem>
+              )}/>
+               <FormField control={form.control} name="desiredStartDate" render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Desired start date</FormLabel>
+                      <FormControl><Input placeholder="e.g., September 2025" {...field} /></FormControl>
+                      <FormMessage />
+                  </FormItem>
+              )}/>
+              <FormField control={form.control} name="careerGoal" render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Career goal (Optional)</FormLabel>
+                      <FormControl><Textarea placeholder="e.g., 'To become an aerospace engineer...'" {...field} /></FormControl>
+                      <FormMessage />
+                  </FormItem>
+              )}/>
+              <FormField control={form.control} name="scholarshipInterest" render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Scholarship interest</FormLabel>
+                </div>
+                <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
+              </FormItem>
+              )}/>
+               <FormField control={form.control} name="studyMode" render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Preferred study mode</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl><SelectTrigger><SelectValue placeholder="Select mode..." /></SelectTrigger></FormControl>
+                          <SelectContent>
+                              <SelectItem value="On-campus">On-campus</SelectItem>
+                              <SelectItem value="Hybrid">Hybrid</SelectItem>
+                              <SelectItem value="Online">Online</SelectItem>
+                          </SelectContent>
+                      </Select>
+                      <FormMessage />
+                  </FormItem>
+              )}/>
+              <FormField control={form.control} name="priorityFactors" render={() => (
                 <FormItem>
-                  <FormLabel>Preferred Countries</FormLabel>
-                  <ScrollArea className="h-48">
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 pr-4">
-                      {countries.map((country) => (
-                        <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field }) => (
-                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-accent has-[[data-state=checked]]:bg-accent transition-colors">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value?.includes(country.code)}
-                                onCheckedChange={(checked) => (
-                                  checked
-                                    ? field.onChange([...field.value, country.code])
-                                    : field.onChange(field.value?.filter(v => v !== country.code))
-                                )}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal cursor-pointer">{country.name}</FormLabel>
-                          </FormItem>
-                        )} />
-                      ))}
+                    <FormLabel>Priorities</FormLabel>
+                    <div className="space-y-2 pt-2">
+                        {["Affordable tuition", "English-taught courses", "City life", "International ranking", "Career prospects"].map((item) => (
+                        <FormField
+                            key={item}
+                            control={form.control}
+                            name="priorityFactors"
+                            render={({ field }) => (
+                            <FormItem className="flex flex-row items-center space-x-3 space-y-0">
+                                <FormControl>
+                                <Checkbox
+                                    checked={field.value?.includes(item)}
+                                    onCheckedChange={(checked) => {
+                                    return checked
+                                        ? field.onChange([...(field.value || []), item])
+                                        : field.onChange(
+                                            (field.value || [])?.filter(
+                                            (value) => value !== item
+                                            )
+                                        );
+                                    }}
+                                />
+                                </FormControl>
+                                <FormLabel className="font-normal">{item}</FormLabel>
+                            </FormItem>
+                            )}
+                        />
+                        ))}
                     </div>
-                  </ScrollArea>
-                  <FormMessage />
+                    <FormMessage />
                 </FormItem>
               )} />
             </CardContent>

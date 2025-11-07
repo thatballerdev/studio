@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useForm, type SubmitHandler, type FieldValues } from 'react-hook-form';
+import { useForm, type SubmitHandler, type FieldValues, FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -42,18 +42,18 @@ const schemas = [
 ];
 
 const steps = [
-  { id: 1, title: 'Your Name', schema: schemas[0], icon: User, fields: ['fullName'] },
-  { id: 2, title: 'Current Education', schema: schemas[1], icon: BookOpen, fields: ['currentEducation'] },
-  { id: 3, title: 'Target Degree', schema: schemas[2], icon: Target, fields: ['targetDegree'] },
-  { id: 4, title: 'Field of Interest', schema: schemas[3], icon: Briefcase, fields: ['fieldInterest'] },
-  { id: 5, title: 'Annual Budget', schema: schemas[4], icon: DollarSign, fields: ['budgetRangeUSD'] },
-  { id: 6, title: 'Language Preference', schema: schemas[5], icon: Globe, fields: ['englishOnly'] },
-  { id: 7, title: 'Preferred Region', schema: schemas[6], icon: Globe, fields: ['regionPreference'] },
-  { id: 8, 'title': 'Start Date', schema: schemas[7], icon: Calendar, fields: ['desiredStartDate'] },
-  { id: 9, 'title': 'Career Goals', schema: schemas[8], icon: Briefcase, fields: ['careerGoal'] },
-  { id: 10, 'title': 'Scholarships', schema: schemas[9], icon: Award, fields: ['scholarshipInterest'] },
-  { id: 11, 'title': 'Study Mode', schema: schemas[10], icon: Monitor, fields: ['studyMode'] },
-  { id: 12, 'title': 'Your Priorities', schema: schemas[11], icon: Star, fields: ['priorityFactors'] },
+  { id: 1, title: 'Your Name', schema: schemas[0], icon: User, fields: ['fullName'] as FieldPath<any>[] },
+  { id: 2, title: 'Current Education', schema: schemas[1], icon: BookOpen, fields: ['currentEducation'] as FieldPath<any>[] },
+  { id: 3, title: 'Target Degree', schema: schemas[2], icon: Target, fields: ['targetDegree'] as FieldPath<any>[] },
+  { id: 4, title: 'Field of Interest', schema: schemas[3], icon: Briefcase, fields: ['fieldInterest'] as FieldPath<any>[] },
+  { id: 5, title: 'Annual Budget', schema: schemas[4], icon: DollarSign, fields: ['budgetRangeUSD'] as FieldPath<any>[] },
+  { id: 6, title: 'Language Preference', schema: schemas[5], icon: Globe, fields: ['englishOnly'] as FieldPath<any>[] },
+  { id: 7, title: 'Preferred Region', schema: schemas[6], icon: Globe, fields: ['regionPreference'] as FieldPath<any>[] },
+  { id: 8, 'title': 'Start Date', schema: schemas[7], icon: Calendar, fields: ['desiredStartDate'] as FieldPath<any>[] },
+  { id: 9, 'title': 'Career Goals', schema: schemas[8], icon: Briefcase, fields: ['careerGoal'] as FieldPath<any>[] },
+  { id: 10, 'title': 'Scholarships', schema: schemas[9], icon: Award, fields: ['scholarshipInterest'] as FieldPath<any>[] },
+  { id: 11, 'title': 'Study Mode', schema: schemas[10], icon: Monitor, fields: ['studyMode'] as FieldPath<any>[] },
+  { id: 12, 'title': 'Your Priorities', schema: schemas[11], icon: Star, fields: ['priorityFactors'] as FieldPath<any>[] },
 ];
 
 const quotes = [
@@ -79,56 +79,56 @@ export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [direction, setDirection] = useState(1);
-  const [formData, setFormData] = useState({});
-
+  
   const currentSchema = steps[currentStep].schema;
 
   const form = useForm({
     resolver: zodResolver(currentSchema),
     mode: 'onChange',
-    defaultValues: {
-      fullName: '',
-      currentEducation: '',
-      targetDegree: '',
-      fieldInterest: [],
-      budgetRangeUSD: '',
-      englishOnly: true,
-      regionPreference: '',
-      desiredStartDate: '',
-      careerGoal: '',
-      scholarshipInterest: false,
-      studyMode: '',
-      priorityFactors: [],
-    }
   });
   
-  const { trigger } = form;
-
+  useEffect(() => {
+    if (userProfile) {
+        const defaultValues = {
+            fullName: userProfile.fullName || userProfile.name || '',
+            currentEducation: userProfile.currentEducation || '',
+            targetDegree: userProfile.targetDegree || '',
+            fieldInterest: userProfile.fieldInterest || [],
+            budgetRangeUSD: userProfile.budgetRangeUSD || '',
+            englishOnly: userProfile.englishOnly ?? true,
+            regionPreference: userProfile.regionPreference || '',
+            desiredStartDate: userProfile.desiredStartDate || '',
+            careerGoal: userProfile.careerGoal || '',
+            scholarshipInterest: userProfile.scholarshipInterest ?? false,
+            studyMode: userProfile.studyMode || '',
+            priorityFactors: userProfile.priorityFactors || [],
+        };
+        form.reset(defaultValues);
+    }
+  }, [userProfile, form]);
+  
   const processStep: SubmitHandler<FieldValues> = async (data) => {
-    const updatedData = { ...formData, ...data };
-    setFormData(updatedData);
-
     try {
-      if (user && db && Object.keys(data).length > 0) {
+      if (user && db) {
         await updateDoc(doc(db, 'users', user.uid), data, { merge: true });
       }
+      if (currentStep < steps.length - 1) {
+        setDirection(1);
+        setCurrentStep(step => step + 1);
+      } else {
+        await handleFinalSubmit(data);
+      }
     } catch (error) {
-      console.error("Failed to save step data", error);
+      console.error("Failed to save or process step", error);
       toast({ variant: 'destructive', title: 'Error', description: 'Could not save your progress.' });
-    }
-    
-    if (currentStep < steps.length - 1) {
-      setDirection(1);
-      setCurrentStep(step => step + 1);
-    } else {
-      await handleFinalSubmit(updatedData);
     }
   };
 
   const nextStep = async () => {
-    const isValid = await trigger();
+    const fieldsToValidate = steps[currentStep].fields;
+    const isValid = await form.trigger(fieldsToValidate);
     if (isValid) {
-      processStep(form.getValues());
+      await form.handleSubmit(processStep)();
     }
   };
 
@@ -161,28 +161,6 @@ export default function OnboardingPage() {
     }
   };
   
-  useEffect(() => {
-    if (userProfile) {
-        const defaultValues = {
-            fullName: userProfile.fullName || userProfile.name || '',
-            currentEducation: userProfile.currentEducation || '',
-            targetDegree: userProfile.targetDegree || '',
-            fieldInterest: userProfile.fieldInterest || [],
-            budgetRangeUSD: userProfile.budgetRangeUSD || '',
-            englishOnly: userProfile.englishOnly ?? true,
-            regionPreference: userProfile.regionPreference || '',
-            desiredStartDate: userProfile.desiredStartDate || '',
-            careerGoal: userProfile.careerGoal || '',
-            scholarshipInterest: userProfile.scholarshipInterest ?? false,
-            studyMode: userProfile.studyMode || '',
-            priorityFactors: userProfile.priorityFactors || [],
-        };
-        form.reset(defaultValues);
-        setFormData(defaultValues);
-    }
-  }, [userProfile, form]);
-
-
   const progress = ((currentStep + 1) / steps.length) * 100;
   
   return (
@@ -400,9 +378,9 @@ export default function OnboardingPage() {
                                             checked={field.value?.includes(item)}
                                             onCheckedChange={(checked) => {
                                             return checked
-                                                ? field.onChange([...field.value, item])
+                                                ? field.onChange([...(field.value || []), item])
                                                 : field.onChange(
-                                                    field.value?.filter(
+                                                    (field.value || [])?.filter(
                                                     (value) => value !== item
                                                     )
                                                 );
