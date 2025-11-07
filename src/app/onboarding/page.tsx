@@ -41,19 +41,6 @@ const schemas = [
   z.object({ priorityFactors: z.array(z.string()).min(1, "Please select at least one priority.") })
 ];
 
-type FormValues = z.infer<typeof schemas[0]> &
-  z.infer<typeof schemas[1]> &
-  z.infer<typeof schemas[2]> &
-  z.infer<typeof schemas[3]> &
-  z.infer<typeof schemas[4]> &
-  z.infer<typeof schemas[5]> &
-  z.infer<typeof schemas[6]> &
-  z.infer<typeof schemas[7]> &
-  z.infer<typeof schemas[8]> &
-  z.infer<typeof schemas[9]> &
-  z.infer<typeof schemas[10]> &
-  z.infer<typeof schemas[11]>;
-
 const steps = [
   { id: 1, title: 'Your Name', schema: schemas[0], icon: User, fields: ['fullName'] },
   { id: 2, title: 'Current Education', schema: schemas[1], icon: BookOpen, fields: ['currentEducation'] },
@@ -99,21 +86,47 @@ export default function OnboardingPage() {
   const form = useForm({
     resolver: zodResolver(currentSchema),
     mode: 'onChange',
+    defaultValues: {
+      fullName: '',
+      currentEducation: '',
+      targetDegree: '',
+      fieldInterest: [],
+      budgetRangeUSD: '',
+      englishOnly: true,
+      regionPreference: '',
+      desiredStartDate: '',
+      careerGoal: '',
+      scholarshipInterest: false,
+      studyMode: '',
+      priorityFactors: [],
+    }
   });
 
   useEffect(() => {
-    // When the step changes, reset the form with a new resolver
-    form.reset(undefined, { keepValues: true });
+    // When the step changes, reset the form with a new resolver, but keep existing values
+    form.reset(form.getValues(), {
+      keepValues: true,
+      keepDirty: true,
+      keepDefaultValues: true,
+    });
   }, [currentStep, form]);
 
 
   const processStep = async (data: FieldValues) => {
-    const updatedData = { ...formData, ...data };
+    const currentFields = steps[currentStep].fields;
+    const stepData = currentFields.reduce((obj, field) => {
+        if (data[field] !== undefined) {
+            obj[field] = data[field];
+        }
+        return obj;
+    }, {} as FieldValues);
+
+    const updatedData = { ...formData, ...stepData };
     setFormData(updatedData);
 
     try {
-      if (user && db) {
-        await updateDoc(doc(db, 'users', user.uid), data, { merge: true });
+      if (user && db && Object.keys(stepData).length > 0) {
+        await updateDoc(doc(db, 'users', user.uid), stepData, { merge: true });
       }
     } catch (error) {
       console.error("Failed to save step data", error);
@@ -159,8 +172,8 @@ export default function OnboardingPage() {
   
   useEffect(() => {
     if (userProfile) {
-        form.reset({
-            fullName: userProfile.name || '',
+        const defaultValues = {
+            fullName: userProfile.fullName || userProfile.name || '',
             currentEducation: userProfile.currentEducation || '',
             targetDegree: userProfile.targetDegree || '',
             fieldInterest: userProfile.fieldInterest || [],
@@ -172,8 +185,9 @@ export default function OnboardingPage() {
             scholarshipInterest: userProfile.scholarshipInterest ?? false,
             studyMode: userProfile.studyMode || '',
             priorityFactors: userProfile.priorityFactors || [],
-        });
-        setFormData(form.getValues());
+        };
+        form.reset(defaultValues);
+        setFormData(defaultValues);
     }
   }, [userProfile, form]);
 
