@@ -49,11 +49,11 @@ const steps = [
   { id: 5, title: 'Annual Budget', schema: schemas[4], icon: DollarSign, fields: ['budgetRangeUSD'] },
   { id: 6, title: 'Language Preference', schema: schemas[5], icon: Globe, fields: ['englishOnly'] },
   { id: 7, title: 'Preferred Region', schema: schemas[6], icon: Globe, fields: ['regionPreference'] },
-  { id: 8, title: 'Start Date', schema: schemas[7], icon: Calendar, fields: ['desiredStartDate'] },
-  { id: 9, title: 'Career Goals', schema: schemas[8], icon: Briefcase, fields: ['careerGoal'] },
-  { id: 10, title: 'Scholarships', schema: schemas[9], icon: Award, fields: ['scholarshipInterest'] },
-  { id: 11, title: 'Study Mode', schema: schemas[10], icon: Monitor, fields: ['studyMode'] },
-  { id: 12, title: 'Your Priorities', schema: schemas[11], icon: Star, fields: ['priorityFactors'] },
+  { id: 8, 'title': 'Start Date', schema: schemas[7], icon: Calendar, fields: ['desiredStartDate'] },
+  { id: 9, 'title': 'Career Goals', schema: schemas[8], icon: Briefcase, fields: ['careerGoal'] },
+  { id: 10, 'title': 'Scholarships', schema: schemas[9], icon: Award, fields: ['scholarshipInterest'] },
+  { id: 11, 'title': 'Study Mode', schema: schemas[10], icon: Monitor, fields: ['studyMode'] },
+  { id: 12, 'title': 'Your Priorities', schema: schemas[11], icon: Star, fields: ['priorityFactors'] },
 ];
 
 const quotes = [
@@ -101,32 +101,16 @@ export default function OnboardingPage() {
       priorityFactors: [],
     }
   });
+  
+  const { trigger } = form;
 
-  useEffect(() => {
-    // When the step changes, reset the form with a new resolver, but keep existing values
-    form.reset(form.getValues(), {
-      keepValues: true,
-      keepDirty: true,
-      keepDefaultValues: true,
-    });
-  }, [currentStep, form]);
-
-
-  const processStep = async (data: FieldValues) => {
-    const currentFields = steps[currentStep].fields;
-    const stepData = currentFields.reduce((obj, field) => {
-        if (data[field] !== undefined) {
-            obj[field] = data[field];
-        }
-        return obj;
-    }, {} as FieldValues);
-
-    const updatedData = { ...formData, ...stepData };
+  const processStep: SubmitHandler<FieldValues> = async (data) => {
+    const updatedData = { ...formData, ...data };
     setFormData(updatedData);
 
     try {
-      if (user && db && Object.keys(stepData).length > 0) {
-        await updateDoc(doc(db, 'users', user.uid), stepData, { merge: true });
+      if (user && db && Object.keys(data).length > 0) {
+        await updateDoc(doc(db, 'users', user.uid), data, { merge: true });
       }
     } catch (error) {
       console.error("Failed to save step data", error);
@@ -137,7 +121,14 @@ export default function OnboardingPage() {
       setDirection(1);
       setCurrentStep(step => step + 1);
     } else {
-      await handleSubmit(updatedData);
+      await handleFinalSubmit(updatedData);
+    }
+  };
+
+  const nextStep = async () => {
+    const isValid = await trigger();
+    if (isValid) {
+      processStep(form.getValues());
     }
   };
 
@@ -148,7 +139,7 @@ export default function OnboardingPage() {
     }
   }
 
-  const handleSubmit = async (finalData: FieldValues) => {
+  const handleFinalSubmit = async (finalData: FieldValues) => {
     if (!user || !db) {
       toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in.' });
       return;
@@ -211,7 +202,7 @@ export default function OnboardingPage() {
             </div>
           </CardHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(processStep)} className="min-h-[350px] flex flex-col">
+            <form onSubmit={e => e.preventDefault()} className="min-h-[350px] flex flex-col">
               <CardContent className="flex-grow">
                 <AnimatePresence mode="wait" custom={direction}>
                   <motion.div
@@ -436,11 +427,11 @@ export default function OnboardingPage() {
                   <ArrowLeft className="mr-2 h-4 w-4" /> Back
                 </Button>
                 {currentStep < steps.length - 1 ? (
-                  <Button type="submit">
+                  <Button type="button" onClick={nextStep}>
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 ) : (
-                  <Button type="submit" disabled={isLoading}>
+                  <Button type="button" onClick={form.handleSubmit(processStep)} disabled={isLoading}>
                     {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Finish Setup <Check className="ml-2 h-4 w-4" /></>}
                   </Button>
                 )}
