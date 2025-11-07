@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -152,7 +151,7 @@ export default function AboutPage() {
                 <h3 className="text-2xl font-bold font-heading">Onem Ibrahim Danazumi</h3>
                 <p className="text-primary font-semibold mb-2">Co-Founder & CEO</p>
                 <p className="text-foreground/70 mb-4">
-                  The visionary who turned his scholarship-hunting marathon into a roadmap for others. Kunle is dedicated to democratizing access to global education for every Nigerian student.
+                  The visionary who turned his scholarship-hunting marathon into a roadmap for others. Onem is dedicated to democratizing access to global education for every Nigerian student.
                 </p>
               </motion.div>
               <motion.div initial="initial" whileInView="animate" variants={fadeIn} viewport={{ once: true, amount: 0.5 }} transition={{delay: 0.3}} className="flex flex-col items-center text-center">
