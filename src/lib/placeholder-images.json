@@ -29,6 +29,18 @@
       "description": "An aerial view of a university campus",
       "imageUrl": "https://images.unsplash.com/photo-1601840698412-cbecc8039e6b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHx1bml2ZXJzaXR5JTIwYWVyaWFsfGVufDB8fHx8MTc2MjQ2MjcwM3ww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "university aerial"
+    },
+    {
+      "id": "founder-nigerian",
+      "description": "Portrait of a Nigerian man",
+      "imageUrl": "https://images.unsplash.com/photo-1610933761858-08d753c12a76?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxuaWdlcmlhbiUyMG1hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc2MjU1MTAwNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "nigerian man portrait"
+    },
+    {
+      "id": "founder-american",
+      "description": "Portrait of an American man",
+      "imageUrl": "https://images.unsplash.com/photo-1557862921-37829c790f19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbWVyaWNhbiUyMG1hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc2MjU1MTAyNnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "american man portrait"
     }
   ]
 }

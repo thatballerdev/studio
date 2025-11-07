@@ -22,7 +22,7 @@ export default function Home() {
             <Logo width={120} height={48} />
           </Link>
           <nav className="ml-10 hidden md:flex items-center gap-6 text-sm font-medium">
-            <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
+            <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
@@ -196,7 +196,7 @@ export default function Home() {
             <div>
                 <h4 className="font-semibold mb-3 font-heading">Company</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li><Link href="#" className="hover:text-primary">About</Link></li>
+                    <li><Link href="/about" className="hover:text-primary">About</Link></li>
                     <li><Link href="#" className="hover:text-primary">Careers</Link></li>
                     <li><Link href="#" className="hover:text-primary">Press</Link></li>
                 </ul>
