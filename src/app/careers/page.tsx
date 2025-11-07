@@ -59,7 +59,14 @@ export default function CareersPage() {
   });
 
   const onSubmit: SubmitHandler<ApplicationFormValues> = async (data) => {
-    if (!db || !storage) return;
+    if (!db || !storage) {
+        toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Firebase is not initialized. Please try again later.'
+        });
+        return;
+    }
 
     setIsSubmitting(true);
     try {
