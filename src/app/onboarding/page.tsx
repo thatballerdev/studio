@@ -1,13 +1,13 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler, type FieldValues, FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, updateDoc } from 'firebase/firestore';
-import { User, ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star, User } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
@@ -82,30 +82,24 @@ export default function OnboardingPage() {
   
   const currentSchema = steps[currentStep].schema;
 
-  const form = useForm({
+  const form = useForm<FieldValues>({
     resolver: zodResolver(currentSchema),
+    values: {
+      fullName: userProfile?.fullName || userProfile?.name || '',
+      currentEducation: userProfile?.currentEducation || '',
+      targetDegree: userProfile?.targetDegree || '',
+      fieldInterest: userProfile?.fieldInterest || [],
+      budgetRangeUSD: userProfile?.budgetRangeUSD || '',
+      englishOnly: userProfile?.englishOnly ?? true,
+      regionPreference: userProfile?.regionPreference || '',
+      desiredStartDate: userProfile?.desiredStartDate || '',
+      careerGoal: userProfile?.careerGoal || '',
+      scholarshipInterest: userProfile?.scholarshipInterest ?? false,
+      studyMode: userProfile?.studyMode || '',
+      priorityFactors: userProfile?.priorityFactors || [],
+    },
     mode: 'onChange',
   });
-  
-  useEffect(() => {
-    if (userProfile) {
-        const defaultValues = {
-            fullName: userProfile.fullName || userProfile.name || '',
-            currentEducation: userProfile.currentEducation || '',
-            targetDegree: userProfile.targetDegree || '',
-            fieldInterest: userProfile.fieldInterest || [],
-            budgetRangeUSD: userProfile.budgetRangeUSD || '',
-            englishOnly: userProfile.englishOnly ?? true,
-            regionPreference: userProfile.regionPreference || '',
-            desiredStartDate: userProfile.desiredStartDate || '',
-            careerGoal: userProfile.careerGoal || '',
-            scholarshipInterest: userProfile.scholarshipInterest ?? false,
-            studyMode: userProfile.studyMode || '',
-            priorityFactors: userProfile.priorityFactors || [],
-        };
-        form.reset(defaultValues);
-    }
-  }, [userProfile, form]);
   
   const processStep: SubmitHandler<FieldValues> = async (data) => {
     try {
@@ -145,12 +139,10 @@ export default function OnboardingPage() {
       return;
     }
     setIsLoading(true);
+    const allData = { ...form.getValues(), ...finalData, onboardingComplete: true };
 
     try {
-      await updateDoc(doc(db, 'users', user.uid), {
-        ...finalData,
-        onboardingComplete: true,
-      });
+      await updateDoc(doc(db, 'users', user.uid), allData);
 
       toast({ title: 'Setup Complete!', description: "We're finding the best universities for you." });
       router.push('/dashboard');
