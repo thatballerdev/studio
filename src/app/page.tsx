@@ -45,9 +45,12 @@ export default function Home() {
             <div className="container mx-auto text-left px-4 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div className="animate-fade-up">
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-6 !leading-tight font-heading">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-4 !leading-tight font-heading">
                             Study smart. Spend less. Graduate abroad.
                         </h1>
+                        <p className="text-xl md:text-2xl text-muted-foreground mb-10 italic">
+                            Education with purpose, not pressure.
+                        </p>
                         <p className="max-w-xl text-lg md:text-xl text-foreground/80 mb-10">
                             Find accredited English-taught programs under your budget, compare true cost, and apply with confidence.
                         </p>
