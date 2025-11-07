@@ -27,10 +27,10 @@ export default function UniversityCard({ university }: UniversityCardProps) {
               data-ai-hint={placeholderImage.imageHint}
             />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
           <div className="absolute bottom-4 left-4 text-white p-2">
-            <CardTitle className="text-2xl text-shadow-md">{university.name}</CardTitle>
-            <CardDescription className="text-gray-200 text-shadow-sm flex items-center mt-1">
+            <CardTitle className="text-2xl [text-shadow:0_2px_4px_rgba(0,0,0,0.5)]">{university.name}</CardTitle>
+            <CardDescription className="text-gray-200 [text-shadow:0_1px_2px_rgba(0,0,0,0.5)] flex items-center mt-1">
               <span className="text-xl mr-2">{getFlagEmoji(university.countryCode)}</span>
               {university.country}
             </CardDescription>
@@ -43,8 +43,8 @@ export default function UniversityCard({ university }: UniversityCardProps) {
             <span>~${university.annualCost.toLocaleString()} / year</span>
         </div>
         <div>
-          <h4 className="font-semibold mb-2 flex items-center">
-            <Star className="h-4 w-4 mr-2 text-yellow-500 fill-current" />
+          <h4 className="font-semibold mb-2 flex items-center text-sm text-foreground/80">
+            <Star className="h-4 w-4 mr-2 text-yellow-400 fill-current" />
             Highlights
           </h4>
           <div className="flex flex-wrap gap-2">

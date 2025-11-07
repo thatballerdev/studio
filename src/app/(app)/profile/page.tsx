@@ -130,7 +130,7 @@ export default function ProfilePage() {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 pr-4">
                       {countries.map((country) => (
                         <FormField key={country.code} control={form.control} name="preferredCountries" render={({ field }) => (
-                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary transition-colors">
+                          <FormItem className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-accent has-[[data-state=checked]]:bg-accent transition-colors">
                             <FormControl>
                               <Checkbox
                                 checked={field.value?.includes(country.code)}
@@ -154,7 +154,7 @@ export default function ProfilePage() {
           </Card>
           
           <div className="flex justify-end">
-            <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading}>
               {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Save Changes <Check className="ml-2 h-4 w-4" /></>}
             </Button>
           </div>

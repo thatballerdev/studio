@@ -90,9 +90,9 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary/50 p-4 animate-in fade-in duration-500">
+    <div className="flex min-h-screen items-center justify-center bg-secondary p-4 animate-in fade-in duration-500">
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl border-2 border-transparent hover:border-primary/20 transition-all">
+        <Card className="shadow-lg border-border/50">
           <CardHeader className="text-center">
              <Link href="/" className="flex justify-center items-center gap-2 mb-4">
                 <Logo />
@@ -142,7 +142,7 @@ export default function SignupPage() {
                     </FormItem>
                   )}
                 />
-                <Button type="submit" className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" disabled={isLoading}>
+                <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Create Account'}
                 </Button>
               </form>

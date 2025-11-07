@@ -37,7 +37,7 @@ export default function DashboardPage() {
     <div className="container mx-auto">
       <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
         <h1 className="text-3xl font-bold">Your University Feed</h1>
-        <p className="text-muted-foreground">Education with purpose, not pressure.</p>
+        <p className="text-muted-foreground">Based on your preferences, here are some recommendations.</p>
       </div>
 
       {filteredUniversities.length > 0 ? (

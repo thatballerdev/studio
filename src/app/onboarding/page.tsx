@@ -102,12 +102,12 @@ export default function OnboardingPage() {
 
   return (
     <AuthCheck>
-      <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-secondary/50">
+      <div className="flex min-h-screen flex-col items-center justify-center p-4 bg-secondary">
         <div className="flex items-center gap-2 mb-8">
             <Logo />
             <span className="font-bold text-xl">Northway</span>
         </div>
-        <Card className="w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-500">
+        <Card className="w-full max-w-lg shadow-lg animate-in fade-in zoom-in-95 duration-500 border-border/50">
           <CardHeader>
             <Progress value={progress} className="mb-4 h-2" />
             <CardTitle>Step {currentStep}: {steps[currentStep - 1].title}</CardTitle>
@@ -160,7 +160,7 @@ export default function OnboardingPage() {
                          <ScrollArea className="h-64">
                           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 pr-4">
                             {countries.map((country) => (
-                                <FormItem key={country.code} className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-secondary has-[[data-state=checked]]:bg-secondary transition-colors">
+                                <FormItem key={country.code} className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-accent has-[[data-state=checked]]:bg-accent transition-colors">
                                     <FormControl>
                                         <Checkbox
                                         checked={field.value?.includes(country.code)}
@@ -196,7 +196,7 @@ export default function OnboardingPage() {
                     Next <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 ) : (
-                  <Button type="submit" className="bg-accent text-accent-foreground hover:bg-accent/90" disabled={isLoading}>
+                  <Button type="submit" disabled={isLoading}>
                     {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <>Finish <Check className="ml-2 h-4 w-4" /></>}
                   </Button>
                 )}

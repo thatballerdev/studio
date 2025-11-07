@@ -32,8 +32,7 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        <section className="relative w-full py-24 md:py-32 lg:py-48">
-          <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] dark:bg-background dark:bg-[radial-gradient(hsl(var(--muted))_1px,transparent_1px)]"></div>
+        <section className="w-full py-24 md:py-32 lg:py-48">
           <div className="container mx-auto text-center px-4">
             <div className="animate-in fade-in slide-in-from-bottom-8 duration-1000">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
@@ -52,9 +51,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-16 md:py-24 bg-card border-y">
+        <section className="w-full py-16 md:py-24 bg-secondary/50 border-y">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
+            <div className="text-center mb-12 animate-in fade-in duration-500">
               <h2 className="text-3xl md:text-4xl font-bold">Featured Universities</h2>
               <p className="text-muted-foreground mt-2 max-w-xl mx-auto">
                 Explore top institutions that offer quality education at an affordable price.
@@ -109,16 +108,16 @@ export default function Home() {
         </section>
 
       </main>
-      <footer className="py-8 border-t bg-card">
+      <footer className="py-8 border-t bg-secondary/50">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <div className="flex items-center gap-2 mb-4 md:mb-0">
             <Logo />
             <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} Northway. All rights reserved.</p>
           </div>
           <div className="flex gap-4 text-muted-foreground">
-            <Link href="#" className="hover:text-foreground"><Twitter size={20} /></Link>
-            <Link href="#" className="hover:text-foreground"><Linkedin size={20} /></Link>
-            <Link href="#" className="hover:text-foreground"><Facebook size={20} /></Link>
+            <Link href="#" className="hover:text-primary"><Twitter size={20} /></Link>
+            <Link href="#" className="hover:text-primary"><Linkedin size={20} /></Link>
+            <Link href="#" className="hover:text-primary"><Facebook size={20} /></Link>
           </div>
         </div>
       </footer>
