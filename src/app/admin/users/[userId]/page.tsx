@@ -81,12 +81,12 @@ export default function UserProfilePage() {
     }
 
     html2canvas(input, {
-        scale: 2, // Increase scale for better resolution
+        scale: 2, 
         useCORS: true, 
+        backgroundColor: window.getComputedStyle(document.body).backgroundColor === 'rgb(255, 255, 255)' ? '#FFFFFF' : '#1C2532'
     }).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         
-        // A4 page size in points (width: 595.28, height: 841.89)
         const pdf = new jsPDF('p', 'pt', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -95,16 +95,14 @@ export default function UserProfilePage() {
         const canvasHeight = canvas.height;
         
         const ratio = canvasWidth / canvasHeight;
-        let newCanvasWidth = pdfWidth;
+        let newCanvasWidth = pdfWidth - 40; // Add some margin
         let newCanvasHeight = newCanvasWidth / ratio;
 
-        // If the height is still too large for the page, scale it down.
-        if (newCanvasHeight > pdfHeight) {
-            newCanvasHeight = pdfHeight;
+        if (newCanvasHeight > pdfHeight - 40) {
+            newCanvasHeight = pdfHeight - 40;
             newCanvasWidth = newCanvasHeight * ratio;
         }
 
-        // Center the image on the PDF page
         const x = (pdfWidth - newCanvasWidth) / 2;
         const y = 20;
 
@@ -142,8 +140,7 @@ export default function UserProfilePage() {
         )}
 
         {userProfile && (
-          <div ref={profileRef} className="bg-background p-4">
-             <Card>
+             <Card ref={profileRef} className="p-4 sm:p-6">
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <User className="h-8 w-8 text-primary" />
@@ -217,11 +214,8 @@ export default function UserProfilePage() {
                   </div>
                 </CardContent>
               </Card>
-          </div>
         )}
       </div>
     </AdminGuard>
   );
 }
-
-    
