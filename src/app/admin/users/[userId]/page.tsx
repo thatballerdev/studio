@@ -4,13 +4,12 @@
 import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDoc, useFirebase, useMemoFirebase } from '@/firebase';
 import Link from 'next/link';
 import { ArrowLeft, Loader2, User } from 'lucide-react';
 import { format } from 'date-fns';
 
 import AdminGuard from '@/components/admin-guard';
-import { useFirebase } from '@/context/firebase-provider';
 import type { UserProfile } from '@/lib/types';
 import {
   Card,
@@ -29,7 +28,7 @@ const DetailItem = ({
   label: string;
   value?: string | string[] | number | boolean | null;
 }) => {
-  if (value === undefined || value === null || value === '') {
+  if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
     return null;
   }
 
@@ -64,17 +63,12 @@ const DetailItem = ({
 };
 
 export default function UserProfilePage() {
-  const { db } = useFirebase();
+  const { firestore } = useFirebase();
   const params = useParams();
   const userId = params.userId as string;
 
-  const userDocRef = useMemo(() => doc(db, 'users', userId), [db, userId]);
-  const [userDoc, loading, error] = useDocument(userDocRef);
-
-  const userProfile = useMemo(() => {
-    if (!userDoc) return null;
-    return { ...userDoc.data(), uid: userDoc.id } as UserProfile;
-  }, [userDoc]);
+  const userDocRef = useMemoFirebase(() => (firestore ? doc(firestore, 'users', userId) : null), [firestore, userId]);
+  const { data: userProfile, isLoading, error } = useDoc<UserProfile>(userDocRef);
 
   return (
     <AdminGuard>
@@ -88,7 +82,7 @@ export default function UserProfilePage() {
           </Button>
         </div>
 
-        {loading && (
+        {isLoading && (
           <div className="flex justify-center items-center py-10">
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
@@ -179,4 +173,3 @@ export default function UserProfilePage() {
     </AdminGuard>
   );
 }
-

@@ -1,21 +1,22 @@
+
 "use client";
 
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useFirebase } from '@/context/firebase-provider';
+import { useUser } from '@/firebase';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthCheck({ children }: { children: React.ReactNode }) {
-  const { user, loading } = useFirebase();
+  const { user, isUserLoading } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isUserLoading && !user) {
       router.push('/login');
     }
-  }, [user, loading, router]);
+  }, [user, isUserLoading, router]);
 
-  if (loading || !user) {
+  if (isUserLoading || !user) {
     return (
       <div className="flex h-screen w-full items-center justify-center">
         <Loader2 className="h-12 w-12 animate-spin text-accent" />

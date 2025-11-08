@@ -5,8 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { LayoutGrid, LogOut, User, Menu, FileText, Shield } from 'lucide-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 
-import { useFirebase } from '@/context/firebase-provider';
+import { useAuth, useFirebase, useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -19,12 +21,28 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
+import type { UserProfile } from '@/lib/types';
 
 const ADMIN_EMAIL = 'admin@northway.com';
 
 export default function Header({ children }: { children?: React.ReactNode}) {
-  const { user, userProfile, auth } = useFirebase();
+  const { user } = useUser();
+  const auth = useAuth();
+  const { firestore } = useFirebase();
   const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    if (user && firestore) {
+      const userDocRef = doc(firestore, 'users', user.uid);
+      const unsubscribe = onSnapshot(userDocRef, (doc) => {
+        if (doc.exists()) {
+          setUserProfile(doc.data() as UserProfile);
+        }
+      });
+      return () => unsubscribe();
+    }
+  }, [user, firestore]);
 
   const handleLogout = async () => {
     if (!auth) return;
@@ -32,7 +50,7 @@ export default function Header({ children }: { children?: React.ReactNode}) {
     router.push('/');
   };
 
-  const getInitials = (name?: string) => {
+  const getInitials = (name?: string | null) => {
     if (!name) return 'U';
     const names = name.split(' ');
     if (names.length > 1 && names[0] && names[1]) {
@@ -114,14 +132,14 @@ export default function Header({ children }: { children?: React.ReactNode}) {
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                 <Avatar className="h-9 w-9">
                   <AvatarImage src={user?.photoURL || undefined} alt="User avatar" />
-                  <AvatarFallback>{getInitials(userProfile?.name)}</AvatarFallback>
+                  <AvatarFallback>{getInitials(userProfile?.name || user?.displayName)}</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{userProfile?.name}</p>
+                  <p className="text-sm font-medium leading-none">{userProfile?.name || user?.displayName}</p>
                   <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                 </div>
               </DropdownMenuLabel>

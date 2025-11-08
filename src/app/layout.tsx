@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { FirebaseProvider } from '@/context/firebase-provider';
+import { FirebaseClientProvider } from '@/firebase';
 import { Inter, Nunito_Sans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
@@ -36,10 +36,10 @@ export default function RootLayout({
           nunitoSans.variable
         )}
       >
-        <FirebaseProvider>
+        <FirebaseClientProvider>
           {children}
           <Toaster />
-        </FirebaseProvider>
+        </FirebaseClientProvider>
       </body>
     </html>
   );

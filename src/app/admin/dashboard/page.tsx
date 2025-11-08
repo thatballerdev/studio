@@ -3,11 +3,10 @@
 
 import { useMemo } from 'react';
 import { collection, query, orderBy } from 'firebase/firestore';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useCollection, useFirebase, useMemoFirebase } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 
-import { useFirebase } from '@/context/firebase-provider';
 import AdminGuard from '@/components/admin-guard';
 import {
   Table,
@@ -23,23 +22,18 @@ import { Loader2, Users } from 'lucide-react';
 import type { UserProfile } from '@/lib/types';
 
 export default function AdminDashboardPage() {
-  const { db } = useFirebase();
+  const { firestore } = useFirebase();
   const router = useRouter();
 
-  const usersCollectionRef = useMemo(() => collection(db, 'users'), [db]);
-  const usersQuery = useMemo(
-    () => query(usersCollectionRef, orderBy('profileUpdatedAt', 'desc')),
-    [usersCollectionRef]
+  const usersQuery = useMemoFirebase(
+    () =>
+      firestore
+        ? query(collection(firestore, 'users'), orderBy('profileUpdatedAt', 'desc'))
+        : null,
+    [firestore]
   );
 
-  const [value, loading, error] = useCollection(usersQuery);
-
-  const users = useMemo(() => {
-    return value?.docs.map(doc => ({
-      ...doc.data(),
-      uid: doc.id,
-    })) as UserProfile[];
-  }, [value]);
+  const { data: users, isLoading, error } = useCollection<UserProfile>(usersQuery);
 
   return (
     <AdminGuard>
@@ -54,7 +48,7 @@ export default function AdminDashboardPage() {
             <CardTitle>Registered Users ({users?.length || 0})</CardTitle>
           </CardHeader>
           <CardContent>
-            {loading && (
+            {isLoading && (
               <div className="flex justify-center items-center py-10">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
@@ -64,7 +58,7 @@ export default function AdminDashboardPage() {
                 Error: {error.message}
               </div>
             )}
-            {!loading && users && (
+            {!isLoading && users && (
               <div className="border rounded-md">
                 <Table>
                   <TableHeader>
@@ -117,4 +111,3 @@ export default function AdminDashboardPage() {
     </AdminGuard>
   );
 }
-
