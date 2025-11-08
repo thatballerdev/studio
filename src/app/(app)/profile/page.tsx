@@ -91,7 +91,7 @@ export default function ProfilePage() {
     setIsSubmitting(true);
 
     try {
-      await updateDoc(doc(db, 'users', user.uid), data);
+      await updateDoc(doc(db, 'users', user.uid), {...data, name: data.fullName});
       toast({ title: 'Profile Updated', description: 'Your preferences have been saved.' });
       router.refresh(); // To refetch data on dashboard
     } catch (error: any) {
@@ -339,5 +339,3 @@ export default function ProfilePage() {
     </div>
   );
 }
-
-    

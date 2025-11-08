@@ -57,7 +57,8 @@ export interface CareerApplication {
     id?: string;
     applicantName: string;
     applicantEmail: string;
-    applicantDetails: string;
+    coverLetter: string;
+    studentsPerMonth: string;
     cvUrl: string;
-    applicationDate: any; // Using 'any' for Firebase's serverTimestamp()
+    applicationDate: Date;
 }

@@ -122,7 +122,11 @@ export default function OnboardingPage() {
     }
     setIsLoading(true);
 
-    const finalData = { ...data, onboardingComplete: true };
+    const finalData: Partial<UserProfile> = { 
+        ...data, 
+        onboardingComplete: true,
+        name: data.fullName, // Also update the base name field
+    };
 
     try {
       await setDoc(doc(db, 'users', user.uid), finalData, { merge: true });
@@ -144,8 +148,16 @@ export default function OnboardingPage() {
 
     // Save progress to Firestore without blocking UI
     if (user && db) {
-      const currentData = form.getValues(fields[0]);
-      setDoc(doc(db, 'users', user.uid), {[fields[0]]: currentData}, { merge: true }).catch(err => {
+      const fieldName = fields[0];
+      const currentData = form.getValues(fieldName);
+      const dataToSave = { [fieldName]: currentData };
+
+      // Also save name to fullName if it's the first step
+      if (fieldName === 'name') {
+        dataToSave['fullName'] = currentData;
+      }
+      
+      setDoc(doc(db, 'users', user.uid), dataToSave, { merge: true }).catch(err => {
           console.warn("Could not save onboarding progress", err);
       });
     }
@@ -238,24 +250,45 @@ export default function OnboardingPage() {
                       )} />
                     )}
                      {currentStep === 3 && (
-                      <FormField control={form.control} name="fieldInterest" render={({ field }) => (
+                      <FormField control={form.control} name="fieldInterest" render={() => (
                         <FormItem>
                           <FormLabel>Which field or area are you most interested in?</FormLabel>
                           <div className="grid grid-cols-2 gap-2 h-64 overflow-auto p-2 border rounded-md">
                             {allSubjects.map((item) => (
-                              <FormItem key={item} className="flex flex-row items-start space-x-3 space-y-0">
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...(field.value || []), item])
-                                        : field.onChange((field.value || []).filter((value) => value !== item));
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">{item}</FormLabel>
-                              </FormItem>
+                               <FormField
+                                key={item}
+                                control={form.control}
+                                name="fieldInterest"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={item}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(item)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([
+                                                  ...(field.value || []),
+                                                  item,
+                                                ])
+                                              : field.onChange(
+                                                  (field.value || [])?.filter(
+                                                    (value) => value !== item
+                                                  )
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {item}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
                             ))}
                           </div>
                           <FormMessage />
@@ -420,5 +453,3 @@ export default function OnboardingPage() {
     </AuthCheck>
   );
 }
-
-    

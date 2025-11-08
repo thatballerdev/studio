@@ -8,12 +8,39 @@ import { Button } from '@/components/ui/button';
 import { Loader2, Telescope } from 'lucide-react';
 import Link from 'next/link';
 
+// Mapping budget string ranges to a max numerical value for filtering
 function budgetToNumber(budgetRange?: string): number {
-    if (!budgetRange) return 100000;
-    if (budgetRange.includes('+')) return 100000;
-    const numbers = budgetRange.split('-').map(s => parseInt(s, 10));
-    return numbers[1] || 100000;
+    if (!budgetRange) return 100000; // Default to a high number if no budget is set
+    
+    // For ranges like "15000+"
+    if (budgetRange.includes('+')) {
+        const value = parseInt(budgetRange.replace('+', ''), 10);
+        return value + 50000; // Return a very high number to include everything above
+    }
+    
+    // For ranges like "5000-10000"
+    if (budgetRange.includes('-')) {
+        const numbers = budgetRange.split('-').map(s => parseInt(s, 10));
+        return numbers[1] || 100000; // Use the upper bound
+    }
+
+    // For ranges like "<5000"
+    if (budgetRange.includes('<')) {
+        return parseInt(budgetRange.replace('<', ''), 10);
+    }
+    
+    return 100000;
 }
+
+
+// Mapping region preferences to country codes
+const regionToCountryCodes: Record<string, string[]> = {
+    "Eastern Europe": ["CZ", "PL"],
+    "Western Europe": ["FR", "DE", "NL", "BE"], // Added Belgium for example
+    "Central Europe": ["AT", "DE", "PL", "CZ"],
+    "Nordic": ["SE", "DK", "FI", "NO", "IS"], // Added more Nordic countries
+    "No Preference": [], // Empty array means no country filtering
+};
 
 export default function DashboardPage() {
   const { userProfile, loading } = useFirebase();
@@ -36,14 +63,18 @@ export default function DashboardPage() {
   }
 
   const filteredUniversities = universityData.filter(uni => {
-    // New budget logic
-    const userBudgetMax = budgetToNumber(userProfile.budgetRangeUSD);
-    const budgetMatch = userProfile.budgetRangeUSD ? uni.annualCost <= userBudgetMax : true;
-    
-    // Legacy country logic
-    const countryMatch = userProfile.preferredCountries ? userProfile.preferredCountries.some(c => uni.countryCode === c) : true;
+    if (!userProfile) return true;
 
-    // TODO: Add more filtering based on new preferences like region, etc.
+    // Budget filtering logic
+    const userBudgetMax = budgetToNumber(userProfile.budgetRangeUSD);
+    const budgetMatch = uni.annualCost <= userBudgetMax;
+    
+    // Region/Country filtering logic
+    const preferredRegion = userProfile.regionPreference || 'No Preference';
+    const allowedCountryCodes = regionToCountryCodes[preferredRegion] || [];
+    const countryMatch = preferredRegion === 'No Preference' || allowedCountryCodes.includes(uni.countryCode);
+    
+    // TODO: Add more filtering based on other new preferences like field of interest, etc.
     return budgetMatch && countryMatch;
   });
 
@@ -74,5 +105,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-
-    
