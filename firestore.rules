@@ -2,18 +2,15 @@
 /**
  * @file Firebase Security Rules for Northway Application
  * @description This ruleset enforces a user-ownership model for user profiles,
- * allows public read access to university data, and restricts write access.
- * Career applications are open for submission but with restricted write access.
+ * and allows public read access to university data, while restricting write access.
  *
  * Data Structure:
  * - /users/{userId}/profile: User profile information, accessible only by the user.
  * - /universities/{universityId}: Publicly readable university data.
- * - /careerApplications/{applicationId}: Career applications.
  *
  * Key Security Decisions:
  * - User profiles are strictly owned by the authenticated user.
  * - University data is publicly readable, but write access is restricted.
- * - Career applications are open for submission, and write access is restricted to avoid malicious usage of the collection.
  *
  * Denormalization for Authorization:
  *   No denormalization is used in this simple example.
@@ -32,9 +29,8 @@ service cloud.firestore {
      * @deny (get, update, delete) User with ID 'user456' cannot access /users/user123/profile.
      * @principle Enforces document ownership for all operations on the user profile.
      */
-    match /users/{userId} {
-      allow read, update, delete: if isSignedIn() && isOwner(userId);
-      allow create: if isSignedIn() && isOwner(userId);
+    match /users/{userId}/{document=**} {
+      allow read, write: if isSignedIn() && isOwner(userId);
     }
 
     /**
@@ -47,20 +43,6 @@ service cloud.firestore {
     match /universities/{universityId} {
       allow get, list: if true;
       allow write: if false;
-    }
-
-    /**
-     * @description Allows any signed-in user to submit a career application, but with write access restrictions to prevent abuse.
-     * Validates that the submitted data matches the expected schema for a CareerApplication.
-     * @path /careerApplications/{applicationId}
-     * @allow (create) Any signed-in user can create a career application if the data is valid.
-     * @deny (update, delete) No user can update or delete a career application.
-     * @principle Allows open submission but restricts modification and deletion, and ensures data integrity.
-     */
-    match /careerApplications/{applicationId} {
-      allow read: if true;
-      allow create: if isSignedIn() && isValidApplication();
-      allow update, delete: if false;
     }
 
     // --- Helper Functions ---
@@ -80,23 +62,6 @@ service cloud.firestore {
      */
     function isOwner(userId) {
       return request.auth.uid == userId;
-    }
-    
-    /**
-    * @description Validates the structure and content of a new career application.
-    * Ensures all required fields are present and have the correct data types.
-    * Limits the size of string inputs to prevent abuse.
-    * @return True if the application data is valid, false otherwise.
-    */
-    function isValidApplication() {
-      let data = request.resource.data;
-      return 
-        data.applicantName is string && data.applicantName.size() < 100 &&
-        data.applicantEmail is string && data.applicantEmail.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$') &&
-        data.applicantDetails is string && data.applicantDetails.size() < 5000 &&
-        data.studentsPerMonth is string && data.studentsPerMonth.size() < 50 &&
-        data.cvUrl is string && data.cvUrl.matches('^https://firebasestorage.googleapis.com/.*') &&
-        data.applicationDate is timestamp && data.applicationDate == request.time;
     }
   }
 }
