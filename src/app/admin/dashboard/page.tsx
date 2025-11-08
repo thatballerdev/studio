@@ -67,9 +67,9 @@ export default function AdminDashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {users.map(user => (
+                    {users.map((user, index) => (
                       <TableRow
-                        key={user.uid}
+                        key={`${user.uid}-${index}`}
                         onClick={() => router.push(`/admin/users/${user.uid}`)}
                         className="cursor-pointer hover:bg-muted/50"
                       >
