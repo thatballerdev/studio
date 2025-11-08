@@ -26,10 +26,7 @@ export default function AdminDashboardPage() {
   const router = useRouter();
 
   const usersQuery = useMemoFirebase(
-    () =>
-      firestore
-        ? query(collection(firestore, 'users'))
-        : null,
+    () => (firestore ? query(collection(firestore, 'users')) : null),
     [firestore]
   );
 
