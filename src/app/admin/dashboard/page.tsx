@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react';
 import { collection, query, orderBy } from 'firebase/firestore';
-import { useCollection, useFirebase, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 
@@ -22,7 +22,7 @@ import { Loader2, Users } from 'lucide-react';
 import type { UserProfile } from '@/lib/types';
 
 export default function AdminDashboardPage() {
-  const { firestore } = useFirebase();
+  const firestore = useFirestore();
   const router = useRouter();
 
   const usersQuery = useMemoFirebase(

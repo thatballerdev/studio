@@ -1,12 +1,16 @@
 
 "use client";
 
-import { useFirebase } from '@/context/firebase-provider';
+import { useUser, useFirestore } from '@/firebase';
 import { universityData } from '@/lib/university-data';
 import UniversityCard from '@/components/university-card';
 import { Button } from '@/components/ui/button';
 import { Loader2, Telescope } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import type { UserProfile } from '@/lib/types';
+
 
 // Mapping budget string ranges to a max numerical value for filtering
 function budgetToNumber(budgetRange?: string): number {
@@ -42,7 +46,28 @@ const regionToCountryCodes: Record<string, string[]> = {
 };
 
 export default function DashboardPage() {
-  const { userProfile, loading } = useFirebase();
+  const { user, isUserLoading } = useUser();
+  const firestore = useFirestore();
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+
+  useEffect(() => {
+    if (user && firestore) {
+      const unsub = onSnapshot(doc(firestore, 'users', user.uid), (doc) => {
+        if (doc.exists()) {
+          setUserProfile(doc.data() as UserProfile);
+        } else {
+          setUserProfile(null);
+        }
+        setLoadingProfile(false);
+      });
+      return () => unsub();
+    } else if (!isUserLoading) {
+      setLoadingProfile(false);
+    }
+  }, [user, isUserLoading, firestore]);
+
+  const loading = isUserLoading || loadingProfile;
 
   if (loading) {
     return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;

@@ -1,15 +1,15 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler, type FieldValues, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star, User } from 'lucide-react';
 
-import { useFirebase } from '@/context/firebase-provider';
+import { useUser, useFirestore } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -91,7 +91,8 @@ const quotes = [
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user, userProfile, db } = useFirebase();
+  const { user, isUserLoading } = useUser();
+  const db = useFirestore();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,21 +100,46 @@ export default function OnboardingPage() {
   
   const form = useForm<z.infer<typeof allSchemas>>({
     resolver: zodResolver(allSchemas),
-    values: {
-        fullName: userProfile?.fullName || userProfile?.name || '',
-        currentEducation: userProfile?.currentEducation || '',
-        targetDegree: userProfile?.targetDegree || '',
-        fieldInterest: userProfile?.fieldInterest || [],
-        budgetRangeUSD: userProfile?.budgetRangeUSD || '',
-        englishOnly: userProfile?.englishOnly ?? true,
-        regionPreference: userProfile?.regionPreference || '',
-        desiredStartDate: userProfile?.desiredStartDate || '',
-        careerGoal: userProfile?.careerGoal || '',
-        scholarshipInterest: userProfile?.scholarshipInterest ?? false,
-        studyMode: userProfile?.studyMode || '',
-        priorityFactors: userProfile?.priorityFactors || [],
+    defaultValues: {
+        fullName: '',
+        currentEducation: '',
+        targetDegree: '',
+        fieldInterest: [],
+        budgetRangeUSD: '',
+        englishOnly: true,
+        regionPreference: '',
+        desiredStartDate: '',
+        careerGoal: '',
+        scholarshipInterest: false,
+        studyMode: '',
+        priorityFactors: [],
       },
   });
+
+  useEffect(() => {
+    if (user && db) {
+      const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        if (doc.exists()) {
+          const profileData = doc.data() as UserProfile;
+          form.reset({
+            fullName: profileData.fullName || profileData.name || '',
+            currentEducation: profileData.currentEducation || '',
+            targetDegree: profileData.targetDegree || '',
+            fieldInterest: profileData.fieldInterest || [],
+            budgetRangeUSD: profileData.budgetRangeUSD || '',
+            englishOnly: profileData.englishOnly ?? true,
+            regionPreference: profileData.regionPreference || '',
+            desiredStartDate: profileData.desiredStartDate || '',
+            careerGoal: profileData.careerGoal || '',
+            scholarshipInterest: profileData.scholarshipInterest ?? false,
+            studyMode: profileData.studyMode || '',
+            priorityFactors: profileData.priorityFactors || [],
+          });
+        }
+      });
+      return () => unsub();
+    }
+  }, [user, isUserLoading, db, form]);
 
   const processForm: SubmitHandler<z.infer<typeof allSchemas>> = async (data) => {
     if (!user || !db) {

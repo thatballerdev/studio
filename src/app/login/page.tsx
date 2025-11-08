@@ -16,8 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useFirebase } from '@/context/firebase-provider';
-import Image from 'next/image';
+import { useUser, useAuth, useFirestore } from '@/firebase';
 import type { UserProfile } from '@/lib/types';
 import Logo from '@/components/logo';
 
@@ -30,21 +29,34 @@ type FormValues = z.infer<typeof formSchema>;
 
 const ADMIN_EMAIL = 'admin@northway.com';
 
+function LoggedInRedirect() {
+    const { user, isUserLoading } = useUser();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!isUserLoading && user) {
+            if (user.email === ADMIN_EMAIL) {
+                router.push('/admin/dashboard');
+            } else {
+                router.push('/dashboard');
+            }
+        }
+    }, [user, isUserLoading, router]);
+    
+    // This component doesn't render anything visible, it just handles the redirect logic.
+    return null;
+}
+
+
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { user, loading, auth, db } = useFirebase();
-
-  useEffect(() => {
-    if (!loading && user) {
-      if (user.email === ADMIN_EMAIL) {
-        router.push('/admin/dashboard');
-      } else {
-        router.push('/dashboard');
-      }
-    }
-  }, [user, loading, router]);
+  
+  // Use specific hooks for services, which is safer
+  const auth = useAuth();
+  const db = useFirestore();
+  const { user, isUserLoading } = useUser();
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -69,31 +81,45 @@ export default function LoginPage() {
         router.push('/onboarding');
       }
     } else {
+      // This case handles users who signed up but didn't start onboarding
       router.push('/onboarding');
     }
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (!auth) return;
+    if (!auth) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'Authentication service not available. Please try again later.',
+      });
+      return;
+    }
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
       await handleLoginRedirect(userCredential.user);
     } catch (error: any) {
+      const errorMessage =
+        error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password'
+          ? 'Invalid email or password.'
+          : error.message || 'An unknown error occurred. Please try again.';
+      
       toast({
         variant: 'destructive',
         title: 'Login Failed',
-        description: error.message || 'An unknown error occurred. Please try again.',
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  if (loading || (!loading && user)) {
+  if (isUserLoading || (!isUserLoading && user)) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <LoggedInRedirect />
       </div>
     );
   }

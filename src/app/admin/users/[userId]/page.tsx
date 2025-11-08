@@ -4,7 +4,7 @@
 import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
-import { useDoc, useFirebase, useMemoFirebase } from '@/firebase';
+import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import Link from 'next/link';
 import { ArrowLeft, Loader2, User } from 'lucide-react';
 import { format } from 'date-fns';
@@ -63,7 +63,7 @@ const DetailItem = ({
 };
 
 export default function UserProfilePage() {
-  const { firestore } = useFirebase();
+  const firestore = useFirestore();
   const params = useParams();
   const userId = params.userId as string;
 

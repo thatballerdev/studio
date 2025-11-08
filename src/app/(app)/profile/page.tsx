@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { Check, Loader2 } from 'lucide-react';
 
-import { useFirebase } from '@/context/firebase-provider';
+import { useUser, useFirestore } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -21,6 +21,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
+import type { UserProfile } from '@/lib/types';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
@@ -41,9 +42,12 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, userProfile, loading, db } = useFirebase();
+  const { user, isUserLoading } = useUser();
+  const db = useFirestore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -64,23 +68,33 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (userProfile) {
-      form.reset({
-        fullName: userProfile.fullName || userProfile.name || '',
-        currentEducation: userProfile.currentEducation || '',
-        targetDegree: userProfile.targetDegree || '',
-        fieldInterest: userProfile.fieldInterest || [],
-        budgetRangeUSD: userProfile.budgetRangeUSD || '',
-        englishOnly: userProfile.englishOnly ?? true,
-        regionPreference: userProfile.regionPreference || '',
-        desiredStartDate: userProfile.desiredStartDate || '',
-        careerGoal: userProfile.careerGoal || '',
-        scholarshipInterest: userProfile.scholarshipInterest ?? false,
-        studyMode: userProfile.studyMode || '',
-        priorityFactors: userProfile.priorityFactors || [],
+    if (user && db) {
+      const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        if (doc.exists()) {
+          const profileData = doc.data() as UserProfile;
+          setUserProfile(profileData);
+          form.reset({
+            fullName: profileData.fullName || profileData.name || '',
+            currentEducation: profileData.currentEducation || '',
+            targetDegree: profileData.targetDegree || '',
+            fieldInterest: profileData.fieldInterest || [],
+            budgetRangeUSD: profileData.budgetRangeUSD || '',
+            englishOnly: profileData.englishOnly ?? true,
+            regionPreference: profileData.regionPreference || '',
+            desiredStartDate: profileData.desiredStartDate || '',
+            careerGoal: profileData.careerGoal || '',
+            scholarshipInterest: profileData.scholarshipInterest ?? false,
+            studyMode: profileData.studyMode || '',
+            priorityFactors: profileData.priorityFactors || [],
+          });
+        }
+        setLoadingProfile(false);
       });
+      return () => unsub();
+    } else if (!isUserLoading) {
+      setLoadingProfile(false);
     }
-  }, [userProfile, form]);
+  }, [user, isUserLoading, db, form]);
 
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {
@@ -107,7 +121,7 @@ export default function ProfilePage() {
     }
   };
 
-  if (loading) {
+  if (isUserLoading || loadingProfile) {
     return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
   

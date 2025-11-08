@@ -8,7 +8,7 @@ import { LayoutGrid, LogOut, User, Menu, FileText, Shield } from 'lucide-react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
-import { useAuth, useFirebase, useUser } from '@/firebase';
+import { useAuth, useFirestore, useUser } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -28,7 +28,7 @@ const ADMIN_EMAIL = 'admin@northway.com';
 export default function Header({ children }: { children?: React.ReactNode}) {
   const { user } = useUser();
   const auth = useAuth();
-  const { firestore } = useFirebase();
+  const firestore = useFirestore();
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 

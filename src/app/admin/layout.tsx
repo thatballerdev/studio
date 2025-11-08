@@ -1,7 +1,6 @@
 
 import AuthCheck from "@/components/auth-check";
 import Header from "@/components/header";
-import { FirebaseClientProvider } from "@/firebase";
 
 export default function AdminLayout({
   children,
@@ -9,7 +8,6 @@ export default function AdminLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <FirebaseClientProvider>
       <AuthCheck>
         <div className="flex min-h-screen w-full flex-col">
           <Header />
@@ -18,6 +16,5 @@ export default function AdminLayout({
           </main>
         </div>
       </AuthCheck>
-    </FirebaseClientProvider>
   );
 }

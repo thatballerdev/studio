@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -15,8 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { useFirebase } from '@/context/firebase-provider';
-import Image from 'next/image';
+import { useUser, useAuth, useFirestore } from '@/firebase';
 import Logo from '@/components/logo';
 
 const formSchema = z.object({
@@ -31,13 +31,15 @@ export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const { user, loading, auth, db } = useFirebase();
+  const { user, isUserLoading } = useUser();
+  const auth = useAuth();
+  const db = useFirestore();
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!isUserLoading && user) {
       router.push('/dashboard');
     }
-  }, [user, loading, router]);
+  }, [user, isUserLoading, router]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -81,7 +83,7 @@ export default function SignupPage() {
     }
   };
 
-  if (loading || (!loading && user)) {
+  if (isUserLoading || (!isUserLoading && user)) {
      return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
