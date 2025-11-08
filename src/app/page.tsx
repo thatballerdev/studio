@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart, Twitter, Linkedin, Facebook, Shield } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
@@ -214,6 +214,7 @@ export default function Home() {
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li><Link href="#" className="hover:text-primary">Terms of Service</Link></li>
                     <li><Link href="#" className="hover:text-primary">Privacy Policy</Link></li>
+                    <li><Link href="/login" className="hover:text-primary flex items-center"><Shield className="w-4 h-4 mr-2" />Admin</Link></li>
                 </ul>
             </div>
             <div>
