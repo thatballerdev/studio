@@ -2,7 +2,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { collection, query, orderBy } from 'firebase/firestore';
+import { collection, query } from 'firebase/firestore';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
@@ -28,7 +28,7 @@ export default function AdminDashboardPage() {
   const usersQuery = useMemoFirebase(
     () =>
       firestore
-        ? query(collection(firestore, 'users'), orderBy('profileUpdatedAt', 'desc'))
+        ? query(collection(firestore, 'users'))
         : null,
     [firestore]
   );
