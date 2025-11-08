@@ -20,13 +20,13 @@ service cloud.firestore {
 
     // --- User Profile Rules ---
     match /users/{userId} {
-      // Admins can get any user's profile.
-      // A user can read and write to their own profile.
-      allow get, update, delete: if isSignedIn() && (isAdmin() || isOwner(userId));
-      allow create: if isSignedIn() && isOwner(userId);
+      // Users can create, read, update, delete their own profile
+      allow read, write: if isSignedIn() && isOwner(userId);
+      // Admins can read any user's profile
+      allow get: if isAdmin();
     }
     
-    // Admin can list all users for the dashboard.
+    // Admins can list all users for the dashboard.
     // This rule applies to collection-level queries.
     match /users/{document=**} {
         allow list: if isAdmin();
@@ -34,10 +34,10 @@ service cloud.firestore {
 
     // --- University Data Rules ---
     // Anyone can read university data.
-    // No one can write to university data through the client SDK.
+    // Writes are restricted to prevent client-side modifications.
     match /universities/{universityId} {
       allow get, list: if true;
-      allow write: if false; // Protect this collection from client-side writes
+      allow write: if false; 
     }
   }
 }
