@@ -129,7 +129,7 @@ export default function CareersPage() {
                     Ready to make a difference? We'd love to hear from you.
                   </p>
                   <Button asChild size="lg" className="w-full font-bold">
-                    <a href="mailto:career@northway.com">
+                    <a href="mailto:career@northway.com?subject=Application%20for%20Student%20Ambassador%20Position">
                       <Mail className="mr-3" size={20} /> Email Your Application
                     </a>
                   </Button>
