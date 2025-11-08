@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -6,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, type User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { ArrowRight, Loader2 } from 'lucide-react';
 
@@ -27,6 +28,8 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
+const ADMIN_EMAIL = 'admin@northway.com';
+
 export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
@@ -35,7 +38,11 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push('/dashboard');
+      if (user.email === ADMIN_EMAIL) {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
     }
   }, [user, loading, router]);
 
@@ -44,27 +51,34 @@ export default function LoginPage() {
     defaultValues: { email: '', password: '' },
   });
 
+  const handleLoginRedirect = async (loggedInUser: User) => {
+    if (loggedInUser.email === ADMIN_EMAIL) {
+      router.push('/admin/dashboard');
+      return;
+    }
+
+    if (!db) return;
+    const userDocRef = doc(db, 'users', loggedInUser.uid);
+    const userDoc = await getDoc(userDocRef);
+
+    if (userDoc.exists()) {
+      const userProfile = userDoc.data() as UserProfile;
+      if (userProfile.onboardingComplete) {
+        router.push('/dashboard');
+      } else {
+        router.push('/onboarding');
+      }
+    } else {
+      router.push('/onboarding');
+    }
+  };
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    if (!auth || !db) return;
+    if (!auth) return;
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-      
-      const userDocRef = doc(db, 'users', userCredential.user.uid);
-      const userDoc = await getDoc(userDocRef);
-
-      if (userDoc.exists()) {
-        const userProfile = userDoc.data() as UserProfile;
-        if (userProfile.onboardingComplete) {
-          router.push('/dashboard');
-        } else {
-          router.push('/onboarding');
-        }
-      } else {
-        // This case should ideally not happen if signup is correct
-        router.push('/onboarding');
-      }
-
+      await handleLoginRedirect(userCredential.user);
     } catch (error: any) {
       toast({
         variant: 'destructive',
