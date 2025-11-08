@@ -1,13 +1,15 @@
 
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, User } from 'lucide-react';
+import { ArrowLeft, Loader2, User, Download } from 'lucide-react';
 import { format } from 'date-fns';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 import AdminGuard from '@/components/admin-guard';
 import type { UserProfile } from '@/lib/types';
@@ -66,19 +68,37 @@ export default function UserProfilePage() {
   const firestore = useFirestore();
   const params = useParams();
   const userId = params.userId as string;
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const userDocRef = useMemoFirebase(() => (firestore ? doc(firestore, 'users', userId) : null), [firestore, userId]);
   const { data: userProfile, isLoading, error } = useDoc<UserProfile>(userDocRef);
 
+  const handleDownloadPdf = () => {
+    if (!profileRef.current) return;
+
+    html2canvas(profileRef.current).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'px', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`user-profile-${userId}.pdf`);
+    });
+  };
+
   return (
     <AdminGuard>
       <div className="container mx-auto py-8">
-        <div className="mb-6">
+        <div className="mb-6 flex justify-between items-center">
           <Button variant="ghost" asChild>
             <Link href="/admin/dashboard">
               <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Dashboard
             </Link>
+          </Button>
+          <Button variant="outline" onClick={handleDownloadPdf}>
+            <Download className="mr-2 h-4 w-4" />
+            Download PDF
           </Button>
         </div>
 
@@ -95,7 +115,7 @@ export default function UserProfilePage() {
         )}
 
         {userProfile && (
-          <Card>
+          <Card ref={profileRef}>
             <CardHeader>
               <div className="flex items-center gap-4">
                 <User className="h-8 w-8 text-primary" />
@@ -113,6 +133,7 @@ export default function UserProfilePage() {
               </h3>
               <div className="text-sm">
                 <DetailItem label="Full Name" value={userProfile.fullName} />
+                <DetailItem label="Email" value={userProfile.email} />
                 <DetailItem
                   label="Current Education"
                   value={userProfile.currentEducation}
