@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { Check, Loader2 } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
@@ -90,8 +90,14 @@ export default function ProfilePage() {
     }
     setIsSubmitting(true);
 
+    const dataToUpdate = {
+        ...data,
+        name: data.fullName,
+        profileUpdatedAt: serverTimestamp(),
+    };
+
     try {
-      await updateDoc(doc(db, 'users', user.uid), {...data, name: data.fullName});
+      await updateDoc(doc(db, 'users', user.uid), dataToUpdate);
       toast({ title: 'Profile Updated', description: 'Your preferences have been saved.' });
       router.refresh(); // To refetch data on dashboard
     } catch (error: any) {

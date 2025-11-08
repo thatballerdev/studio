@@ -61,6 +61,14 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [pathname, setPathname] = useState('');
+
+  useEffect(() => {
+    // This code now runs only on the client, avoiding the "window is not defined" error.
+    if (typeof window !== 'undefined') {
+      setPathname(window.location.pathname);
+    }
+  }, []);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (firebaseUser) => {
@@ -100,17 +108,29 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribeProfile();
   }, [user]);
 
-  if (loading && !userProfile) {
-     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      </div>
-    )
+  if (loading) {
+    // Don't show global loader for admin pages, as they have their own guard
+    if (pathname.startsWith('/admin')) {
+      return (
+        <FirebaseContext.Provider value={{ auth, db, storage, user, userProfile, loading }}>
+          {children}
+        </FirebaseContext.Provider>
+      );
+    }
+    // Show a loader for other pages while waiting for user/profile data
+    if (!pathname.startsWith('/onboarding') && user) {
+        return (
+            <div className="flex h-screen w-screen items-center justify-center bg-background">
+                <Loader2 className="h-12 w-12 animate-spin text-primary" />
+            </div>
+        )
+    }
   }
+
 
   return (
     <FirebaseContext.Provider value={{ auth, db, storage, user, userProfile, loading }}>
-      {!loading && children}
+        {children}
     </FirebaseContext.Provider>
   );
 };

@@ -1,4 +1,6 @@
 
+import type { FieldValue } from 'firebase/firestore';
+
 export interface UserProfile {
   uid: string;
   email: string;
@@ -24,6 +26,7 @@ export interface UserProfile {
   scholarshipInterest?: boolean;
   studyMode?: string;
   priorityFactors?: string[];
+  profileUpdatedAt?: FieldValue;
 }
 
 
@@ -51,14 +54,4 @@ export interface Program {
   };
   commonDurationYears: number;
   lastVerified: string;
-}
-
-export interface CareerApplication {
-    id?: string;
-    applicantName: string;
-    applicantEmail: string;
-    coverLetter: string;
-    studentsPerMonth: string;
-    cvUrl: string;
-    applicationDate: Date;
 }

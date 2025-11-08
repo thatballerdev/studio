@@ -14,8 +14,7 @@ function budgetToNumber(budgetRange?: string): number {
     
     // For ranges like "15000+"
     if (budgetRange.includes('+')) {
-        const value = parseInt(budgetRange.replace('+', ''), 10);
-        return value + 50000; // Return a very high number to include everything above
+        return Infinity; // Return a very high number to include everything above
     }
     
     // For ranges like "5000-10000"
@@ -36,9 +35,9 @@ function budgetToNumber(budgetRange?: string): number {
 // Mapping region preferences to country codes
 const regionToCountryCodes: Record<string, string[]> = {
     "Eastern Europe": ["CZ", "PL"],
-    "Western Europe": ["FR", "DE", "NL", "BE"], // Added Belgium for example
+    "Western Europe": ["FR", "DE", "NL", "BE", "AT"], 
     "Central Europe": ["AT", "DE", "PL", "CZ"],
-    "Nordic": ["SE", "DK", "FI", "NO", "IS"], // Added more Nordic countries
+    "Nordic": ["SE", "DK", "FI", "NO", "IS"],
     "No Preference": [], // Empty array means no country filtering
 };
 

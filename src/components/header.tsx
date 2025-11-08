@@ -1,9 +1,10 @@
+
 "use client";
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { LayoutGrid, LogOut, User, Menu, FileText } from 'lucide-react';
+import { LayoutGrid, LogOut, User, Menu, FileText, Shield } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
 import { Button } from '@/components/ui/button';
@@ -18,6 +19,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
+
+const ADMIN_EMAIL = 'admin@northway.com';
 
 export default function Header({ children }: { children?: React.ReactNode}) {
   const { user, userProfile, auth } = useFirebase();
@@ -58,6 +61,14 @@ export default function Header({ children }: { children?: React.ReactNode}) {
           Profile
         </Link>
       </SheetClose>
+      {user?.email === ADMIN_EMAIL && (
+         <SheetClose asChild>
+          <Link href="/admin/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium text-primary">
+            <Shield className="mr-2 h-5 w-5" />
+            Admin
+          </Link>
+        </SheetClose>
+      )}
     </>
   );
 
@@ -127,6 +138,12 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                 <User className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
+              {user?.email === ADMIN_EMAIL && (
+                <DropdownMenuItem onClick={() => router.push('/admin/dashboard')}>
+                  <Shield className="mr-2 h-4 w-4" />
+                  <span>Admin</span>
+                </DropdownMenuItem>
+              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />

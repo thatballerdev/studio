@@ -7,42 +7,87 @@
       "type": "object",
       "description": "Represents a user's profile with their preferences and information.",
       "properties": {
-        "id": {
+        "uid": {
           "type": "string",
-          "description": "Unique identifier for the UserProfile entity."
-        },
-        "profession": {
-          "type": "string",
-          "description": "The user's profession."
-        },
-        "studyInterest": {
-          "type": "string",
-          "description": "The user's area of study interest."
-        },
-        "budget": {
-          "type": "number",
-          "description": "The user's budget for education."
-        },
-        "preferredCountries": {
-          "type": "array",
-          "description": "The user's preferred countries for studying.",
-          "items": {
-            "type": "string"
-          }
+          "description": "Unique identifier for the UserProfile entity, matches Firebase Auth UID."
         },
         "email": {
           "type": "string",
           "description": "The user's email address.",
           "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "fullName": {
+          "type": "string",
+          "description": "The user's full name from onboarding."
+        },
+        "onboardingComplete": {
+          "type": "boolean",
+          "description": "Flag indicating if the user has completed the onboarding process."
+        },
+        "currentEducation": {
+          "type": "string",
+          "description": "The user's current level of education."
+        },
+        "targetDegree": {
+          "type": "string",
+          "description": "The degree the user is aiming for."
+        },
+        "fieldInterest": {
+          "type": "array",
+          "description": "The user's fields of study interest.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "budgetRangeUSD": {
+          "type": "string",
+          "description": "The user's annual budget range for tuition in USD."
+        },
+        "englishOnly": {
+          "type": "boolean",
+          "description": "Whether the user prefers English-only programs."
+        },
+        "regionPreference": {
+          "type": "string",
+          "description": "The user's preferred region for studying."
+        },
+        "desiredStartDate": {
+          "type": "string",
+          "description": "The user's desired start date for their studies."
+        },
+        "careerGoal": {
+          "type": "string",
+          "description": "The user's stated career goal."
+        },
+        "scholarshipInterest": {
+          "type": "boolean",
+          "description": "Whether the user is interested in scholarships."
+        },
+        "studyMode": {
+          "type": "string",
+          "description": "The user's preferred study mode (On-campus, Hybrid, Online)."
+        },
+        "priorityFactors": {
+          "type": "array",
+          "description": "Factors the user prioritizes when choosing a university.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "profileUpdatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of when the user's profile was last updated."
         }
       },
       "required": [
-        "id",
-        "profession",
-        "studyInterest",
-        "budget",
-        "preferredCountries",
-        "email"
+        "uid",
+        "email",
+        "onboardingComplete"
       ]
     },
     "University": {
@@ -97,13 +142,13 @@
   "firestore": {
     "structure": [
       {
-        "path": "/users/{userId}/profile",
+        "path": "/users/{userId}",
         "definition": {
           "entityName": "UserProfile",
           "schema": {
-            "$ref": "#/backend/entities/UserProfile"
+            "$ref": "#/entities/UserProfile"
           },
-          "description": "Stores user profile information. Accessible only by the authenticated user with matching userId.",
+          "description": "Stores user profile information. Accessible only by the authenticated user with matching userId, or by an admin.",
           "params": [
             {
               "name": "userId",
@@ -117,7 +162,7 @@
         "definition": {
           "entityName": "University",
           "schema": {
-            "$ref": "#/backend/entities/University"
+            "$ref": "#/entities/University"
           },
           "description": "Stores university data. Read access is generally public. Write access is restricted.",
           "params": [
@@ -128,7 +173,6 @@
           ]
         }
       }
-    ],
-    "reasoning": "The Firestore data structure is designed to support the Northway application, focusing on user profiles and university data, with an emphasis on security and scalability. Authorization Independence: The structure ensures authorization independence by avoiding hierarchical `get()` calls in security rules. User-specific data is stored under the `/users/{userId}` path, enabling direct access control based on `request.auth.uid` without needing to traverse parent documents. Structural Segregation (Homogeneous Security Posture): The design uses distinct collections to maintain a homogeneous security posture. User profiles are stored in `/users/{userId}`, ensuring that only the authenticated user can access their data. University data is stored in `/universities`, which can be configured for read access by all users. Access Modeling: The structure utilizes path-based ownership for user profiles (`/users/{userId}/profile`) to ensure that only the authenticated user can modify their profile."
+    ]
   }
 }

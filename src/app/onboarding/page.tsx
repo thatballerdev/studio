@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler, type FieldValues, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { ArrowLeft, ArrowRight, Check, Loader2, BookOpen, DollarSign, Target, Globe, Calendar, Briefcase, Award, Monitor, Star, User } from 'lucide-react';
 
 import { useFirebase } from '@/context/firebase-provider';
@@ -122,10 +122,11 @@ export default function OnboardingPage() {
     }
     setIsLoading(true);
 
-    const finalData: Partial<UserProfile> = { 
+    const finalData = { 
         ...data, 
         onboardingComplete: true,
         name: data.fullName, // Also update the base name field
+        profileUpdatedAt: serverTimestamp(),
     };
 
     try {
@@ -145,22 +146,6 @@ export default function OnboardingPage() {
     const output = await form.trigger(fields, { shouldFocus: true });
 
     if (!output) return;
-
-    // Save progress to Firestore without blocking UI
-    if (user && db) {
-      const fieldName = fields[0];
-      const currentData = form.getValues(fieldName);
-      const dataToSave = { [fieldName]: currentData };
-
-      // Also save name to fullName if it's the first step
-      if (fieldName === 'name') {
-        dataToSave['fullName'] = currentData;
-      }
-      
-      setDoc(doc(db, 'users', user.uid), dataToSave, { merge: true }).catch(err => {
-          console.warn("Could not save onboarding progress", err);
-      });
-    }
 
     if (currentStep < steps.length - 1) {
       setDirection(1);
