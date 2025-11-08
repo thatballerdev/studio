@@ -18,14 +18,18 @@ service cloud.firestore {
     }
 
     // --- User Profile Rules ---
-    // Users can read and write to their own profile document.
-    // The admin can read any user's profile document.
+
+    // Rule for the entire 'users' collection
+    match /users/{document=**} {
+      // Admin can list all users for the dashboard.
+      allow list: if isSignedIn() && isAdmin();
+    }
+    
+    // Rule for individual user documents
+    // Users can read/write their own profile. Admin can read any profile.
     match /users/{userId} {
       allow read: if isSignedIn() && (isOwner(userId) || isAdmin());
       allow write: if isSignedIn() && isOwner(userId);
-
-      // Admin can list all users for the dashboard.
-      allow list: if isSignedIn() && isAdmin();
     }
     
     // --- University Data Rules ---
