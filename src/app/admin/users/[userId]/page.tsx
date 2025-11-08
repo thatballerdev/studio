@@ -80,37 +80,32 @@ export default function UserProfilePage() {
         return;
     }
 
-    // Temporarily change card style for capture
     const originalBg = input.style.backgroundColor;
-    const originalBoxShadow = input.style.boxShadow;
     input.style.backgroundColor = 'white';
-    input.style.boxShadow = 'none';
 
 
     html2canvas(input, {
         scale: 2, 
         useCORS: true,
         onclone: (document) => {
-            // Find all text elements in the cloned document and set their color to black
-            document.querySelectorAll('p, div, h3, span, h4').forEach((el) => {
+            document.querySelectorAll('p, div, h3, span, h4, h2').forEach((el) => {
                 (el as HTMLElement).style.color = 'black';
             });
              document.querySelectorAll('.text-muted-foreground').forEach((el) => {
-                (el as HTMLElement).style.color = '#6b7280'; // A dark gray for muted text
+                (el as HTMLElement).style.color = '#6b7280';
             });
              document.querySelectorAll('.font-semibold').forEach((el) => {
                 (el as HTMLElement).style.fontWeight = '600';
             });
         }
     }).then((canvas) => {
-        // Restore original style
         input.style.backgroundColor = originalBg;
-        input.style.boxShadow = originalBoxShadow;
 
         const imgData = canvas.toDataURL('image/png');
         
         const pdf = new jsPDF('p', 'pt', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
         
         const imgProps= pdf.getImageProperties(imgData);
         const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
@@ -118,13 +113,13 @@ export default function UserProfilePage() {
         let position = 0;
 
         pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
+        heightLeft -= pdfHeight;
 
         while (heightLeft >= 0) {
             position = heightLeft - imgHeight;
             pdf.addPage();
             pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdf.internal.pageSize.getHeight();
+            heightLeft -= pdfHeight;
         }
         
         pdf.save(`northway-profile-${userProfile?.fullName || userId}.pdf`);
@@ -142,7 +137,7 @@ export default function UserProfilePage() {
             </Link>
           </Button>
           {userProfile && (
-             <Button variant="outline" onClick={handleDownloadPdf}>
+             <Button onClick={handleDownloadPdf}>
                 <Download className="mr-2 h-4 w-4" />
                 Download PDF
             </Button>
@@ -162,8 +157,7 @@ export default function UserProfilePage() {
         )}
 
         {userProfile && (
-             <div ref={profileRef} className="bg-card">
-              <Card className="p-4 sm:p-6">
+             <Card ref={profileRef} className="p-4 sm:p-6 bg-card">
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <User className="h-8 w-8 text-primary" />
@@ -237,7 +231,6 @@ export default function UserProfilePage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
         )}
       </div>
     </AdminGuard>
