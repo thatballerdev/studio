@@ -1,28 +1,10 @@
-
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // --- Helper Functions ---
-    function isSignedIn() {
-      return request.auth != null;
-    }
-
-    // --- User Profile Rules ---
-    // A simplified rule for the test environment.
-    // ANY signed-in user can read all user profiles and list the collection.
-    // Individual users can only write to their own profile.
-    match /users/{userId} {
-      allow read, list: if isSignedIn();
-      allow write: if request.auth.uid == userId;
-    }
-
-    // --- University Data Rules ---
-    // Anyone can read university data.
-    match /universities/{universityId} {
-      allow get, list: if true;
-      allow write: if false; 
+    // WARNING: These rules are insecure and for testing only.
+    // Any authenticated user can read and write all data.
+    match /{document=**} {
+      allow read, write: if request.auth != null;
     }
   }
 }
