@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart, Twitter, Linkedin, Facebook, Shield } from 'lucide-react';
 import Image from 'next/image';
@@ -26,7 +27,8 @@ export default function Home() {
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-4">
+            <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">Admin</Link>
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>
