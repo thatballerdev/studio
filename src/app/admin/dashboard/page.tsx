@@ -66,7 +66,7 @@ export default function AdminDashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {users.map((user) => (
+                    {users.map((user, index) => (
                       <TableRow
                         key={user.uid}
                         onClick={() => router.push(`/admin/users/${user.uid}`)}
