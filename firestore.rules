@@ -9,34 +9,17 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isOwner(userId) {
-      return request.auth.uid == userId;
-    }
-    
-    function isAdmin() {
-      // Ensure auth and token objects exist before accessing email
-      return isSignedIn() && request.auth.token.email == 'admin@northway.com';
-    }
-
     // --- User Profile Rules ---
-    // This rule handles access to INDIVIDUAL user documents.
+    // A simplified rule for the test environment.
+    // ANY signed-in user can read all user profiles and list the collection.
+    // Individual users can only write to their own profile.
     match /users/{userId} {
-      // Users can create, read, update, delete their own profile.
-      allow read, write: if isSignedIn() && isOwner(userId);
-      // Admins can read any individual user's profile.
-      allow get: if isAdmin();
-    }
-    
-    // --- Admin Collection Rule ---
-    // This rule handles access for collection-level queries, like listing all users.
-    // It is ONLY for the admin.
-    match /users/{document=**} {
-        allow list: if isAdmin();
+      allow read, list: if isSignedIn();
+      allow write: if request.auth.uid == userId;
     }
 
     // --- University Data Rules ---
     // Anyone can read university data.
-    // Writes are restricted to prevent client-side modifications.
     match /universities/{universityId} {
       allow get, list: if true;
       allow write: if false; 
