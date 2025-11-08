@@ -14,24 +14,26 @@ service cloud.firestore {
     }
     
     function isAdmin() {
-      return request.auth.token.email == 'admin@northway.com';
+      // Ensure auth and token objects exist before accessing email
+      return isSignedIn() && request.auth.token.email == 'admin@northway.com';
     }
 
     // --- User Profile Rules ---
-
-    // Rule for the entire 'users' collection
-    match /users/{document=**} {
-      // Admin can list all users for the dashboard.
-      allow list: if isSignedIn() && isAdmin();
-    }
-    
-    // Rule for individual user documents
-    // Users can read/write their own profile. Admin can read any profile.
     match /users/{userId} {
-      allow read: if isSignedIn() && (isOwner(userId) || isAdmin());
+      // Admin can read any user's profile.
+      // A user can read their own profile.
+      allow read: if isSignedIn() && (isAdmin() || isOwner(userId));
+
+      // A user can only write to their own profile.
       allow write: if isSignedIn() && isOwner(userId);
     }
     
+    // Admin can list all users for the dashboard.
+    // This rule applies to the 'users' collection itself, not individual documents.
+    match /users/{document=**} {
+        allow list: if isAdmin();
+    }
+
     // --- University Data Rules ---
     // Anyone can read university data.
     // No one can write to university data through the client SDK.
