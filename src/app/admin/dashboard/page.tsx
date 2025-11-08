@@ -63,13 +63,12 @@ export default function AdminDashboardPage() {
                       <TableHead>Full Name</TableHead>
                       <TableHead>Email</TableHead>
                       <TableHead>Onboarding Status</TableHead>
-                      <TableHead>Profile Updated</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {users.map((user, index) => (
+                    {users.map((user) => (
                       <TableRow
-                        key={`${user.uid}-${index}`}
+                        key={user.uid}
                         onClick={() => router.push(`/admin/users/${user.uid}`)}
                         className="cursor-pointer hover:bg-muted/50"
                       >
@@ -87,14 +86,6 @@ export default function AdminDashboardPage() {
                               ? 'Complete'
                               : 'Incomplete'}
                           </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {user.profileUpdatedAt
-                            ? format(
-                                (user.profileUpdatedAt as any).toDate(),
-                                'PPpp'
-                              )
-                            : 'N/A'}
                         </TableCell>
                       </TableRow>
                     ))}
