@@ -83,7 +83,7 @@ export default function UserProfilePage() {
     html2canvas(input, {
         scale: 2, 
         useCORS: true, 
-        backgroundColor: window.getComputedStyle(document.body).backgroundColor === 'rgb(255, 255, 255)' ? '#FFFFFF' : '#1C2532'
+        backgroundColor: window.getComputedStyle(document.body).backgroundColor === 'rgb(255, 255, 255)' ? '#FFFFFF' : '#0f172a' // Adjust for dark mode if needed
     }).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         
@@ -121,10 +121,12 @@ export default function UserProfilePage() {
               Back to Dashboard
             </Link>
           </Button>
-          <Button variant="outline" onClick={handleDownloadPdf}>
-            <Download className="mr-2 h-4 w-4" />
-            Download PDF
-          </Button>
+          {userProfile && (
+             <Button variant="outline" onClick={handleDownloadPdf}>
+                <Download className="mr-2 h-4 w-4" />
+                Download PDF
+            </Button>
+          )}
         </div>
 
         {isLoading && (
@@ -140,7 +142,7 @@ export default function UserProfilePage() {
         )}
 
         {userProfile && (
-             <Card ref={profileRef} className="p-4 sm:p-6">
+             <Card ref={profileRef} className="p-4 sm:p-6 bg-card">
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <User className="h-8 w-8 text-primary" />
