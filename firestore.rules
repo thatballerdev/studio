@@ -19,15 +19,17 @@ service cloud.firestore {
     }
 
     // --- User Profile Rules ---
+    // This rule handles access to INDIVIDUAL user documents.
     match /users/{userId} {
-      // Users can create, read, update, delete their own profile
+      // Users can create, read, update, delete their own profile.
       allow read, write: if isSignedIn() && isOwner(userId);
-      // Admins can read any user's profile
+      // Admins can read any individual user's profile.
       allow get: if isAdmin();
     }
     
-    // Admins can list all users for the dashboard.
-    // This rule applies to collection-level queries.
+    // --- Admin Collection Rule ---
+    // This rule handles access for collection-level queries, like listing all users.
+    // It is ONLY for the admin.
     match /users/{document=**} {
         allow list: if isAdmin();
     }
