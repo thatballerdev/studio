@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { collection, query, doc, getDoc } from 'firebase/firestore';
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { useRouter } from 'next/navigation';
@@ -94,6 +94,7 @@ export default function AdminDashboardPage() {
   const [isDownloading, setIsDownloading] = useState<string | null>(null);
   const pdfRef = useRef<HTMLDivElement>(null);
   const [pdfData, setPdfData] = useState<UserProfile | null>(null);
+  const [displayedUsers, setDisplayedUsers] = useState<UserProfile[]>([]);
 
   const usersQuery = useMemoFirebase(
     () => (firestore ? query(collection(firestore, 'users')) : null),
@@ -102,12 +103,14 @@ export default function AdminDashboardPage() {
 
   const { data: users, isLoading, error } = useCollection<UserProfile>(usersQuery);
 
-  const filteredUsers = useMemo(() => {
-    if (!users) return [];
-    return users.filter(user =>
-      (user.fullName || user.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (user.email || '').toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  useEffect(() => {
+    if (users) {
+      const filtered = users.filter(user =>
+        (user.fullName || user.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.email || '').toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setDisplayedUsers(filtered);
+    }
   }, [users, searchTerm]);
   
   const generatePdf = (profile: UserProfile) => {
@@ -179,7 +182,7 @@ export default function AdminDashboardPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Registered Users ({filteredUsers?.length || 0})</CardTitle>
+            <CardTitle>Registered Users ({displayedUsers?.length || 0})</CardTitle>
              <div className="relative mt-4">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -201,7 +204,7 @@ export default function AdminDashboardPage() {
                 Error: {error.message}
               </div>
             )}
-            {!isLoading && users && (
+            {!isLoading && displayedUsers && (
               <div className="border rounded-md">
                 <Table>
                   <TableHeader>
@@ -213,7 +216,7 @@ export default function AdminDashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredUsers.map((user) => (
+                    {displayedUsers.map((user) => (
                       <TableRow
                         key={user.uid}
                         className="group"
