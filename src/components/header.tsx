@@ -81,14 +81,6 @@ export default function Header({ children }: { children?: React.ReactNode}) {
           Profile
         </Link>
       </SheetClose>
-      {isAdmin && (
-         <SheetClose asChild>
-          <Link href="/admin/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium text-primary">
-            <Shield className="mr-2 h-5 w-5" />
-            Admin
-          </Link>
-        </SheetClose>
-      )}
     </>
   );
 
@@ -156,7 +148,7 @@ export default function Header({ children }: { children?: React.ReactNode}) {
               {isAdmin ? (
                  <DropdownMenuItem onClick={() => router.push('/admin/dashboard')}>
                   <Shield className="mr-2 h-4 w-4" />
-                  <span>Admin Dashboard</span>
+                  <span>User Management</span>
                 </DropdownMenuItem>
               ) : (
                 <>
