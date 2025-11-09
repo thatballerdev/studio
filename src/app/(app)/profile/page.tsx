@@ -25,6 +25,7 @@ import type { UserProfile } from '@/lib/types';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
+  email: z.string().email(),
   phoneNumber: z.string().min(10, "Please enter a valid phone number."),
   contactMethod: z.enum(["Email", "Phone"]),
   currentEducation: z.string().min(1, "Please select your education level."),
@@ -55,6 +56,7 @@ export default function ProfilePage() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       fullName: '',
+      email: '',
       phoneNumber: '',
       contactMethod: 'Email',
       currentEducation: '',
@@ -79,6 +81,7 @@ export default function ProfilePage() {
           setUserProfile(profileData);
           form.reset({
             fullName: profileData.fullName || profileData.name || '',
+            email: profileData.email || user.email || '',
             phoneNumber: profileData.phoneNumber || '',
             contactMethod: profileData.contactMethod || 'Email',
             currentEducation: profileData.currentEducation || '',
@@ -113,6 +116,7 @@ export default function ProfilePage() {
     const dataToUpdate = {
         ...data,
         name: data.fullName,
+        email: user.email, // Email should not be editable from this form
         profileUpdatedAt: serverTimestamp(),
     };
 
@@ -147,6 +151,13 @@ export default function ProfilePage() {
                 <FormItem>
                   <FormLabel>Full Name</FormLabel>
                   <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="email" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl><Input readOnly disabled placeholder="Your email address" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )} />
@@ -388,3 +399,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    

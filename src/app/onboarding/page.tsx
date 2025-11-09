@@ -44,6 +44,8 @@ const prioritiesSchema = z.object({ priorityFactors: z
     .array(z.string())
     .min(1, "Please select at least one priority.")
 });
+const emailSchema = z.object({ email: z.string().email() });
+
 
 const allSchemas = z.object({
     fullName: z.string().min(2, "Please enter your full name."),
@@ -59,7 +61,8 @@ const allSchemas = z.object({
     careerGoal: z.string().optional(),
     scholarshipInterest: z.boolean().default(false),
     studyMode: z.string().min(1, "Please select a study mode."),
-    priorityFactors: z.array(z.string()).min(1, "Please select at least one priority.")
+    priorityFactors: z.array(z.string()).min(1, "Please select at least one priority."),
+    email: z.string().email(),
 });
 
 
@@ -123,11 +126,15 @@ export default function OnboardingPage() {
         scholarshipInterest: false,
         studyMode: '',
         priorityFactors: [],
+        email: user?.email || '',
       },
   });
 
   useEffect(() => {
     if (user && db) {
+      // Set email from user object right away
+      form.setValue('email', user.email || '');
+
       const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
         if (doc.exists()) {
           const profileData = doc.data() as UserProfile;
@@ -146,6 +153,7 @@ export default function OnboardingPage() {
             scholarshipInterest: profileData.scholarshipInterest ?? false,
             studyMode: profileData.studyMode || '',
             priorityFactors: profileData.priorityFactors || [],
+            email: user.email || profileData.email || '',
           });
         }
       });
@@ -165,6 +173,7 @@ export default function OnboardingPage() {
         onboardingComplete: true,
         name: data.fullName, // Also update the base name field
         profileUpdatedAt: serverTimestamp(),
+        email: user.email, // Ensure the auth email is the source of truth
     };
 
     try {
@@ -253,7 +262,7 @@ export default function OnboardingPage() {
                              <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2 pt-2">
                                 <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl><RadioGroupItem value="Email" /></FormControl>
-                                    <FormLabel className="font-normal">Email</FormLabel>
+                                    <FormLabel className="font-normal">Email ({user?.email})</FormLabel>
                                 </FormItem>
                                  <FormItem className="flex items-center space-x-3 space-y-0">
                                     <FormControl><RadioGroupItem value="Phone" /></FormControl>
@@ -503,3 +512,5 @@ export default function OnboardingPage() {
     </AuthCheck>
   );
 }
+
+    

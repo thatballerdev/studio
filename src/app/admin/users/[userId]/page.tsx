@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, User, Download, Phone, Mail } from 'lucide-react';
+import { ArrowLeft, Loader2, User, Download } from 'lucide-react';
 import { format } from 'date-fns';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -244,3 +244,5 @@ export default function UserProfilePage() {
     </AdminGuard>
   );
 }
+
+    
