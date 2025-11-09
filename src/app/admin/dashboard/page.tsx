@@ -30,7 +30,7 @@ import Logo from '@/components/logo';
 const PdfContent = ({ userProfile, innerRef }: { userProfile: UserProfile, innerRef: React.Ref<HTMLDivElement> }) => {
     if (!userProfile) return null;
     return (
-        <div ref={innerRef} className="p-8 bg-white" style={{ width: '210mm' }}>
+        <div ref={innerRef} className="p-8 bg-white text-black" style={{ width: '210mm' }}>
              <div className="text-center mb-8">
                 <div className="flex justify-center mb-2"><Logo width={120} height={40}/></div>
                 <p className="text-sm italic text-gray-500">Education with purpose, not pressure.</p>
@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
                 return;
             }
 
-            html2canvas(input, { scale: 2, useCORS: true })
+            html2canvas(input, { scale: 2, useCORS: true, backgroundColor: null })
                 .then((canvas) => {
                     const imgData = canvas.toDataURL('image/png');
                     const pdf = new jsPDF('p', 'pt', 'a4');
@@ -144,10 +144,14 @@ export default function AdminDashboardPage() {
   };
 
   const handleDownloadClick = async (userId: string) => {
-    if (!firestore || !userId) { // Defensive check for userId
+    if (!userId) {
         console.error("User ID is missing. Cannot download PDF.");
         return;
-    };
+    }
+    if (!firestore) {
+        console.error("Firestore is not available.");
+        return;
+    }
     setIsDownloading(userId);
     try {
         const userDocRef = doc(firestore, 'users', userId);
@@ -209,9 +213,9 @@ export default function AdminDashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredUsers.map((user, index) => (
+                    {filteredUsers.map((user) => (
                       <TableRow
-                        key={`${user.uid}-${index}`}
+                        key={user.uid}
                         className="group"
                       >
                         <TableCell 
@@ -258,7 +262,7 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
       {/* Hidden div for rendering PDF content */}
-      <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+      <div style={{ position: 'absolute', left: '-9999px', top: 0, color: '#000' }}>
         {pdfData && <PdfContent userProfile={pdfData} innerRef={pdfRef} />}
       </div>
     </AdminGuard>
