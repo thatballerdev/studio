@@ -40,7 +40,7 @@ const DetailItem = ({
     displayValue = (
       <div className="flex flex-wrap gap-2">
         {value.map(item => (
-          <Badge key={item} variant="secondary">
+          <Badge key={item} variant="secondary" className="font-normal">
             {item}
           </Badge>
         ))}
@@ -88,14 +88,20 @@ export default function UserProfilePage() {
         scale: 2, 
         useCORS: true,
         onclone: (document) => {
-            document.querySelectorAll('p, div, h3, span, h4, h2').forEach((el) => {
+            // Ensure text is dark for the PDF
+            document.querySelectorAll('p, div, h3, span, h4, h2, h1, [class*="text-"]').forEach((el) => {
                 (el as HTMLElement).style.color = 'black';
             });
              document.querySelectorAll('.text-muted-foreground').forEach((el) => {
                 (el as HTMLElement).style.color = '#6b7280';
             });
-             document.querySelectorAll('.font-semibold').forEach((el) => {
+             document.querySelectorAll('[class*="font-semibold"], [class*="font-bold"]').forEach((el) => {
                 (el as HTMLElement).style.fontWeight = '600';
+            });
+             document.querySelectorAll('div[role="badge"]').forEach((el) => {
+                (el as HTMLElement).style.backgroundColor = '#f3f4f6'; // secondary bg
+                (el as HTMLElement).style.color = '#111827'; // secondary-foreground
+                (el as HTMLElement).style.border = '1px solid #e5e7eb';
             });
         }
     }).then((canvas) => {
@@ -105,7 +111,6 @@ export default function UserProfilePage() {
         
         const pdf = new jsPDF('p', 'pt', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
         
         const imgProps= pdf.getImageProperties(imgData);
         const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
@@ -113,13 +118,13 @@ export default function UserProfilePage() {
         let position = 0;
 
         pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdfHeight;
+        heightLeft -= pdf.internal.pageSize.getHeight();
 
         while (heightLeft >= 0) {
             position = heightLeft - imgHeight;
             pdf.addPage();
             pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdfHeight;
+            heightLeft -= pdf.internal.pageSize.getHeight();
         }
         
         pdf.save(`northway-profile-${userProfile?.fullName || userId}.pdf`);
@@ -162,7 +167,7 @@ export default function UserProfilePage() {
                   <div className="flex items-center gap-4">
                     <User className="h-8 w-8 text-primary" />
                     <div>
-                      <CardTitle className="text-2xl">
+                      <CardTitle className="text-2xl font-bold">
                         {userProfile.fullName || userProfile.name}
                       </CardTitle>
                       <CardDescription>{userProfile.email}</CardDescription>
@@ -170,20 +175,20 @@ export default function UserProfilePage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-4">
+                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-6">
                     Contact Information
                   </h3>
-                   <div className="text-sm">
+                   <div className="text-sm space-y-2">
                     <DetailItem label="Full Name" value={userProfile.fullName} />
                     <DetailItem label="Email" value={userProfile.email} />
                     <DetailItem label="Phone Number" value={userProfile.phoneNumber} />
                     <DetailItem label="Preferred Contact" value={userProfile.contactMethod} />
                   </div>
 
-                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-4">
-                    User Preferences
+                  <h3 className="text-lg font-semibold mt-8 mb-4 border-t pt-6">
+                    Study Preferences
                   </h3>
-                  <div className="text-sm">
+                  <div className="text-sm space-y-2">
                     <DetailItem
                       label="Current Education"
                       value={userProfile.currentEducation}
@@ -222,8 +227,12 @@ export default function UserProfilePage() {
                       value={userProfile.studyMode}
                     />
                     <DetailItem
-                      label="Priority Factors"
+                      label="Priorities"
                       value={userProfile.priorityFactors}
+                    />
+                    <DetailItem
+                      label="Onboarding Complete"
+                      value={userProfile.onboardingComplete}
                     />
                     <DetailItem
                       label="Profile Last Updated"
