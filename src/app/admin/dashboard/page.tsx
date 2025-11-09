@@ -218,7 +218,7 @@ export default function AdminDashboardPage() {
                   <TableBody>
                     {displayedUsers.map((user) => (
                       <TableRow
-                        key={user.uid}
+                        key={`${user.uid}-${user.email}`}
                         className="group"
                       >
                         <TableCell 
