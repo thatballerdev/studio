@@ -144,15 +144,23 @@ export default function AdminDashboardPage() {
   };
 
   const handleDownloadClick = async (userId: string) => {
-    if (!firestore) return;
+    if (!firestore || !userId) { // Defensive check for userId
+        console.error("User ID is missing. Cannot download PDF.");
+        return;
+    };
     setIsDownloading(userId);
-    const userDocRef = doc(firestore, 'users', userId);
-    const userDoc = await getDoc(userDocRef);
-    if (userDoc.exists()) {
-        await generatePdf(userDoc.data() as UserProfile);
-    } else {
-        console.error("User not found for PDF generation.");
-        setIsDownloading(null);
+    try {
+        const userDocRef = doc(firestore, 'users', userId);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+            await generatePdf(userDoc.data() as UserProfile);
+        } else {
+            console.error("User not found for PDF generation.");
+            setIsDownloading(null);
+        }
+    } catch (error) {
+        console.error("Error downloading PDF:", error);
+        setIsDownloading(null); // Reset button on error
     }
   };
 
