@@ -35,7 +35,17 @@ const DetailItem = ({
   icon?: React.ReactNode;
 }) => {
   if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-    return null;
+    return (
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-2 py-4 border-b"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="font-semibold text-muted-foreground flex items-center gap-2 text-sm">{icon}{label}</p>
+          <div className="md:col-span-2"><p className="text-muted-foreground/70 text-sm italic">Not provided</p></div>
+        </motion.div>
+    );
   }
 
   let displayValue: React.ReactNode;
@@ -88,25 +98,17 @@ export default function UserProfilePage() {
       console.error("Profile element not found for PDF generation.");
       return;
     }
-
-    // Temporarily set background to white for PDF generation
-    const originalBg = input.style.backgroundColor;
-    input.style.backgroundColor = 'white';
-
+    
     html2canvas(input, {
         scale: 2, 
-        useCORS: true, // Important for external images like the logo
+        useCORS: true,
         onclone: (document) => {
-            // Make the logo visible for the PDF clone
             const logo = document.getElementById('pdf-logo-header');
             if (logo) {
-              logo.classList.remove('hidden');
+              logo.style.display = 'block';
             }
         }
     }).then((canvas) => {
-        // Restore original background color after capture
-        input.style.backgroundColor = originalBg;
-
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'pt', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
@@ -156,7 +158,7 @@ export default function UserProfilePage() {
                 transition={{ duration: 0.5 }}
              >
               <Card ref={profileRef} className="bg-card p-4 sm:p-8 rounded-2xl shadow-md">
-                <div id="pdf-logo-header" className="hidden text-center mb-8">
+                <div id="pdf-logo-header" style={{display: 'none'}} className="text-center mb-8">
                     <div className="flex justify-center mb-2"><Logo width={120} height={40}/></div>
                     <p className="text-sm italic text-gray-500">Education with purpose, not pressure.</p>
                 </div>
@@ -174,10 +176,10 @@ export default function UserProfilePage() {
                     Contact Information
                   </h3>
                    <div className="text-sm space-y-2">
-                    <DetailItem label="Full Name" value={userProfile.fullName} />
-                    <DetailItem label="Email" value={userProfile.email} />
-                    <DetailItem label="Phone Number" value={userProfile.phoneNumber} />
-                    <DetailItem label="Preferred Contact" value={userProfile.contactMethod} />
+                    <DetailItem icon={<User />} label="Full Name" value={userProfile.fullName} />
+                    <DetailItem icon={<Mail />} label="Email" value={userProfile.email} />
+                    <DetailItem icon={<Phone />} label="Phone Number" value={userProfile.phoneNumber} />
+                    <DetailItem icon={<Globe />} label="Preferred Contact" value={userProfile.contactMethod} />
                   </div>
 
                   <h3 className="text-xl font-semibold mt-8 mb-4 border-t pt-8 flex items-center">
@@ -216,3 +218,5 @@ export default function UserProfilePage() {
     </AdminGuard>
   );
 }
+
+    
