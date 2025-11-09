@@ -27,7 +27,6 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const ADMIN_EMAIL = 'admin@northway.com';
 
 function LoggedInRedirect() {
     const { user, isUserLoading } = useUser();
@@ -35,11 +34,7 @@ function LoggedInRedirect() {
 
     useEffect(() => {
         if (!isUserLoading && user) {
-            if (user.email === ADMIN_EMAIL) {
-                router.push('/admin/dashboard');
-            } else {
-                router.push('/dashboard');
-            }
+            router.push('/dashboard');
         }
     }, [user, isUserLoading, router]);
     
@@ -64,11 +59,6 @@ export default function LoginPage() {
   });
 
   const handleLoginRedirect = async (loggedInUser: User) => {
-    if (loggedInUser.email === ADMIN_EMAIL) {
-      router.push('/admin/dashboard');
-      return;
-    }
-
     if (!db) return;
     const userDocRef = doc(db, 'users', loggedInUser.uid);
     const userDoc = await getDoc(userDocRef);

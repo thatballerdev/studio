@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { LayoutGrid, LogOut, User, Menu, FileText, Shield } from 'lucide-react';
+import { LayoutGrid, LogOut, User, Menu, FileText } from 'lucide-react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -23,8 +23,6 @@ import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/s
 import Logo from '@/components/logo';
 import type { UserProfile } from '@/lib/types';
 
-const ADMIN_EMAIL = 'admin@northway.com';
-
 export default function Header({ children }: { children?: React.ReactNode}) {
   const { user } = useUser();
   const auth = useAuth();
@@ -32,8 +30,6 @@ export default function Header({ children }: { children?: React.ReactNode}) {
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   
-  const isAdmin = user?.email === ADMIN_EMAIL;
-
   useEffect(() => {
     if (user && firestore) {
       const userDocRef = doc(firestore, 'users', user.uid);
@@ -88,7 +84,7 @@ export default function Header({ children }: { children?: React.ReactNode}) {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
-          <Link href={isAdmin ? "/admin/dashboard" : "/dashboard"} className="flex items-center gap-2">
+          <Link href={"/dashboard"} className="flex items-center gap-2">
             <Logo width={100} height={40} />
           </Link>
         </div>
@@ -104,26 +100,19 @@ export default function Header({ children }: { children?: React.ReactNode}) {
           <SheetContent side="left" className="w-72 p-0">
             <div className="flex flex-col h-full">
                 <div className="p-6 border-b">
-                  <Link href={isAdmin ? "/admin/dashboard" : "/dashboard"} className="flex items-center gap-2">
+                  <Link href={"/dashboard"} className="flex items-center gap-2">
                       <Logo width={100} height={40}/>
                   </Link>
                 </div>
                 <nav className="flex flex-col gap-2 p-4">
-                    {isAdmin ? (
-                      <SheetClose asChild>
-                        <Link href="/admin/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium text-primary">
-                          <Shield className="mr-2 h-5 w-5" />
-                          User Management
-                        </Link>
-                      </SheetClose>
-                    ) : mobileNavItems}
+                    {mobileNavItems}
                 </nav>
             </div>
           </SheetContent>
         </Sheet>
         
         <div className="items-center flex-1 hidden md:flex">
-            {!isAdmin && children}
+            {children}
         </div>
 
 
@@ -145,12 +134,6 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {isAdmin ? (
-                 <DropdownMenuItem onClick={() => router.push('/admin/dashboard')}>
-                  <Shield className="mr-2 h-4 w-4" />
-                  <span>User Management</span>
-                </DropdownMenuItem>
-              ) : (
                 <>
                   <DropdownMenuItem onClick={() => router.push('/dashboard')}>
                     <LayoutGrid className="mr-2 h-4 w-4" />
@@ -165,7 +148,6 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                     <span>Profile</span>
                   </DropdownMenuItem>
                 </>
-              )}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
                 <LogOut className="mr-2 h-4 w-4" />
