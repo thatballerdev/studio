@@ -20,6 +20,15 @@
           "type": "string",
           "description": "The user's display name."
         },
+        "phoneNumber": {
+            "type": "string",
+            "description": "The user's phone number."
+        },
+        "contactMethod": {
+            "type": "string",
+            "description": "The user's preferred contact method.",
+            "enum": ["Email", "Phone"]
+        },
         "fullName": {
           "type": "string",
           "description": "The user's full name from onboarding."

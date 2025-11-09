@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, User, Download } from 'lucide-react';
+import { ArrowLeft, Loader2, User, Download, Phone, Mail } from 'lucide-react';
 import { format } from 'date-fns';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -170,12 +170,20 @@ export default function UserProfilePage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h3 className="text-lg font-semibold mb-4 border-t pt-4">
+                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-4">
+                    Contact Information
+                  </h3>
+                   <div className="text-sm">
+                    <DetailItem label="Full Name" value={userProfile.fullName} />
+                    <DetailItem label="Email" value={userProfile.email} />
+                    <DetailItem label="Phone Number" value={userProfile.phoneNumber} />
+                    <DetailItem label="Preferred Contact" value={userProfile.contactMethod} />
+                  </div>
+
+                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-4">
                     User Preferences
                   </h3>
                   <div className="text-sm">
-                    <DetailItem label="Full Name" value={userProfile.fullName} />
-                    <DetailItem label="Email" value={userProfile.email} />
                     <DetailItem
                       label="Current Education"
                       value={userProfile.currentEducation}

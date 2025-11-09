@@ -15,6 +15,8 @@ export interface UserProfile {
 
   // New detailed onboarding fields
   fullName?: string;
+  phoneNumber?: string;
+  contactMethod?: 'Email' | 'Phone';
   currentEducation?: string;
   targetDegree?: string;
   fieldInterest?: string[];

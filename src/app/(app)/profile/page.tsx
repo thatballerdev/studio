@@ -25,6 +25,8 @@ import type { UserProfile } from '@/lib/types';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
+  phoneNumber: z.string().min(10, "Please enter a valid phone number."),
+  contactMethod: z.enum(["Email", "Phone"]),
   currentEducation: z.string().min(1, "Please select your education level."),
   targetDegree: z.string().min(1, "Please select your target degree."),
   fieldInterest: z.array(z.string()).min(1, "Please select at least one field."),
@@ -53,6 +55,8 @@ export default function ProfilePage() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       fullName: '',
+      phoneNumber: '',
+      contactMethod: 'Email',
       currentEducation: '',
       targetDegree: '',
       fieldInterest: [],
@@ -75,6 +79,8 @@ export default function ProfilePage() {
           setUserProfile(profileData);
           form.reset({
             fullName: profileData.fullName || profileData.name || '',
+            phoneNumber: profileData.phoneNumber || '',
+            contactMethod: profileData.contactMethod || 'Email',
             currentEducation: profileData.currentEducation || '',
             targetDegree: profileData.targetDegree || '',
             fieldInterest: profileData.fieldInterest || [],
@@ -142,6 +148,29 @@ export default function ProfilePage() {
                   <FormLabel>Full Name</FormLabel>
                   <FormControl><Input placeholder="Your Name" {...field} /></FormControl>
                   <FormMessage />
+                </FormItem>
+              )} />
+               <FormField control={form.control} name="phoneNumber" render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl><Input type="tel" placeholder="+1 (555) 123-4567" {...field} /></FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} />
+              <FormField control={form.control} name="contactMethod" render={({ field }) => (
+                <FormItem>
+                    <FormLabel>Preferred Contact Method</FormLabel>
+                    <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4 pt-2">
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl><RadioGroupItem value="Email" /></FormControl>
+                            <FormLabel className="font-normal">Email</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2 space-y-0">
+                            <FormControl><RadioGroupItem value="Phone" /></FormControl>
+                            <FormLabel className="font-normal">Phone Call / SMS</FormLabel>
+                        </FormItem>
+                    </RadioGroup>
+                    <FormMessage />
                 </FormItem>
               )} />
             </CardContent>
