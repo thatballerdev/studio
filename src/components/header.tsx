@@ -31,6 +31,8 @@ export default function Header({ children }: { children?: React.ReactNode}) {
   const firestore = useFirestore();
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  
+  const isAdmin = user?.email === ADMIN_EMAIL;
 
   useEffect(() => {
     if (user && firestore) {
@@ -79,7 +81,7 @@ export default function Header({ children }: { children?: React.ReactNode}) {
           Profile
         </Link>
       </SheetClose>
-      {user?.email === ADMIN_EMAIL && (
+      {isAdmin && (
          <SheetClose asChild>
           <Link href="/admin/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium text-primary">
             <Shield className="mr-2 h-5 w-5" />
@@ -94,7 +96,7 @@ export default function Header({ children }: { children?: React.ReactNode}) {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-20 items-center">
         <div className="mr-4 hidden md:flex">
-          <Link href="/dashboard" className="flex items-center gap-2">
+          <Link href={isAdmin ? "/admin/dashboard" : "/dashboard"} className="flex items-center gap-2">
             <Logo width={100} height={40} />
           </Link>
         </div>
@@ -110,19 +112,26 @@ export default function Header({ children }: { children?: React.ReactNode}) {
           <SheetContent side="left" className="w-72 p-0">
             <div className="flex flex-col h-full">
                 <div className="p-6 border-b">
-                  <Link href="/dashboard" className="flex items-center gap-2">
+                  <Link href={isAdmin ? "/admin/dashboard" : "/dashboard"} className="flex items-center gap-2">
                       <Logo width={100} height={40}/>
                   </Link>
                 </div>
                 <nav className="flex flex-col gap-2 p-4">
-                    {mobileNavItems}
+                    {isAdmin ? (
+                      <SheetClose asChild>
+                        <Link href="/admin/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium text-primary">
+                          <Shield className="mr-2 h-5 w-5" />
+                          User Management
+                        </Link>
+                      </SheetClose>
+                    ) : mobileNavItems}
                 </nav>
             </div>
           </SheetContent>
         </Sheet>
         
         <div className="items-center flex-1 hidden md:flex">
-            {children}
+            {!isAdmin && children}
         </div>
 
 
@@ -144,23 +153,26 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => router.push('/dashboard')}>
-                <LayoutGrid className="mr-2 h-4 w-4" />
-                <span>Dashboard</span>
-              </DropdownMenuItem>
-               <DropdownMenuItem onClick={() => router.push('/programs')}>
-                <FileText className="mr-2 h-4 w-4" />
-                <span>Programs</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => router.push('/profile')}>
-                <User className="mr-2 h-4 w-4" />
-                <span>Profile</span>
-              </DropdownMenuItem>
-              {user?.email === ADMIN_EMAIL && (
-                <DropdownMenuItem onClick={() => router.push('/admin/dashboard')}>
+              {isAdmin ? (
+                 <DropdownMenuItem onClick={() => router.push('/admin/dashboard')}>
                   <Shield className="mr-2 h-4 w-4" />
-                  <span>Admin</span>
+                  <span>Admin Dashboard</span>
                 </DropdownMenuItem>
+              ) : (
+                <>
+                  <DropdownMenuItem onClick={() => router.push('/dashboard')}>
+                    <LayoutGrid className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </DropdownMenuItem>
+                   <DropdownMenuItem onClick={() => router.push('/programs')}>
+                    <FileText className="mr-2 h-4 w-4" />
+                    <span>Programs</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/profile')}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                </>
               )}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>

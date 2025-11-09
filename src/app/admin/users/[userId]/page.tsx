@@ -6,7 +6,7 @@ import { useParams } from 'next/navigation';
 import { doc } from 'firebase/firestore';
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import Link from 'next/link';
-import { ArrowLeft, Loader2, User, Download } from 'lucide-react';
+import { ArrowLeft, Loader2, User, Download, Mail, Phone } from 'lucide-react';
 import { format } from 'date-fns';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import Logo from '@/components/logo';
 
 const DetailItem = ({
   label,
@@ -31,7 +32,12 @@ const DetailItem = ({
   value?: string | string[] | number | boolean | null;
 }) => {
   if (value === undefined || value === null || value === '' || (Array.isArray(value) && value.length === 0)) {
-    return null;
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-1 py-3 border-b">
+          <p className="font-semibold text-muted-foreground">{label}</p>
+          <div className="md:col-span-2"><p className="text-muted-foreground/70 italic">Not provided</p></div>
+        </div>
+      );
   }
 
   let displayValue: React.ReactNode;
@@ -48,7 +54,7 @@ const DetailItem = ({
     );
   } else if (typeof value === 'boolean') {
     displayValue = (
-      <Badge variant={value ? 'default' : 'outline'}>
+      <Badge variant={value ? 'default' : 'outline'} className="font-semibold">
         {value ? 'Yes' : 'No'}
       </Badge>
     );
@@ -88,7 +94,7 @@ export default function UserProfilePage() {
         scale: 2, 
         useCORS: true,
         onclone: (document) => {
-            // Ensure text is dark for the PDF
+            document.getElementById('pdf-logo')?.classList.remove('hidden');
             document.querySelectorAll('p, div, h3, span, h4, h2, h1, [class*="text-"]').forEach((el) => {
                 (el as HTMLElement).style.color = 'black';
             });
@@ -99,8 +105,8 @@ export default function UserProfilePage() {
                 (el as HTMLElement).style.fontWeight = '600';
             });
              document.querySelectorAll('div[role="badge"]').forEach((el) => {
-                (el as HTMLElement).style.backgroundColor = '#f3f4f6'; // secondary bg
-                (el as HTMLElement).style.color = '#111827'; // secondary-foreground
+                (el as HTMLElement).style.backgroundColor = '#f3f4f6'; 
+                (el as HTMLElement).style.color = '#111827'; 
                 (el as HTMLElement).style.border = '1px solid #e5e7eb';
             });
         }
@@ -108,23 +114,23 @@ export default function UserProfilePage() {
         input.style.backgroundColor = originalBg;
 
         const imgData = canvas.toDataURL('image/png');
-        
         const pdf = new jsPDF('p', 'pt', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = pdf.internal.pageSize.getHeight();
         
         const imgProps= pdf.getImageProperties(imgData);
         const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
         let heightLeft = imgHeight;
         let position = 0;
 
-        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-        heightLeft -= pdf.internal.pageSize.getHeight();
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+        heightLeft -= pdfHeight;
 
-        while (heightLeft >= 0) {
+        while (heightLeft > 0) {
             position = heightLeft - imgHeight;
             pdf.addPage();
             pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
-            heightLeft -= pdf.internal.pageSize.getHeight();
+            heightLeft -= pdfHeight;
         }
         
         pdf.save(`northway-profile-${userProfile?.fullName || userId}.pdf`);
@@ -141,7 +147,7 @@ export default function UserProfilePage() {
               Back to Dashboard
             </Link>
           </Button>
-          {userProfile && (
+           {userProfile && (
              <Button onClick={handleDownloadPdf}>
                 <Download className="mr-2 h-4 w-4" />
                 Download PDF
@@ -162,7 +168,9 @@ export default function UserProfilePage() {
         )}
 
         {userProfile && (
-             <Card ref={profileRef} className="p-4 sm:p-6 bg-card">
+             <div ref={profileRef} className="bg-card p-4 sm:p-8 rounded-lg">
+              <div id="pdf-logo" className="hidden mb-8"><Logo width={120} height={40}/></div>
+              <Card>
                 <CardHeader>
                   <div className="flex items-center gap-4">
                     <User className="h-8 w-8 text-primary" />
@@ -175,7 +183,8 @@ export default function UserProfilePage() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-6">
+                  <h3 className="text-lg font-semibold mt-6 mb-4 border-t pt-6 flex items-center">
+                    <Mail className="mr-3 h-5 w-5 text-muted-foreground" />
                     Contact Information
                   </h3>
                    <div className="text-sm space-y-2">
@@ -185,10 +194,15 @@ export default function UserProfilePage() {
                     <DetailItem label="Preferred Contact" value={userProfile.contactMethod} />
                   </div>
 
-                  <h3 className="text-lg font-semibold mt-8 mb-4 border-t pt-6">
-                    Study Preferences
+                  <h3 className="text-lg font-semibold mt-8 mb-4 border-t pt-6 flex items-center">
+                    <User className="mr-3 h-5 w-5 text-muted-foreground" />
+                    Study Preferences & Profile
                   </h3>
                   <div className="text-sm space-y-2">
+                    <DetailItem
+                      label="Onboarding Complete"
+                      value={userProfile.onboardingComplete}
+                    />
                     <DetailItem
                       label="Current Education"
                       value={userProfile.currentEducation}
@@ -231,23 +245,20 @@ export default function UserProfilePage() {
                       value={userProfile.priorityFactors}
                     />
                     <DetailItem
-                      label="Onboarding Complete"
-                      value={userProfile.onboardingComplete}
-                    />
-                    <DetailItem
                       label="Profile Last Updated"
                       value={
-                        userProfile.profileUpdatedAt
+                        userProfile.profileUpdatedAt && (userProfile.profileUpdatedAt as any).toDate
                           ? format(
                               (userProfile.profileUpdatedAt as any).toDate(),
                               'PPpp'
                             )
-                          : 'N/A'
+                          : 'Not available'
                       }
                     />
                   </div>
                 </CardContent>
               </Card>
+            </div>
         )}
       </div>
     </AdminGuard>
