@@ -216,9 +216,9 @@ export default function AdminDashboardPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {displayedUsers.map((user) => (
+                    {displayedUsers.map((user, index) => (
                       <TableRow
-                        key={user.uid}
+                        key={`${user.uid}-${index}`}
                         className="group"
                       >
                         <TableCell 
