@@ -1,3 +1,4 @@
+
 import AuthCheck from "@/components/auth-check";
 import Header from "@/components/header";
 import Link from "next/link";
