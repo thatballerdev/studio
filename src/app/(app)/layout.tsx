@@ -22,12 +22,6 @@ export default function AppLayout({
                 </Link>
               </Button>
               <Button variant="ghost" asChild className="justify-start">
-                <Link href="/programs">
-                  <FileText className="mr-2 h-4 w-4" />
-                  Programs
-                </Link>
-              </Button>
-              <Button variant="ghost" asChild className="justify-start">
                 <Link href="/profile">
                   <User className="mr-2 h-4 w-4" />
                   Profile
