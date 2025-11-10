@@ -31,6 +31,10 @@ export default function ProgramsPage() {
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
+  const maxTuition = useMemo(() => {
+    return programData.reduce((max, p) => Math.max(max, p.tuitionRangeEUR.max), 0);
+  }, []);
+
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
       const degreeMatch = degreeLevel === 'all' || program.degreeLevel === degreeLevel;
@@ -47,7 +51,7 @@ export default function ProgramsPage() {
   const resetFilters = () => {
     setDegreeLevel('all');
     setSubject('all');
-    setBudget([30000]);
+    setBudget([maxTuition]);
     setLanguage('all');
     setSearchTerm('');
   };
@@ -55,7 +59,7 @@ export default function ProgramsPage() {
   const activeFilterCount = [
     degreeLevel !== 'all',
     subject !== 'all',
-    budget[0] !== 30000,
+    budget[0] !== maxTuition,
     language !== 'all',
     searchTerm !== ''
   ].filter(Boolean).length;
@@ -156,17 +160,17 @@ export default function ProgramsPage() {
 
                         {/* Budget Slider */}
                         <div className="space-y-2">
-                            <Label>Max Annual Tuition: €{budget[0].toLocaleString()}</Label>
+                            <Label>Max Annual Tuition: €{(budget[0] / 1000).toFixed(0)}k</Label>
                             <Slider
                                 value={budget}
                                 onValueChange={setBudget}
-                                max={30000}
+                                max={maxTuition}
                                 step={1000}
                                 min={1000}
                             />
                             <div className="flex justify-between text-xs text-muted-foreground">
                                 <span>€1k</span>
-                                <span>€30k+</span>
+                                <span>€{(maxTuition / 1000).toFixed(0)}k+</span>
                             </div>
                         </div>
 
@@ -267,3 +271,5 @@ export default function ProgramsPage() {
     </div>
   );
 }
+
+    
