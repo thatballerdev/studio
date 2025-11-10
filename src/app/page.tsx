@@ -10,9 +10,79 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { universityData } from '@/lib/university-data';
 import { getFlagEmoji } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+
 
 export default function Home() {
   const heroImage = PlaceHolderImages.find(p => p.id === 'hero');
+
+  const faqData = [
+    {
+      question: "Is using Northway completely free?",
+      answer: "Yes, our service is free to get started. We won't charge you a dime until you have successfully received your university admission and student visa. Only after you have secured both do we charge a one-time service fee of $100. You may need to pay separate university application fees, but in many cases, we can get these waived thanks to our partnerships."
+    },
+    {
+      question: "Are there scholarships available?",
+      answer: "Yes, scholarships are available in many instances. However, they are highly dependent on several factors, including your academic performance (CGPA), the specific university and program, and other special circumstances like your field of study or demonstrated leadership skills. We will help you identify and apply for any scholarships you are eligible for during our 1-on-1 call."
+    },
+    {
+      question: "I am an athlete. How can you help me combine sports and studies?",
+      answer: "We have extensive experience helping student-athletes. During our 1-on-1 strategy call, we will discuss your athletic profile and goals in detail. We will then focus on finding universities that not only match your academic and budget needs but also have strong sports programs and facilities for your specific sport, ensuring a perfect fit for both your education and athletic career."
+    },
+    {
+      question: "Can I work part-time while studying abroad?",
+      answer: "Absolutely. Most countries we work with have visa regulations that allow international students to work part-time (typically around 20 hours per week during semesters and full-time during breaks). This is a great way to cover living expenses, and we provide guidance on finding student jobs as part of our 'Smooth Arrival' support."
+    },
+    {
+      question: "Can I work in the U.S. with a foreign degree?",
+      answer: "Yes, it is definitely possible. We partner with accredited universities whose degrees are recognized globally. As part of our career pathway support, we assist with the process of credential evaluation to validate your results for U.S. employers and can guide you on job applications and work visa pathways in the future."
+    },
+    {
+      question: "How long does the entire process take?",
+      answer: "The timeline can vary, but our process is designed for speed. After our initial call, we can secure an admission offer in as little as 48 hours to two weeks. The visa application process is the most variable part, typically taking anywhere from 4 to 12 weeks depending on the country. We guide you every step of the way to ensure it’s as fast as possible."
+    },
+    {
+      question: "What kind of universities do you partner with?",
+      answer: "We partner with a wide range of accredited public and private universities across Europe and other regions. Our main focus is on institutions that offer a high-quality education and excellent value, allowing students to graduate with little to no debt."
+    },
+    {
+      question: "Do I need to speak a foreign language?",
+      answer: "Not necessarily. We specialize in finding English-taught programs. While learning the local language is fantastic for cultural immersion and part-time jobs (and we encourage it!), your degree courses will be in English."
+    },
+    {
+      question: "What does the 'Visa & Travel Prep' service include?",
+      answer: "This is our full-service support package. We don't just tell you what to do; we help you do it. This includes helping you gather and correctly fill out all visa documentation, booking your flights to get the best rates, and securing your student accommodation before you travel."
+    },
+    {
+      question: "What if I change my mind about my university or program?",
+      answer: "We understand that plans can change. Our 'Future Career Pathways' support includes assistance with switching universities or programs if needed. Our goal is to ensure you are on the right path for your long-term success, and we provide the flexibility to help you get there."
+    },
+    {
+      question: "What is the average annual cost for tuition and living?",
+      answer: "This varies by country. In many parts of Eastern and Central Europe, you can find quality programs with tuition from $2,000 - $6,000 per year. Combined with living costs, your total annual budget could be as low as $8,000 - $15,000, which is often less than one year's tuition alone in the U.S."
+    },
+    {
+      question: "What happens after I fill out the onboarding form?",
+      answer: "After you submit your profile, our team will review your goals and budget. We will then reach out to you within a few business days to schedule your free, no-obligation 1-on-1 strategy call."
+    },
+    {
+      question: "Do you help with master's degrees or only bachelor's?",
+      answer: "We help with both! Whether you are a recent high school graduate looking for a bachelor's degree or a professional seeking a master's program, our process is tailored to find the right fit for your level of study."
+    },
+    {
+      question: "What makes Northway different from other agencies?",
+      answer: "Our key difference is our comprehensive, student-first support model and our mission to eradicate student debt. We don't just match you with a school; we manage the entire journey from application to arrival and beyond. Our success is tied to your success, which is why we only charge our service fee after you've secured your admission and visa."
+    },
+    {
+      question: "I have a low GPA. Can I still study abroad?",
+      answer: "Yes, there are options available. While a higher GPA opens up more opportunities and scholarships, we work with a diverse range of universities with different entry requirements. Be honest about your academic record in the onboarding form, and we will find a realistic and suitable pathway for you."
+    }
+  ];
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-body">
@@ -206,6 +276,31 @@ export default function Home() {
                 </div>
             </div>
         </section>
+        
+        {/* FAQ Section */}
+        <section className="w-full py-20 md:py-28">
+            <div className="container mx-auto px-4 max-w-4xl">
+                 <div className="text-center mb-16 animate-fade-up">
+                    <h2 className="text-4xl md:text-5xl font-bold font-heading">Frequently Asked Questions</h2>
+                    <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
+                        Have questions? We've got answers. Here are some of the most common things we get asked.
+                    </p>
+                </div>
+                <div className="animate-fade-up" style={{animationDelay: '200ms'}}>
+                    <Accordion type="single" collapsible className="w-full">
+                        {faqData.map((faq, index) => (
+                             <AccordionItem value={`item-${index}`} key={index}>
+                                <AccordionTrigger className="text-lg font-semibold text-left hover:no-underline">{faq.question}</AccordionTrigger>
+                                <AccordionContent className="text-base text-muted-foreground leading-relaxed">
+                                    {faq.answer}
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>
+            </div>
+        </section>
+
       </main>
 
       {/* Footer */}
@@ -251,5 +346,7 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
