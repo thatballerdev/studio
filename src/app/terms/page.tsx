@@ -12,7 +12,7 @@ const fadeIn = {
   animate: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
     <motion.div 
         className="mb-12"
         initial={{ opacity: 0, x: -20 }}
@@ -72,7 +72,7 @@ export default function TermsOfServicePage() {
             </p>
              <p className="mt-2 text-sm text-muted-foreground">Last Updated: {new Date().toLocaleDateString()}</p>
           </div>
-        </section>
+        </motion.section>
 
         <section className="py-20 md:py-28">
             <div className="container max-w-4xl">
@@ -87,7 +87,7 @@ export default function TermsOfServicePage() {
                 
                 <Section title="2. Description of Services & Our Mission">
                     <p>
-                        Northway's mission is to combat the student debt crisis by providing students, particularly those facing the high costs of education in regions like the United States and Nigeria, with a clear, supported, and affordable pathway to high-quality international degrees.
+                        Northway's mission is to combat the student debt crisis by providing students, particularly those facing the high costs of education in regions like the United States, with a clear, supported, and affordable pathway to high-quality international degrees.
                     </p>
                     <p>
                         <strong>Our Role:</strong> We are an expert guidance and facilitation service. We are not a university, a scholarship-granting institution, a financial services provider, or a government agency. Our Service consists of providing information on vetted international universities, personalized strategy development, comprehensive application assistance, and guidance through the visa and relocation process.
