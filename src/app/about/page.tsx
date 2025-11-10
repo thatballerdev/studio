@@ -190,7 +190,7 @@ export default function AboutPage() {
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li><Link href="/about" className="hover:text-primary">About</Link></li>
                     <li><Link href="/careers" className="hover:text-primary">Careers</Link></li>
-                    <li><Link href="#" className="hover:text-primary">Press</Link></li>
+                    <li><Link href="/press" className="hover:text-primary">Press</Link></li>
                 </ul>
             </div>
             <div>

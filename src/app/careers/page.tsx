@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Mail, ArrowLeft, Briefcase, Info } from 'lucide-react';
+import { Mail, ArrowLeft, Briefcase, Info, Twitter, Linkedin, Facebook } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
@@ -69,10 +69,42 @@ export default function CareersPage() {
       </main>
       
       <footer className="py-12 border-t bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Northway. All rights reserved.
-          </div>
+        <div className="container mx-auto px-4 grid grid-cols-2 md:grid-cols-5 gap-8">
+            <div className="col-span-2 md:col-span-1">
+                <Logo width={100} height={40}/>
+                <p className="text-sm text-muted-foreground mt-4">&copy; {new Date().getFullYear()} Northway. All rights reserved.</p>
+            </div>
+            <div>
+                <h4 className="font-semibold mb-3 font-heading">Company</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li><Link href="/about" className="hover:text-primary">About</Link></li>
+                    <li><Link href="/careers" className="hover:text-primary">Careers</Link></li>
+                    <li><Link href="/press" className="hover:text-primary">Press</Link></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-semibold mb-3 font-heading">Resources</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li><Link href="#" className="hover:text-primary">Blog</Link></li>
+                    <li><Link href="#" className="hover:text-primary">Guides</Link></li>
+                    <li><Link href="#" className="hover:text-primary">Help Center</Link></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-semibold mb-3 font-heading">Legal</h4>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li><Link href="#" className="hover:text-primary">Terms of Service</Link></li>
+                    <li><Link href="#" className="hover:text-primary">Privacy Policy</Link></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-semibold mb-3 font-heading">Connect</h4>
+                <div className="flex gap-4 text-muted-foreground">
+                    <Link href="#" className="hover:text-primary"><Twitter size={20} /></Link>
+                    <Link href="#" className="hover:text-primary"><Linkedin size={20} /></Link>
+                    <Link href="#" className="hover:text-primary"><Facebook size={20} /></Link>
+                </div>
+            </div>
         </div>
       </footer>
     </div>
