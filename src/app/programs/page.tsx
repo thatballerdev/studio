@@ -21,8 +21,6 @@ import { courseCategories, programData } from '@/lib/program-data';
 import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X, ArrowLeft } from 'lucide-react';
 import Logo from '@/components/logo';
 import { Input } from '@/components/ui/input';
-import { Slider } from '@/components/ui/slider';
-
 
 export default function ProgramsPage() {
   const [degreeLevel, setDegreeLevel] = useState<string>('all');
@@ -31,22 +29,6 @@ export default function ProgramsPage() {
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   
-  const { minPrice, maxPrice } = useMemo(() => {
-    let min = Infinity;
-    let max = 0;
-    programData.forEach(p => {
-      if (p.tuitionRangeEUR.min < min) min = p.tuitionRangeEUR.min;
-      if (p.tuitionRangeEUR.max > max) max = p.tuitionRangeEUR.max;
-    });
-    return { minPrice: min, maxPrice: max };
-  }, []);
-  
-  const [budget, setBudget] = useState([minPrice, maxPrice]);
-  
-  useEffect(() => {
-    setBudget([minPrice, maxPrice]);
-  }, [minPrice, maxPrice]);
-
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
       const degreeMatch = degreeLevel === 'all' || program.degreeLevel === degreeLevel;
@@ -55,17 +37,15 @@ export default function ProgramsPage() {
       const searchMatch = searchTerm === '' || 
         program.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
         program.notes.toLowerCase().includes(searchTerm.toLowerCase());
-      const budgetMatch = program.tuitionRangeEUR.min >= budget[0] && program.tuitionRangeEUR.max <= budget[1];
-      return degreeMatch && subjectMatch && languageMatch && searchMatch && budgetMatch;
+      return degreeMatch && subjectMatch && languageMatch && searchMatch;
     });
-  }, [degreeLevel, subject, language, searchTerm, budget]);
+  }, [degreeLevel, subject, language, searchTerm]);
 
   const resetFilters = () => {
     setDegreeLevel('all');
     setSubject('all');
     setLanguage('all');
     setSearchTerm('');
-    setBudget([minPrice, maxPrice]);
   };
 
   const activeFilterCount = [
@@ -73,11 +53,7 @@ export default function ProgramsPage() {
     subject !== 'all',
     language !== 'all',
     searchTerm !== '',
-    budget[0] > minPrice || budget[1] < maxPrice
   ].filter(Boolean).length;
-
-  const formatCurrency = (value: number) => `€${(value / 1000).toFixed(0)}k`;
-
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-body">
@@ -247,20 +223,19 @@ export default function ProgramsPage() {
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li><Link href="/about" className="hover:text-primary">About</Link></li>
                     <li><Link href="/careers" className="hover:text-primary">Careers</Link></li>
-                    <li><Link href="/press" className="hover:text-primary">Press</Link></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-3 font-heading">Resources</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li><Link href="#" className="hover:text-primary">Help Center</Link></li>
+                    <li><Link href="/help" className="hover:text-primary">Help Center</Link></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-3 font-heading">Legal</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li><Link href="#" className="hover:text-primary">Terms of Service</Link></li>
-                    <li><Link href="#" className="hover:text-primary">Privacy Policy</Link></li>
+                    <li><Link href="/terms" className="hover:text-primary">Terms of Service</Link></li>
+                    <li><Link href="/privacy" className="hover:text-primary">Privacy Policy</Link></li>
                 </ul>
             </div>
             <div>
