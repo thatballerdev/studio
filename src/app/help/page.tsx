@@ -122,11 +122,11 @@ export default function HelpCenterPage() {
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
-                            <a href="mailto:support@northway.com" className="block p-8 bg-background rounded-lg border hover:border-primary transition-colors h-full">
+                            <a href="mailto:support@northwayportal.com" className="block p-8 bg-background rounded-lg border hover:border-primary transition-colors h-full">
                                 <Mail className="h-10 w-10 text-accent mx-auto mb-4" />
                                 <h3 className="text-xl font-semibold font-heading">Email Us</h3>
                                 <p className="text-muted-foreground mt-1">For detailed inquiries and document submissions.</p>
-                                <p className="text-primary mt-2 font-semibold">support@northway.com</p>
+                                <p className="text-primary mt-2 font-semibold">support@northwayportal.com</p>
                             </a>
                         </motion.div>
                          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>

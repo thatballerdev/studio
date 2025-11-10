@@ -155,7 +155,7 @@ export default function TermsOfServicePage() {
                     <p>
                         If you have any questions about these Terms, please contact us. We believe in open communication and are here to provide clarity.
                     </p>
-                    <p>Email: <a href="mailto:legal@northway.com" className="text-primary hover:underline">legal@northway.com</a></p>
+                    <p>Email: <a href="mailto:legal@northwayportal.com" className="text-primary hover:underline">legal@northwayportal.com</a></p>
                 </Section>
             </div>
         </section>

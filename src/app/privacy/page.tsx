@@ -155,7 +155,7 @@ export default function PrivacyPolicyPage() {
                     <p>
                         If you have any questions, concerns, or complaints about this Privacy Policy or our data practices, please contact our dedicated privacy team. We are here to help and take your concerns seriously.
                     </p>
-                     <p>Email: <a href="mailto:privacy@northway.com" className="text-primary hover:underline">privacy@northway.com</a></p>
+                     <p>Email: <a href="mailto:privacy@northwayportal.com" className="text-primary hover:underline">privacy@northwayportal.com</a></p>
                 </Section>
             </div>
         </section>
@@ -200,5 +200,3 @@ export default function PrivacyPolicyPage() {
     </div>
   );
 }
-
-    
