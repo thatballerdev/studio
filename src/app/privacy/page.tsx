@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
-import { Shield, FileText, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { Shield, Twitter, Linkedin, Facebook } from 'lucide-react';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -17,7 +17,7 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
         className="mb-12"
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7 }}
     >
         <h2 className="text-2xl md:text-3xl font-bold font-heading mb-6 pb-2 border-b-2 border-primary">{title}</h2>
@@ -68,7 +68,7 @@ export default function PrivacyPolicyPage() {
               Privacy Policy
             </h1>
             <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Your privacy is fundamental to our mission. Here’s how we protect your information.
+              Your privacy is fundamental to our mission. This policy outlines our commitment to protecting your personal information.
             </p>
              <p className="mt-2 text-sm text-muted-foreground">Last Updated: {new Date().toLocaleDateString()}</p>
           </div>
@@ -76,61 +76,86 @@ export default function PrivacyPolicyPage() {
 
         <section className="py-20 md:py-28">
             <div className="container max-w-4xl">
-                <Section title="1. Our Philosophy on Privacy">
+                <Section title="1. Introduction and Our Commitment">
                     <p>
-                        At Northway, trust is our most valuable asset. We understand that your dream of studying abroad involves sharing sensitive personal and financial information. This Privacy Policy explains what information we collect, how we use it, and how we keep it safe. We've written it in plain English because we believe transparency is key to earning and keeping your trust.
+                        Northway Inc. ("Northway," "we," "us," or "our") is dedicated to helping students achieve their educational aspirations without the burden of overwhelming debt. This requires a relationship built on trust. This Privacy Policy details our practices regarding the collection, use, and protection of your personal information when you use our website, platform, and guidance services (collectively, the "Services"). We are committed to transparency and have written this policy to be as clear and straightforward as possible.
                     </p>
                 </Section>
                 
-                <Section title="2. What Information We Collect">
-                    <p>We collect information in a few different ways to provide and improve our Services:</p>
+                <Section title="2. Information We Collect">
+                    <p>To provide our personalized Services, we collect information you provide directly, information generated through your use of our Services, and information from third parties.</p>
                     <ul className="list-disc list-inside space-y-3">
-                        <li><strong>Information You Provide:</strong> This is the data you give us when you sign up and fill out our onboarding form. It includes your name, email, academic history, field of interest, financial budget, and personal preferences.</li>
-                        <li><strong>Information from Your Use of Our Services:</strong> We collect information about how you interact with our website, such as which pages you visit and which programs you view. We use this to make our service better and more relevant to you.</li>
-                        <li><strong>Communications:</strong> If you contact us directly, we may receive additional information about you such as your name, email address, phone number, the contents of the message and/or attachments you may send us.</li>
+                        <li><strong>Personal Identification & Contact Information:</strong> When you create an account, we collect your full name, email address, and password. For detailed guidance, we may also collect your phone number.</li>
+                        <li><strong>Onboarding & Profile Information:</strong> Through our onboarding process, we collect detailed information to build your academic and financial profile. This includes your current level of education, target degrees, fields of interest, financial budget for tuition, regional preferences for study, desired start dates, career goals, and other priorities related to your university search.</li>
+                        <li><strong>Communications Data:</strong> When you contact us for support, schedule a call, or otherwise communicate with us, we collect the contents of those communications, including metadata.</li>
+                        <li><strong>Usage and Technical Data:</strong> We automatically collect information about how you interact with our Services. This includes your IP address, browser type, device information, pages visited, features used, and timestamps of your activities. We use cookies and similar tracking technologies to collect this data.</li>
                     </ul>
                 </Section>
 
-                <Section title="3. How We Use Your Information">
-                    <p>We use your information for one primary purpose: to help you achieve your educational goals. Specifically, we use it to:</p>
+                <Section title="3. How and Why We Use Your Information">
+                    <p>Our use of your information is driven by our core mission: to provide you with a tailored pathway to your educational goals.</p>
                      <ul className="list-disc list-inside space-y-3">
-                        <li><strong>Personalize Your Experience:</strong> Match you with the universities and programs that are the best fit for your profile and budget.</li>
-                        <li><strong>Provide Our Services:</strong> Facilitate your university applications, guide you through visa processes, and offer support.</li>
-                        <li><strong>Communicate With You:</strong> Schedule your 1-on-1 strategy call, send you important updates about your applications, and respond to your questions.</li>
-                        <li><strong>Improve Our Platform:</strong> Analyze how our users interact with our service so we can identify areas for improvement and make the platform even more effective.</li>
+                        <li><strong>To Provide and Personalize Our Services:</strong> The primary use of your profile information is to match you with suitable universities and programs, build your personalized strategy, and facilitate your applications.</li>
+                        <li><strong>To Operate Our Services:</strong> We use your information to create and maintain your account, authenticate you as a user, and ensure the security of our platform.</li>
+                        <li><strong>To Communicate With You:</strong> We use your contact information to schedule strategy calls, send critical updates about your applications, provide customer support, and inform you of changes to our Services or policies.</li>
+                        <li><strong>For Service Improvement and Analytics:</strong> We analyze usage data to understand user behavior, diagnose technical issues, and improve the functionality, user experience, and effectiveness of our platform.</li>
+                        <li><strong>To Comply with Legal Obligations:</strong> We may process your information to comply with applicable laws, regulations, or legal processes, or to respond to valid governmental requests.</li>
                     </ul>
                      <p>
-                        <strong>We will never sell your personal information to third parties. Period.</strong>
+                        <strong>Our Pledge:</strong> We will never sell your personal data to third-party marketers. Your trust is not for sale.
                     </p>
                 </Section>
 
-                <Section title="4. How We Share Your Information">
+                <Section title="4. How We Share and Disclose Your Information">
                     <p>
-                        We only share your information when it is necessary to provide our Services. This is limited to:
+                        We share your information only in limited circumstances where it is necessary to provide our Services or as required by law.
                     </p>
                     <ul className="list-disc list-inside space-y-3">
-                        <li><strong>Universities:</strong> We share your application information with the admissions departments of the universities you have chosen to apply to.</li>
-                        <li><strong>Service Providers:</strong> We work with trusted partners who help us operate our Services, such as cloud hosting providers (like Google Cloud) and authentication services (like Firebase). These partners are contractually obligated to keep your information confidential and secure.</li>
-                        <li><strong>Legal Requirements:</strong> We may disclose your information if required to do so by law or in the good faith belief that such action is necessary to comply with a legal obligation.</li>
+                        <li><strong>University Admissions Departments:</strong> With your explicit consent, we share your application profile and supporting documents with the admissions offices of the universities you have chosen to apply to.</li>
+                        <li><strong>Third-Party Service Providers:</strong> We work with trusted vendors and partners who perform services on our behalf. These include secure cloud hosting providers for our data, authentication service providers to manage user logins, and communication platforms. These providers are contractually bound to protect your data and are prohibited from using it for any purpose other than providing services to Northway.</li>
+                        <li><strong>Legal and Safety Requirements:</strong> We may disclose your information if we believe in good faith that it is necessary to: (a) comply with a law, regulation, legal process, or governmental request; (b) protect the safety of any person; (c) address fraud, security, or technical issues; or (d) protect Northway's rights or property.</li>
+                        <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, bankruptcy, or sale of all or a portion of our assets, your information may be transferred as part of that transaction. We will notify you via email and/or a prominent notice on our website of any change in ownership.</li>
                     </ul>
                 </Section>
                 
-                <Section title="5. Security: How We Protect Your Data">
+                <Section title="5. Data Security">
                     <p>
-                        We take the security of your data very seriously. We use a combination of technical, administrative, and physical controls to maintain the security of your data. This includes using industry-standard encryption (like HTTPS) for data in transit and at rest, and strictly limiting access to your personal information to only those Northway employees who need it to do their jobs.
+                        The security of your personal information is a top priority. We implement a multi-layered security approach, including technical, administrative, and physical safeguards, to protect your data from unauthorized access, use, or disclosure.
+                    </p>
+                     <p>
+                        Our measures include using industry-standard SSL/TLS encryption for all data in transit, encrypting data at rest, employing secure authentication mechanisms, and maintaining strict access controls within our organization. While no system is impenetrable, we are continuously working to improve our security practices to protect your information.
                     </p>
                 </Section>
 
-                <Section title="6. Your Rights and Choices">
+                <Section title="6. Your Rights and Data Choices">
                     <p>
-                        You have rights over your personal data. You can access, update, or correct the information in your Northway profile at any time. If you wish to delete your account, you can do so by contacting our support team. Please note that we may need to retain certain information for legal or legitimate business purposes.
+                        You have rights and choices regarding your personal information. Depending on your location, these may include:
+                    </p>
+                     <ul className="list-disc list-inside space-y-3">
+                        <li><strong>Access and Correction:</strong> You can access and update your profile information at any time through your account dashboard.</li>
+                        <li><strong>Data Portability:</strong> You may have the right to request a copy of your personal data in a machine-readable format.</li>
+                        <li><strong>Deletion:</strong> You can request the deletion of your account and personal data by contacting our support team. Please be aware that we may be required to retain certain information for legal, accounting, or legitimate business purposes.</li>
+                        <li><strong>Opt-out of Communications:</strong> You can opt-out of receiving promotional communications from us by following the unsubscribe link in our emails. We will still send you essential transactional messages related to your account and applications.</li>
+                    </ul>
+                </Section>
+
+                 <Section title="7. International Data Transfers">
+                    <p>
+                        Northway operates globally, which means your personal information may be transferred to, and processed in, countries other than your own. We take steps to ensure that your data is protected wherever it is processed by implementing appropriate safeguards, such as Standard Contractual Clauses, for transfers of data.
                     </p>
                 </Section>
 
-                <Section title="7. Contact Us">
+                <Section title="8. Changes to This Policy">
                     <p>
-                        If you have any questions or concerns about this Privacy Policy or our data practices, please get in touch. We're here to help. You can email our privacy team at <a href="mailto:privacy@northway.com" className="text-primary hover:underline">privacy@northway.com</a>.
+                        We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. If we make material changes, we will notify you by email or through a notice on our website prior to the change becoming effective.
                     </p>
+                </Section>
+
+                <Section title="9. Contact Us">
+                    <p>
+                        If you have any questions, concerns, or complaints about this Privacy Policy or our data practices, please contact our dedicated privacy team. We are here to help and take your concerns seriously.
+                    </p>
+                     <p>Email: <a href="mailto:privacy@northway.com" className="text-primary hover:underline">privacy@northway.com</a></p>
                 </Section>
             </div>
         </section>
@@ -175,3 +200,5 @@ export default function PrivacyPolicyPage() {
     </div>
   );
 }
+
+    
