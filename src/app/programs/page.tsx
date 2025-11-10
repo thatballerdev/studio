@@ -86,9 +86,9 @@ export default function ProgramsPage() {
       
       <main className="flex-1">
         <div className="container mx-auto py-12 md:py-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          <div className="space-y-2 mb-8">
+          <div className="space-y-4 mb-8 text-center max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold tracking-tight font-heading">Explore Programs</h1>
-            <p className="text-lg text-muted-foreground">Find the perfect degree for your goals and budget.</p>
+            <p className="text-lg text-muted-foreground">The prices below represent the average cost in Europe, as most of our applicants choose European universities. For those willing to study in Australia, Asia, Africa, or South America, the cost may be significantly cheaper. To know more, please register and we will discuss this further in our 1-on-1 call.</p>
           </div>
 
           <Card className="p-4 md:p-6 mb-8 shadow-sm border-border/60">

@@ -55,25 +55,6 @@ export default function ProgramCard({ program }: ProgramCardProps) {
             <Euro className="h-4 w-4 mr-3 text-muted-foreground" />
             <span>Tuition: <strong>{formatCost(program.tuitionRangeEUR.min)} - {formatCost(program.tuitionRangeEUR.max)}</strong> / year</span>
           </div>
-          <div className="flex items-start">
-            <Globe className="h-4 w-4 mr-3 text-muted-foreground mt-0.5" />
-             <TooltipProvider>
-                <Tooltip>
-                    <TooltipTrigger asChild>
-                        <div className="flex flex-col items-start gap-1 cursor-help">
-                            <span>Est. Total Cost:</span>
-                            <div className="flex items-center gap-2">
-                                <Badge variant="secondary" className="flex items-center gap-1.5"><TrendingDown className="h-3 w-3" /> E. Europe: {formatCost(program.estTotalCost.easternEurope.min)}+</Badge>
-                                <Badge variant="secondary" className="flex items-center gap-1.5"><TrendingUp className="h-3 w-3"/> W. Europe: {formatCost(program.estTotalCost.westernEurope.min)}+</Badge>
-                            </div>
-                        </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Estimated total annual cost including living expenses.</p>
-                    </TooltipContent>
-                </Tooltip>
-            </TooltipProvider>
-          </div>
           <div className="flex items-center">
              <Languages className="h-4 w-4 mr-3 text-muted-foreground" />
              <LanguageBadge lang={program.typicalLanguage} />
