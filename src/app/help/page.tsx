@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/logo';
-import { HelpCircle, Mail, MessageSquare, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { HelpCircle, Mail, MessageSquare, Twitter, Linkedin, Facebook, FileQuestion } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
 const fadeIn = {
@@ -130,12 +130,14 @@ export default function HelpCenterPage() {
                             </a>
                         </motion.div>
                          <motion.div whileHover={{ scale: 1.05 }} transition={{ duration: 0.3 }}>
-                            <Link href="/contact" className="block p-8 bg-background rounded-lg border hover:border-primary transition-colors h-full">
-                                <MessageSquare className="h-10 w-10 text-accent mx-auto mb-4" />
-                                <h3 className="text-xl font-semibold font-heading">Live Chat</h3>
-                                <p className="text-muted-foreground mt-1">For quick questions and immediate assistance.</p>
-                                <Button className="mt-4">Start a Conversation</Button>
-                            </Link>
+                            <div className="block p-8 bg-background rounded-lg border hover:border-primary transition-colors h-full">
+                                <FileQuestion className="h-10 w-10 text-accent mx-auto mb-4" />
+                                <h3 className="text-xl font-semibold font-heading">View FAQs</h3>
+                                <p className="text-muted-foreground mt-1">Find instant answers to our most common questions.</p>
+                                <Button variant="secondary" className="mt-4" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                                  Read our FAQs
+                                </Button>
+                            </div>
                         </motion.div>
                     </div>
                 </motion.div>
