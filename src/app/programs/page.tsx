@@ -30,11 +30,20 @@ export default function ProgramsPage() {
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const maxTuition = useMemo(() => {
-    return programData.reduce((max, p) => Math.max(max, p.tuitionRangeEUR.max), 0);
+  const { minTuition, maxTuition } = useMemo(() => {
+    if (programData.length === 0) {
+      return { minTuition: 0, maxTuition: 50000 };
+    }
+    return programData.reduce(
+      (acc, p) => ({
+        minTuition: Math.min(acc.minTuition, p.tuitionRangeEUR.min),
+        maxTuition: Math.max(acc.maxTuition, p.tuitionRangeEUR.max),
+      }),
+      { minTuition: Infinity, maxTuition: -Infinity }
+    );
   }, []);
   
-  const [budget, setBudget] = useState<number[]>([1000, maxTuition]);
+  const [budget, setBudget] = useState<number[]>([minTuition, maxTuition]);
 
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
@@ -52,7 +61,7 @@ export default function ProgramsPage() {
   const resetFilters = () => {
     setDegreeLevel('all');
     setSubject('all');
-    setBudget([1000, maxTuition]);
+    setBudget([minTuition, maxTuition]);
     setLanguage('all');
     setSearchTerm('');
   };
@@ -60,7 +69,7 @@ export default function ProgramsPage() {
   const activeFilterCount = [
     degreeLevel !== 'all',
     subject !== 'all',
-    budget[0] !== 1000 || budget[1] !== maxTuition,
+    budget[0] !== minTuition || budget[1] !== maxTuition,
     language !== 'all',
     searchTerm !== ''
   ].filter(Boolean).length;
@@ -166,11 +175,11 @@ export default function ProgramsPage() {
                                 value={budget}
                                 onValueChange={setBudget}
                                 max={maxTuition}
+                                min={minTuition}
                                 step={1000}
-                                min={1000}
                             />
                             <div className="flex justify-between text-xs text-muted-foreground">
-                                <span>€1k</span>
+                                <span>€{(minTuition / 1000).toFixed(0)}k</span>
                                 <span>€{(maxTuition / 1000).toFixed(0)}k+</span>
                             </div>
                         </div>
