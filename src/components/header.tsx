@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { LayoutGrid, LogOut, User, Menu, FileText } from 'lucide-react';
+import { LayoutGrid, LogOut, User, Menu, FileText, BookOpen } from 'lucide-react';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -63,6 +63,12 @@ export default function Header({ children }: { children?: React.ReactNode}) {
         <Link href="/dashboard" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
           <LayoutGrid className="mr-2 h-5 w-5" />
           Dashboard
+        </Link>
+      </SheetClose>
+      <SheetClose asChild>
+        <Link href="/programs" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
+          <BookOpen className="mr-2 h-5 w-5" />
+          Programs
         </Link>
       </SheetClose>
       <SheetClose asChild>
@@ -132,6 +138,10 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                   <DropdownMenuItem onClick={() => router.push('/dashboard')}>
                     <LayoutGrid className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/programs')}>
+                    <BookOpen className="mr-2 h-4 w-4" />
+                    <span>Programs</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/profile')}>
                     <User className="mr-2 h-4 w-4" />

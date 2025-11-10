@@ -3,7 +3,7 @@ import AuthCheck from "@/components/auth-check";
 import Header from "@/components/header";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, FileText, User } from "lucide-react";
+import { LayoutGrid, FileText, User, BookOpen } from "lucide-react";
 
 export default function AppLayout({
   children,
@@ -19,6 +19,12 @@ export default function AppLayout({
                 <Link href="/dashboard">
                   <LayoutGrid className="mr-2 h-4 w-4" />
                   Dashboard
+                </Link>
+              </Button>
+              <Button variant="ghost" asChild className="justify-start">
+                <Link href="/programs">
+                  <BookOpen className="mr-2 h-4 w-4" />
+                  Programs
                 </Link>
               </Button>
               <Button variant="ghost" asChild className="justify-start">
