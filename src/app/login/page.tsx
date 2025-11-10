@@ -105,7 +105,7 @@ export default function LoginPage() {
     <div className="relative flex min-h-screen items-center justify-center bg-secondary p-4 animate-in fade-in duration-500">
       <Button asChild variant="ghost" className="absolute top-4 left-4">
         <Link href="/">
-            <ArrowLeft />
+            <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
         </Link>
       </Button>

@@ -66,12 +66,6 @@ export default function Header({ children }: { children?: React.ReactNode}) {
         </Link>
       </SheetClose>
       <SheetClose asChild>
-        <Link href="/programs" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
-          <BookOpen className="mr-2 h-5 w-5" />
-          Programs
-        </Link>
-      </SheetClose>
-      <SheetClose asChild>
         <Link href="/profile" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
           <User className="mr-2 h-5 w-5" />
           Profile
@@ -138,10 +132,6 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                   <DropdownMenuItem onClick={() => router.push('/dashboard')}>
                     <LayoutGrid className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push('/programs')}>
-                    <BookOpen className="mr-2 h-4 w-4" />
-                    <span>Programs</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/profile')}>
                     <User className="mr-2 h-4 w-4" />

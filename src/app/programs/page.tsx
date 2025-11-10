@@ -19,8 +19,9 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import ProgramCard from '@/components/program-card';
 import { courseCategories, programData } from '@/lib/program-data';
-import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X } from 'lucide-react';
 import Logo from '@/components/logo';
+import { Input } from '@/components/ui/input';
 
 export default function ProgramsPage() {
   const [degreeLevel, setDegreeLevel] = useState<string>('all');
@@ -28,6 +29,7 @@ export default function ProgramsPage() {
   const [budget, setBudget] = useState<number[]>([30000]);
   const [language, setLanguage] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
@@ -35,9 +37,28 @@ export default function ProgramsPage() {
       const subjectMatch = subject === 'all' || program.subject === subject;
       const budgetMatch = program.tuitionRangeEUR.max <= budget[0];
       const languageMatch = language === 'all' || program.typicalLanguage === language;
-      return degreeMatch && subjectMatch && budgetMatch && languageMatch;
+      const searchMatch = searchTerm === '' || 
+        program.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        program.notes.toLowerCase().includes(searchTerm.toLowerCase());
+      return degreeMatch && subjectMatch && budgetMatch && languageMatch && searchMatch;
     });
-  }, [degreeLevel, subject, budget, language]);
+  }, [degreeLevel, subject, budget, language, searchTerm]);
+
+  const resetFilters = () => {
+    setDegreeLevel('all');
+    setSubject('all');
+    setBudget([30000]);
+    setLanguage('all');
+    setSearchTerm('');
+  };
+
+  const activeFilterCount = [
+    degreeLevel !== 'all',
+    subject !== 'all',
+    budget[0] !== 30000,
+    language !== 'all',
+    searchTerm !== ''
+  ].filter(Boolean).length;
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-body">
@@ -80,77 +101,101 @@ export default function ProgramsPage() {
           
             <div className={`grid transition-all duration-300 ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} md:grid-rows-1 md:opacity-100`}>
                 <div className="overflow-hidden">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-end">
+                       
+                        {/* Search Input */}
+                        <div className="space-y-2 lg:col-span-3">
+                            <Label htmlFor="search">Search by keyword</Label>
+                             <div className="relative">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                                <Input
+                                    id="search"
+                                    placeholder="e.g., 'Software Engineering', 'AI', 'Health'"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-10"
+                                />
+                            </div>
+                        </div>
+
                         {/* Degree Level Dropdown */}
                         <div className="space-y-2">
-                        <Label htmlFor="degree-level">Degree Level</Label>
-                        <Select value={degreeLevel} onValueChange={setDegreeLevel}>
-                            <SelectTrigger id="degree-level">
-                            <SelectValue placeholder="Select Degree" />
-                            </SelectTrigger>
-                            <SelectContent>
-                            <SelectItem value="all">All Levels</SelectItem>
-                            <SelectItem value="BSc">Bachelor's (BSc)</SelectItem>
-                            <SelectItem value="MSc">Master's (MSc)</SelectItem>
-                            </SelectContent>
-                        </Select>
+                            <Label htmlFor="degree-level">Degree Level</Label>
+                            <Select value={degreeLevel} onValueChange={setDegreeLevel}>
+                                <SelectTrigger id="degree-level">
+                                <SelectValue placeholder="Select Degree" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                <SelectItem value="all">All Levels</SelectItem>
+                                <SelectItem value="BSc">Bachelor's</SelectItem>
+                                <SelectItem value="MSc">Master's</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {/* Course/Subject Dropdown */}
                         <div className="space-y-2">
-                        <Label htmlFor="subject">Course / Subject</Label>
-                        <Select value={subject} onValueChange={setSubject}>
-                            <SelectTrigger id="subject">
-                            <SelectValue placeholder="Select Subject" />
-                            </SelectTrigger>
-                            <SelectContent>
-                            <SelectItem value="all">All Subjects</SelectItem>
-                            {Object.entries(courseCategories).map(([category, subjects]) => (
-                                <SelectGroup key={category}>
-                                    <SelectLabel>{category}</SelectLabel>
-                                    {subjects.map((s) => (
-                                        <SelectItem key={s} value={s}>{s}</SelectItem>
-                                    ))}
-                                </SelectGroup>
-                            ))}
-                            </SelectContent>
-                        </Select>
+                            <Label htmlFor="subject">Course / Subject</Label>
+                            <Select value={subject} onValueChange={setSubject}>
+                                <SelectTrigger id="subject">
+                                <SelectValue placeholder="Select Subject" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-96">
+                                <SelectItem value="all">All Subjects</SelectItem>
+                                {Object.entries(courseCategories).map(([category, subjects]) => (
+                                    <SelectGroup key={category}>
+                                        <SelectLabel>{category}</SelectLabel>
+                                        {subjects.map((s) => (
+                                            <SelectItem key={s} value={s}>{s}</SelectItem>
+                                        ))}
+                                    </SelectGroup>
+                                ))}
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {/* Budget Slider */}
                         <div className="space-y-2">
-                        <Label>Max Annual Tuition: €{budget[0].toLocaleString()}</Label>
-                        <Slider
-                            value={budget}
-                            onValueChange={setBudget}
-                            max={30000}
-                            step={1000}
-                            min={1000}
-                        />
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                            <span>€1k</span>
-                            <span>€30k+</span>
-                        </div>
+                            <Label>Max Annual Tuition: €{budget[0].toLocaleString()}</Label>
+                            <Slider
+                                value={budget}
+                                onValueChange={setBudget}
+                                max={30000}
+                                step={1000}
+                                min={1000}
+                            />
+                            <div className="flex justify-between text-xs text-muted-foreground">
+                                <span>€1k</span>
+                                <span>€30k+</span>
+                            </div>
                         </div>
 
                         {/* Language Filter */}
                         <div className="space-y-2">
-                        <Label>Language</Label>
-                        <RadioGroup value={language} onValueChange={setLanguage} className="flex flex-row space-x-4 pt-2">
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="all" id="lang-all" />
-                                <Label htmlFor="lang-all">All</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="English" id="lang-en" />
-                                <Label htmlFor="lang-en">English</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="English + Local" id="lang-en-local" />
-                                <Label htmlFor="lang-en-local">EN+</Label>
-                            </div>
-                        </RadioGroup>
+                            <Label>Language</Label>
+                            <RadioGroup value={language} onValueChange={setLanguage} className="flex flex-row space-x-4 pt-2">
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="all" id="lang-all" />
+                                    <Label htmlFor="lang-all">All</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="English" id="lang-en" />
+                                    <Label htmlFor="lang-en">English</Label>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <RadioGroupItem value="English + Local" id="lang-en-local" />
+                                    <Label htmlFor="lang-en-local">EN + Local</Label>
+                                </div>
+                            </RadioGroup>
                         </div>
+
+                         {activeFilterCount > 0 && (
+                            <div className="lg:col-start-4">
+                                <Button onClick={resetFilters} variant="outline" className="w-full">
+                                    <X className="mr-2 h-4 w-4" /> Reset Filters ({activeFilterCount})
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -170,6 +215,9 @@ export default function ProgramsPage() {
                 <Search className="mx-auto h-12 w-12 text-muted-foreground" />
                 <h3 className="mt-4 text-xl font-semibold">No Programs Match Your Filters</h3>
                 <p className="mt-2 text-muted-foreground">Try adjusting your search criteria to find more results.</p>
+                 <Button onClick={resetFilters} variant="secondary" className="mt-6">
+                    <X className="mr-2 h-4 w-4" /> Clear all filters
+                </Button>
               </div>
             )}
           </div>
@@ -219,5 +267,3 @@ export default function ProgramsPage() {
     </div>
   );
 }
-
-    
