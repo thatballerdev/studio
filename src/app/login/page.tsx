@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { signInWithEmailAndPassword, type User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight, Loader2, ArrowLeft } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -102,7 +102,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary p-4 animate-in fade-in duration-500">
+    <div className="relative flex min-h-screen items-center justify-center bg-secondary p-4 animate-in fade-in duration-500">
+      <Button asChild variant="ghost" className="absolute top-4 left-4">
+        <Link href="/">
+            <ArrowLeft />
+            Back to Home
+        </Link>
+      </Button>
       <div className="w-full max-w-md">
         <Card className="shadow-lg border-border/50">
           <CardHeader className="text-center">
