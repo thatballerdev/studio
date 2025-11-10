@@ -81,6 +81,34 @@ export default function Home() {
     {
       question: "I have a low GPA. Can I still study abroad?",
       answer: "Yes, there are options available. While a higher GPA opens up more opportunities and scholarships, we work with a diverse range of universities with different entry requirements. Be honest about your academic record in the onboarding form, and we will find a realistic and suitable pathway for you."
+    },
+    {
+      question: "Is life in these European countries boring?",
+      answer: "Not at all! One of the biggest advantages of studying in Europe is the incredible access to diverse cultures. You can take a weekend train trip and be in a completely different country in a matter of hours. From the historic streets of Prague to the vibrant arts scene in Berlin, you'll find there's always something new to explore. It's an opportunity to experience life in a way that's hard to replicate in the U.S."
+    },
+    {
+      question: "I'm a huge sports fan. Will I miss out on U.S. sports?",
+      answer: "While you might have to stay up late for some NBA or NFL games, you'll be diving into a whole new world of passionate sports culture. European basketball, especially the EuroLeague, is incredibly competitive and exciting. And of course, you'll be in the heart of the football (soccer) world, where the atmosphere on match day is electric. You won't feel left out; you'll just have more sports to love."
+    },
+    {
+      question: "What is your success rate for getting students admitted?",
+      answer: "We have a 99% success rate in securing university admission for qualified students who follow our guidance. Because we work so closely with both you and our partner institutions, we ensure that you are applying to programs where you have a very high chance of acceptance. Your success is our success."
+    },
+    {
+      question: "What kind of support do you offer if I have problems after I arrive?",
+      answer: "Our 'Smooth Arrival' support doesn't end when you land. We are your support system on the ground. Whether you need help navigating local bureaucracy, are feeling homesick, or need advice on finding a doctor, our team is there to assist you in adapting to your new life."
+    },
+    {
+      question: "Are degrees from these universities recognized in the U.S.?",
+      answer: "Yes. We exclusively partner with accredited universities whose degrees are recognized internationally, including in the United States and Canada. As part of our 'Future Career Pathways' support, we even assist with the credential evaluation process to ensure your degree is properly validated for U.S. employers or further education."
+    },
+    {
+      question: "Can my family visit me while I'm studying?",
+      answer: "Absolutely! In fact, it's often much easier and cheaper for family to visit you in Europe than it would be for you to fly back to the U.S. for holidays. We can provide guidance on the necessary invitation letters and visa requirements for your family's visit."
+    },
+    {
+      question: "How safe are the countries where you have partner universities?",
+      answer: "We prioritize your safety. The countries we operate in, particularly in Central and Eastern Europe, generally have very low crime rates, often lower than major U.S. cities. We provide detailed safety briefings and local contact information to ensure you feel secure in your new home."
     }
   ];
 
@@ -346,6 +374,8 @@ export default function Home() {
     </div>
   );
 }
+
+    
 
     
 
