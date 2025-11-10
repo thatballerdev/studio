@@ -34,6 +34,7 @@ import {
   Book,
   Anchor,
   Cpu,
+  TrendingDown,
 } from 'lucide-react';
 
 export const courseCategories: Record<string, string[]> = {
