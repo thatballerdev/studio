@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import {
@@ -18,9 +18,11 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import ProgramCard from '@/components/program-card';
 import { courseCategories, programData } from '@/lib/program-data';
-import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X } from 'lucide-react';
+import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X, ArrowLeft } from 'lucide-react';
 import Logo from '@/components/logo';
 import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
+
 
 export default function ProgramsPage() {
   const [degreeLevel, setDegreeLevel] = useState<string>('all');
@@ -60,15 +62,23 @@ export default function ProgramsPage() {
        {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container h-20 flex items-center">
-          <Link href="/" className="flex items-center gap-2">
-            <Logo width={120} height={48} />
-          </Link>
+          <Button asChild variant="ghost" className="mr-4">
+            <Link href="/">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back to Home
+            </Link>
+          </Button>
+          <div className="flex-1 flex justify-center md:justify-start">
+            <Link href="/" className="flex items-center gap-2">
+                <Logo width={120} height={48} />
+            </Link>
+          </div>
           <nav className="ml-10 hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground transition-colors">Programs</Link>
             <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto hidden md:flex items-center gap-2">
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>
@@ -246,5 +256,3 @@ export default function ProgramsPage() {
     </div>
   );
 }
-
-    
