@@ -1,10 +1,10 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 
-export default function OnboardingFormPage() {
+function TallyForm() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -16,18 +16,16 @@ export default function OnboardingFormPage() {
 
     return () => {
       // Clean up the script when the component unmounts
-      document.head.removeChild(script);
+      if (document.head.contains(script)) {
+        document.head.removeChild(script);
+      }
     };
   }, []);
 
   const getTallySrc = () => {
     const baseUrl = 'https://tally.so/r/D42Wzj';
-    const params = new URLSearchParams();
-    
-    // Forward all existing query parameters to Tally
-    searchParams.forEach((value, key) => {
-        params.append(key, value);
-    });
+    // The searchParams object is already a URLSearchParams instance, so we can use it directly.
+    const params = new URLSearchParams(searchParams.toString());
 
     // Add required Tally parameters
     params.set('transparentBackground', '1');
@@ -63,4 +61,12 @@ export default function OnboardingFormPage() {
       ></iframe>
     </>
   );
+}
+
+export default function OnboardingFormPage() {
+    return (
+        <Suspense fallback={<div>Loading form...</div>}>
+            <TallyForm />
+        </Suspense>
+    )
 }
