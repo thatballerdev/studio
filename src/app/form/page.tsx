@@ -2,11 +2,11 @@
 'use client';
 
 import { useEffect, Suspense } from 'react';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
-function TallyForm() {
-  const searchParams = useSearchParams();
-
+// The TallyForm component now accepts the query string as a prop
+function TallyForm({ queryString }: { queryString: string }) {
   useEffect(() => {
     // Dynamically load the Tally embed script
     const script = document.createElement('script');
@@ -24,8 +24,7 @@ function TallyForm() {
 
   const getTallySrc = () => {
     const baseUrl = 'https://tally.so/r/D42Wzj';
-    // The searchParams object is already a URLSearchParams instance, so we can use it directly.
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(queryString);
 
     // Add required Tally parameters
     params.set('transparentBackground', '1');
@@ -63,10 +62,18 @@ function TallyForm() {
   );
 }
 
+// This new component reads the search params and passes them to TallyForm
+function TallyFormWrapper() {
+  const searchParams = useSearchParams();
+  const queryString = searchParams.toString();
+  return <TallyForm queryString={queryString} />;
+}
+
+// The main page now uses Suspense to wait for the searchParams
 export default function OnboardingFormPage() {
     return (
         <Suspense fallback={<div>Loading form...</div>}>
-            <TallyForm />
+            <TallyFormWrapper />
         </Suspense>
     )
 }
