@@ -54,6 +54,4 @@ export interface Program {
     easternEurope: { min: number; max: number };
     westernEurope: { min: number; max: number };
   };
-  commonDurationYears: number;
-  lastVerified: string;
 }
