@@ -7,7 +7,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
-import { sendPasswordResetEmail } from 'firebase/auth';
+import { sendPasswordResetEmail, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { Check, Loader2, KeyRound } from 'lucide-react';
 
 import { useUser, useAuth, useFirestore } from '@/firebase';
@@ -17,6 +17,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import type { UserProfile } from '@/lib/types';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
@@ -34,6 +35,10 @@ export default function ProfilePage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
+  const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [resetError, setResetError] = useState<string | null>(null);
+  const [isReauthenticating, setIsReauthenticating] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -90,15 +95,35 @@ export default function ProfilePage() {
   };
 
   const handlePasswordReset = async () => {
-    if (!user || !auth) {
-        toast({ variant: 'destructive', title: 'Error', description: 'Could not send reset email. User not found.' });
-        return;
+    if (!user || !auth || !user.email) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Could not send reset email. User not found.' });
+      return;
     }
+    
+    setIsReauthenticating(true);
+    setResetError(null);
+
     try {
-        await sendPasswordResetEmail(auth, user.email!);
-        toast({ title: 'Password Reset Email Sent', description: 'Please check your inbox to reset your password.' });
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+
+      // Re-authentication successful, now send reset email
+      await sendPasswordResetEmail(auth, user.email);
+      toast({ title: 'Password Reset Email Sent', description: 'Please check your inbox to reset your password.' });
+      
+      // Close dialog and clear state
+      setIsResetDialogOpen(false);
+      setCurrentPassword('');
+
     } catch (error: any) {
-        toast({ variant: 'destructive', title: 'Error', description: error.message });
+      if (error.code === 'auth/wrong-password') {
+        setResetError('Incorrect password. Please try again.');
+      } else {
+        setResetError(error.message || 'An unknown error occurred.');
+      }
+      toast({ variant: 'destructive', title: 'Error', description: error.message });
+    } finally {
+      setIsReauthenticating(false);
     }
   }
 
@@ -156,12 +181,46 @@ export default function ProfilePage() {
                  <CardDescription>Manage your account security settings.</CardDescription>
             </CardHeader>
             <CardContent>
-                <Button variant="outline" onClick={handlePasswordReset}>
+                <Button variant="outline" onClick={() => { setIsResetDialogOpen(true); setResetError(null); setCurrentPassword(''); }}>
                     <KeyRound className="mr-2 h-4 w-4" />
                     Send Password Reset Email
                 </Button>
             </CardContent>
         </Card>
+
+        <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Verify Your Identity</DialogTitle>
+                    <DialogDescription>
+                        For your security, please enter your current password to proceed.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-2">
+                    <div className="space-y-2">
+                        <Label htmlFor="current-password">Current Password</Label>
+                        <Input 
+                            id="current-password" 
+                            type="password" 
+                            placeholder="••••••••"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                        />
+                         {resetError && <p className="text-sm font-medium text-destructive">{resetError}</p>}
+                    </div>
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <Button onClick={handlePasswordReset} disabled={isReauthenticating || !currentPassword}>
+                        {isReauthenticating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Verify & Send Email"}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </div>
   );
 }
+
+    
