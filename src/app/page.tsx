@@ -123,7 +123,7 @@ export default function Home() {
           <nav className="ml-10 hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
-            <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
+            <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
           <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" asChild>
@@ -374,9 +374,5 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
 
     

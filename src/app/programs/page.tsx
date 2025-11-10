@@ -30,6 +30,21 @@ export default function ProgramsPage() {
   const [language, setLanguage] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [budget, setBudget] = useState([0, 30000]);
+
+  const { minPrice, maxPrice } = useMemo(() => {
+    let min = Infinity;
+    let max = 0;
+    programData.forEach(p => {
+      if (p.tuitionRangeEUR.min < min) min = p.tuitionRangeEUR.min;
+      if (p.tuitionRangeEUR.max > max) max = p.tuitionRangeEUR.max;
+    });
+    return { minPrice: min, maxPrice: max };
+  }, []);
+  
+  useEffect(() => {
+    setBudget([minPrice, maxPrice]);
+  }, [minPrice, maxPrice]);
 
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
@@ -39,23 +54,29 @@ export default function ProgramsPage() {
       const searchMatch = searchTerm === '' || 
         program.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
         program.notes.toLowerCase().includes(searchTerm.toLowerCase());
-      return degreeMatch && subjectMatch && languageMatch && searchMatch;
+      const budgetMatch = program.tuitionRangeEUR.min >= budget[0] && program.tuitionRangeEUR.max <= budget[1];
+      return degreeMatch && subjectMatch && languageMatch && searchMatch && budgetMatch;
     });
-  }, [degreeLevel, subject, language, searchTerm]);
+  }, [degreeLevel, subject, language, searchTerm, budget]);
 
   const resetFilters = () => {
     setDegreeLevel('all');
     setSubject('all');
     setLanguage('all');
     setSearchTerm('');
+    setBudget([minPrice, maxPrice]);
   };
 
   const activeFilterCount = [
     degreeLevel !== 'all',
     subject !== 'all',
     language !== 'all',
-    searchTerm !== ''
+    searchTerm !== '',
+    budget[0] > minPrice || budget[1] < maxPrice
   ].filter(Boolean).length;
+
+  const formatCurrency = (value: number) => `€${(value / 1000).toFixed(0)}k`;
+
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-body">
@@ -76,7 +97,7 @@ export default function ProgramsPage() {
           <nav className="ml-10 hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground transition-colors">Programs</Link>
-            <Link href="#" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
+            <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
           <div className="ml-auto hidden md:flex items-center gap-2">
             <Button variant="ghost" asChild>
@@ -106,7 +127,7 @@ export default function ProgramsPage() {
           
             <div className={`grid transition-all duration-300 ${showFilters ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} md:grid-rows-1 md:opacity-100`}>
                 <div className="overflow-hidden">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 items-end">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-end">
                        
                         {/* Search Input */}
                         <div className="space-y-2 lg:col-span-3">
@@ -179,7 +200,7 @@ export default function ProgramsPage() {
                         </div>
 
                          {activeFilterCount > 0 && (
-                            <div className="lg:col-start-3">
+                            <div className="md:col-start-3 self-end">
                                 <Button onClick={resetFilters} variant="outline" className="w-full">
                                     <X className="mr-2 h-4 w-4" /> Reset Filters ({activeFilterCount})
                                 </Button>
@@ -256,3 +277,5 @@ export default function ProgramsPage() {
     </div>
   );
 }
+
+    
