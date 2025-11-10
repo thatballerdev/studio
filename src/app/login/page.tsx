@@ -59,21 +59,8 @@ export default function LoginPage() {
   });
 
   const handleLoginRedirect = async (loggedInUser: User) => {
-    if (!db) return;
-    const userDocRef = doc(db, 'users', loggedInUser.uid);
-    const userDoc = await getDoc(userDocRef);
-
-    if (userDoc.exists()) {
-      const userProfile = userDoc.data() as UserProfile;
-      if (userProfile.onboardingComplete) {
-        router.push('/dashboard');
-      } else {
-        router.push('/onboarding');
-      }
-    } else {
-      // This case handles users who signed up but didn't start onboarding
-      router.push('/onboarding');
-    }
+    // Since onboarding is handled externally, we always redirect to the dashboard.
+    router.push('/dashboard');
   };
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {

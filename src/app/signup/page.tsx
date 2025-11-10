@@ -56,12 +56,13 @@ export default function SignupPage() {
       // Also update the user's profile in Firebase Auth
       await updateProfile(user, { displayName: data.name });
       
-      // Create user document in Firestore
+      // Create user document in Firestore. Set onboardingComplete to true as form is now external.
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         email: user.email,
         name: data.name,
-        onboardingComplete: false,
+        fullName: data.name,
+        onboardingComplete: true, // Set to true as Tally form replaces internal onboarding
       });
 
       toast({
@@ -69,7 +70,7 @@ export default function SignupPage() {
         description: "Welcome to Northway. Let's get you set up.",
       });
 
-      router.push('/onboarding');
+      router.push('/dashboard');
     } catch (error: any) {
       toast({
         variant: 'destructive',
