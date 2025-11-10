@@ -14,7 +14,6 @@ import {
   SelectLabel
 } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import ProgramCard from '@/components/program-card';
@@ -30,38 +29,21 @@ export default function ProgramsPage() {
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const { minTuition, maxTuition } = useMemo(() => {
-    if (programData.length === 0) {
-      return { minTuition: 0, maxTuition: 50000 };
-    }
-    return programData.reduce(
-      (acc, p) => ({
-        minTuition: Math.min(acc.minTuition, p.tuitionRangeEUR.min),
-        maxTuition: Math.max(acc.maxTuition, p.tuitionRangeEUR.max),
-      }),
-      { minTuition: Infinity, maxTuition: -Infinity }
-    );
-  }, []);
-  
-  const [budget, setBudget] = useState<number[]>([minTuition, maxTuition]);
-
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
       const degreeMatch = degreeLevel === 'all' || program.degreeLevel === degreeLevel;
       const subjectMatch = subject === 'all' || program.subject === subject;
-      const budgetMatch = program.tuitionRangeEUR.min >= budget[0] && program.tuitionRangeEUR.max <= budget[1];
       const languageMatch = language === 'all' || program.typicalLanguage === language;
       const searchMatch = searchTerm === '' || 
         program.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
         program.notes.toLowerCase().includes(searchTerm.toLowerCase());
-      return degreeMatch && subjectMatch && budgetMatch && languageMatch && searchMatch;
+      return degreeMatch && subjectMatch && languageMatch && searchMatch;
     });
-  }, [degreeLevel, subject, budget, language, searchTerm]);
+  }, [degreeLevel, subject, language, searchTerm]);
 
   const resetFilters = () => {
     setDegreeLevel('all');
     setSubject('all');
-    setBudget([minTuition, maxTuition]);
     setLanguage('all');
     setSearchTerm('');
   };
@@ -69,7 +51,6 @@ export default function ProgramsPage() {
   const activeFilterCount = [
     degreeLevel !== 'all',
     subject !== 'all',
-    budget[0] !== minTuition || budget[1] !== maxTuition,
     language !== 'all',
     searchTerm !== ''
   ].filter(Boolean).length;
@@ -168,22 +149,6 @@ export default function ProgramsPage() {
                             </Select>
                         </div>
 
-                        {/* Budget Slider */}
-                        <div className="space-y-2">
-                            <Label>Annual Tuition: €{(budget[0] / 1000).toFixed(0)}k - €{(budget[1] / 1000).toFixed(0)}k</Label>
-                            <Slider
-                                value={budget}
-                                onValueChange={setBudget}
-                                max={maxTuition}
-                                min={minTuition}
-                                step={1000}
-                            />
-                            <div className="flex justify-between text-xs text-muted-foreground">
-                                <span>€{(minTuition / 1000).toFixed(0)}k</span>
-                                <span>€{(maxTuition / 1000).toFixed(0)}k+</span>
-                            </div>
-                        </div>
-
                         {/* Language Filter */}
                         <div className="space-y-2">
                             <Label>Language</Label>
@@ -204,7 +169,7 @@ export default function ProgramsPage() {
                         </div>
 
                          {activeFilterCount > 0 && (
-                            <div className="lg:col-start-4">
+                            <div className="lg:col-start-3">
                                 <Button onClick={resetFilters} variant="outline" className="w-full">
                                     <X className="mr-2 h-4 w-4" /> Reset Filters ({activeFilterCount})
                                 </Button>
