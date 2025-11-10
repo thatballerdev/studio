@@ -7,38 +7,21 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
-import { Check, Loader2 } from 'lucide-react';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { Check, Loader2, KeyRound } from 'lucide-react';
 
-import { useUser, useFirestore } from '@/firebase';
+import { useUser, useAuth, useFirestore } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
-import { allSubjects } from '@/lib/program-data';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
 import type { UserProfile } from '@/lib/types';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
   email: z.string().email(),
-  phoneNumber: z.string().min(10, "Please enter a valid phone number."),
-  contactMethod: z.enum(["Email", "Phone"]),
-  currentEducation: z.string().min(1, "Please select your education level."),
-  targetDegree: z.string().min(1, "Please select your target degree."),
-  fieldInterest: z.array(z.string()).min(1, "Please select at least one field."),
-  budgetRangeUSD: z.string().min(1, "Please select your budget."),
-  englishOnly: z.boolean().default(true),
-  regionPreference: z.string().min(1, "Please select a region."),
-  desiredStartDate: z.string().min(4, "Please enter a valid start date."),
-  careerGoal: z.string().optional(),
-  scholarshipInterest: z.boolean().default(false),
-  studyMode: z.string().min(1, "Please select a study mode."),
-  priorityFactors: z.array(z.string()).min(1, "Please select at least one priority.")
+  phoneNumber: z.string().min(10, "Please enter a valid phone number.").optional().or(z.literal('')),
 });
 
 type ProfileFormValues = z.infer<typeof profileSchema>;
@@ -46,10 +29,10 @@ type ProfileFormValues = z.infer<typeof profileSchema>;
 export default function ProfilePage() {
   const router = useRouter();
   const { user, isUserLoading } = useUser();
+  const auth = useAuth();
   const db = useFirestore();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
 
   const form = useForm<ProfileFormValues>({
@@ -58,18 +41,6 @@ export default function ProfilePage() {
       fullName: '',
       email: '',
       phoneNumber: '',
-      contactMethod: 'Email',
-      currentEducation: '',
-      targetDegree: '',
-      fieldInterest: [],
-      budgetRangeUSD: '',
-      englishOnly: true,
-      regionPreference: '',
-      desiredStartDate: '',
-      careerGoal: '',
-      scholarshipInterest: false,
-      studyMode: '',
-      priorityFactors: [],
     },
   });
 
@@ -78,23 +49,10 @@ export default function ProfilePage() {
       const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
         if (doc.exists()) {
           const profileData = doc.data() as UserProfile;
-          setUserProfile(profileData);
           form.reset({
             fullName: profileData.fullName || profileData.name || '',
             email: profileData.email || user.email || '',
             phoneNumber: profileData.phoneNumber || '',
-            contactMethod: profileData.contactMethod || 'Email',
-            currentEducation: profileData.currentEducation || '',
-            targetDegree: profileData.targetDegree || '',
-            fieldInterest: profileData.fieldInterest || [],
-            budgetRangeUSD: profileData.budgetRangeUSD || '',
-            englishOnly: profileData.englishOnly ?? true,
-            regionPreference: profileData.regionPreference || '',
-            desiredStartDate: profileData.desiredStartDate || '',
-            careerGoal: profileData.careerGoal || '',
-            scholarshipInterest: profileData.scholarshipInterest ?? false,
-            studyMode: profileData.studyMode || '',
-            priorityFactors: profileData.priorityFactors || [],
           });
         }
         setLoadingProfile(false);
@@ -114,16 +72,16 @@ export default function ProfilePage() {
     setIsSubmitting(true);
 
     const dataToUpdate = {
-        ...data,
+        fullName: data.fullName,
         name: data.fullName,
-        email: user.email, // Email should not be editable from this form
+        phoneNumber: data.phoneNumber,
         profileUpdatedAt: serverTimestamp(),
     };
 
     try {
       await updateDoc(doc(db, 'users', user.uid), dataToUpdate);
-      toast({ title: 'Profile Updated', description: 'Your preferences have been saved.' });
-      router.refresh(); // To refetch data on dashboard
+      toast({ title: 'Profile Updated', description: 'Your information has been saved.' });
+      router.refresh(); 
     } catch (error: any) {
       toast({ variant: 'destructive', title: 'Update Failed', description: error.message });
     } finally {
@@ -131,14 +89,27 @@ export default function ProfilePage() {
     }
   };
 
+  const handlePasswordReset = async () => {
+    if (!user || !auth) {
+        toast({ variant: 'destructive', title: 'Error', description: 'Could not send reset email. User not found.' });
+        return;
+    }
+    try {
+        await sendPasswordResetEmail(auth, user.email!);
+        toast({ title: 'Password Reset Email Sent', description: 'Please check your inbox to reset your password.' });
+    } catch (error: any) {
+        toast({ variant: 'destructive', title: 'Error', description: error.message });
+    }
+  }
+
   if (isUserLoading || loadingProfile) {
     return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
   
   return (
-    <div className="container mx-auto max-w-3xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="container mx-auto max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
       <h1 className="text-3xl font-bold mb-2">Profile Settings</h1>
-      <p className="text-muted-foreground mb-8">Manage your personal information and university preferences.</p>
+      <p className="text-muted-foreground mb-8">Manage your personal information.</p>
       
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -168,224 +139,6 @@ export default function ProfilePage() {
                   <FormMessage />
                 </FormItem>
               )} />
-              <FormField control={form.control} name="contactMethod" render={({ field }) => (
-                <FormItem>
-                    <FormLabel>Preferred Contact Method</FormLabel>
-                    <RadioGroup onValueChange={field.onChange} value={field.value} className="flex space-x-4 pt-2">
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Email" /></FormControl>
-                            <FormLabel className="font-normal">Email</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                            <FormControl><RadioGroupItem value="Phone" /></FormControl>
-                            <FormLabel className="font-normal">Phone Call / SMS</FormLabel>
-                        </FormItem>
-                    </RadioGroup>
-                    <FormMessage />
-                </FormItem>
-              )} />
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Study Preferences</CardTitle>
-              <CardDescription>These settings help us personalize your university feed.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-               <FormField control={form.control} name="currentEducation" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Current level of education</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select level..." /></SelectTrigger></FormControl>
-                    <SelectContent>
-                      <SelectItem value="High School">High School</SelectItem>
-                      <SelectItem value="Associate Degree">Associate Degree</SelectItem>
-                      <SelectItem value="Bachelor's">Bachelor’s</SelectItem>
-                      <SelectItem value="Master's">Master’s</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="targetDegree" render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Target degree</FormLabel>
-                   <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl><SelectTrigger><SelectValue placeholder="Select degree..." /></SelectTrigger></FormControl>
-                    <SelectContent>
-                      <SelectItem value="BSc">Bachelor’s / Undergraduate</SelectItem>
-                      <SelectItem value="MSc">Master’s / Graduate</SelectItem>
-                      <SelectItem value="MD">Medicine / MD</SelectItem>
-                      <SelectItem value="Diploma">Diploma</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )} />
-               <FormField control={form.control} name="fieldInterest" render={() => (
-                <FormItem>
-                  <FormLabel>Field of interest</FormLabel>
-                  <div className="grid grid-cols-2 gap-2 h-64 overflow-auto p-2 border rounded-md">
-                    {allSubjects.map((item) => (
-                      <FormField
-                        key={item}
-                        control={form.control}
-                        name="fieldInterest"
-                        render={({ field }) => {
-                          return (
-                            <FormItem
-                              key={item}
-                              className="flex flex-row items-start space-x-3 space-y-0"
-                            >
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value?.includes(item)}
-                                  onCheckedChange={(checked) => {
-                                    return checked
-                                      ? field.onChange([
-                                          ...(field.value || []),
-                                          item,
-                                        ])
-                                      : field.onChange(
-                                          (field.value || [])?.filter(
-                                            (value) => value !== item
-                                          )
-                                        );
-                                  }}
-                                />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                {item}
-                              </FormLabel>
-                            </FormItem>
-                          );
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <FormMessage />
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="budgetRangeUSD" render={({ field }) => (
-                 <FormItem>
-                    <FormLabel>Annual tuition budget (in USD)</FormLabel>
-                     <RadioGroup onValueChange={field.onChange} value={field.value} className="space-y-2">
-                        <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl><RadioGroupItem value="<5000" /></FormControl>
-                            <FormLabel className="font-normal">&lt; $5,000</FormLabel>
-                        </FormItem>
-                         <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl><RadioGroupItem value="5000-10000" /></FormControl>
-                            <FormLabel className="font-normal">$5,000 – $10,000</FormLabel>
-                        </FormItem>
-                         <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl><RadioGroupItem value="10000-15000" /></FormControl>
-                            <FormLabel className="font-normal">$10,000 – $15,000</FormLabel>
-                        </FormItem>
-                         <FormItem className="flex items-center space-x-3 space-y-0">
-                            <FormControl><RadioGroupItem value="15000+" /></FormControl>
-                            <FormLabel className="font-normal">$15,000+</FormLabel>
-                        </FormItem>
-                    </RadioGroup>
-                     <FormMessage />
-                </FormItem>
-              )} />
-               <FormField control={form.control} name="englishOnly" render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">English-only programs</FormLabel>
-                  </div>
-                  <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-                </FormItem>
-              )} />
-              <FormField control={form.control} name="regionPreference" render={({ field }) => (
-                   <FormItem>
-                      <FormLabel>Preferred region</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select region..." /></SelectTrigger></FormControl>
-                          <SelectContent>
-                              <SelectItem value="Eastern Europe">Eastern Europe</SelectItem>
-                              <SelectItem value="Western Europe">Western Europe</SelectItem>
-                              <SelectItem value="Central Europe">Central Europe</SelectItem>
-                              <SelectItem value="Nordic">Nordic</SelectItem>
-                              <SelectItem value="No Preference">No Preference</SelectItem>
-                          </SelectContent>
-                      </Select>
-                      <FormMessage />
-                  </FormItem>
-              )}/>
-               <FormField control={form.control} name="desiredStartDate" render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Desired start date</FormLabel>
-                      <FormControl><Input placeholder="e.g., September 2025" {...field} /></FormControl>
-                      <FormMessage />
-                  </FormItem>
-              )}/>
-              <FormField control={form.control} name="careerGoal" render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Career goal (Optional)</FormLabel>
-                      <FormControl><Textarea placeholder="e.g., 'To become an aerospace engineer...'" {...field} /></FormControl>
-                      <FormMessage />
-                  </FormItem>
-              )}/>
-              <FormField control={form.control} name="scholarshipInterest" render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <FormLabel className="text-base">Scholarship interest</FormLabel>
-                </div>
-                <FormControl><Switch checked={field.value} onCheckedChange={field.onChange} /></FormControl>
-              </FormItem>
-              )}/>
-               <FormField control={form.control} name="studyMode" render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Preferred study mode</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value}>
-                          <FormControl><SelectTrigger><SelectValue placeholder="Select mode..." /></SelectTrigger></FormControl>
-                          <SelectContent>
-                              <SelectItem value="On-campus">On-campus</SelectItem>
-                              <SelectItem value="Hybrid">Hybrid</SelectItem>
-                              <SelectItem value="Online">Online</SelectItem>
-                          </SelectContent>
-                      </Select>
-                      <FormMessage />
-                  </FormItem>
-              )}/>
-              <FormField control={form.control} name="priorityFactors" render={() => (
-                <FormItem>
-                    <FormLabel>Priorities</FormLabel>
-                    <div className="space-y-2 pt-2">
-                        {["Affordable tuition", "English-taught courses", "City life", "International ranking", "Career prospects"].map((item) => (
-                        <FormField
-                            key={item}
-                            control={form.control}
-                            name="priorityFactors"
-                            render={({ field }) => (
-                            <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                                <FormControl>
-                                <Checkbox
-                                    checked={field.value?.includes(item)}
-                                    onCheckedChange={(checked) => {
-                                    return checked
-                                        ? field.onChange([...(field.value || []), item])
-                                        : field.onChange(
-                                            (field.value || [])?.filter(
-                                            (value) => value !== item
-                                            )
-                                        );
-                                    }}
-                                />
-                                </FormControl>
-                                <FormLabel className="font-normal">{item}</FormLabel>
-                            </FormItem>
-                            )}
-                        />
-                        ))}
-                    </div>
-                    <FormMessage />
-                </FormItem>
-              )} />
             </CardContent>
           </Card>
           
@@ -396,10 +149,19 @@ export default function ProfilePage() {
           </div>
         </form>
       </Form>
+
+       <Card className="mt-8">
+            <CardHeader>
+                <CardTitle>Security</CardTitle>
+                 <CardDescription>Manage your account security settings.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button variant="outline" onClick={handlePasswordReset}>
+                    <KeyRound className="mr-2 h-4 w-4" />
+                    Send Password Reset Email
+                </Button>
+            </CardContent>
+        </Card>
     </div>
   );
 }
-
-    
-
-    
