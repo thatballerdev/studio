@@ -26,7 +26,6 @@ import { Input } from '@/components/ui/input';
 export default function ProgramsPage() {
   const [degreeLevel, setDegreeLevel] = useState<string>('all');
   const [subject, setSubject] = useState<string>('all');
-  const [budget, setBudget] = useState<number[]>([30000]);
   const [language, setLanguage] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -34,12 +33,14 @@ export default function ProgramsPage() {
   const maxTuition = useMemo(() => {
     return programData.reduce((max, p) => Math.max(max, p.tuitionRangeEUR.max), 0);
   }, []);
+  
+  const [budget, setBudget] = useState<number[]>([1000, maxTuition]);
 
   const filteredPrograms = useMemo(() => {
     return programData.filter((program) => {
       const degreeMatch = degreeLevel === 'all' || program.degreeLevel === degreeLevel;
       const subjectMatch = subject === 'all' || program.subject === subject;
-      const budgetMatch = program.tuitionRangeEUR.max <= budget[0];
+      const budgetMatch = program.tuitionRangeEUR.min >= budget[0] && program.tuitionRangeEUR.max <= budget[1];
       const languageMatch = language === 'all' || program.typicalLanguage === language;
       const searchMatch = searchTerm === '' || 
         program.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -51,7 +52,7 @@ export default function ProgramsPage() {
   const resetFilters = () => {
     setDegreeLevel('all');
     setSubject('all');
-    setBudget([maxTuition]);
+    setBudget([1000, maxTuition]);
     setLanguage('all');
     setSearchTerm('');
   };
@@ -59,7 +60,7 @@ export default function ProgramsPage() {
   const activeFilterCount = [
     degreeLevel !== 'all',
     subject !== 'all',
-    budget[0] !== maxTuition,
+    budget[0] !== 1000 || budget[1] !== maxTuition,
     language !== 'all',
     searchTerm !== ''
   ].filter(Boolean).length;
@@ -160,7 +161,7 @@ export default function ProgramsPage() {
 
                         {/* Budget Slider */}
                         <div className="space-y-2">
-                            <Label>Max Annual Tuition: €{(budget[0] / 1000).toFixed(0)}k</Label>
+                            <Label>Annual Tuition: €{(budget[0] / 1000).toFixed(0)}k - €{(budget[1] / 1000).toFixed(0)}k</Label>
                             <Slider
                                 value={budget}
                                 onValueChange={setBudget}
