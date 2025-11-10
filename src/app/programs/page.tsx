@@ -30,8 +30,7 @@ export default function ProgramsPage() {
   const [language, setLanguage] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  const [budget, setBudget] = useState([0, 30000]);
-
+  
   const { minPrice, maxPrice } = useMemo(() => {
     let min = Infinity;
     let max = 0;
@@ -41,6 +40,8 @@ export default function ProgramsPage() {
     });
     return { minPrice: min, maxPrice: max };
   }, []);
+  
+  const [budget, setBudget] = useState([minPrice, maxPrice]);
   
   useEffect(() => {
     setBudget([minPrice, maxPrice]);
@@ -246,14 +247,12 @@ export default function ProgramsPage() {
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li><Link href="/about" className="hover:text-primary">About</Link></li>
                     <li><Link href="/careers" className="hover:text-primary">Careers</Link></li>
-                    <li><Link href="#" className="hover:text-primary">Press</Link></li>
+                    <li><Link href="/press" className="hover:text-primary">Press</Link></li>
                 </ul>
             </div>
             <div>
                 <h4 className="font-semibold mb-3 font-heading">Resources</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li><Link href="#" className="hover:text-primary">Blog</Link></li>
-                    <li><Link href="#" className="hover:text-primary">Guides</Link></li>
                     <li><Link href="#" className="hover:text-primary">Help Center</Link></li>
                 </ul>
             </div>
@@ -277,5 +276,3 @@ export default function ProgramsPage() {
     </div>
   );
 }
-
-    

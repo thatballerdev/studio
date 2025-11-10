@@ -85,8 +85,6 @@ export default function CareersPage() {
             <div>
                 <h4 className="font-semibold mb-3 font-heading">Resources</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li><Link href="#" className="hover:text-primary">Blog</Link></li>
-                    <li><Link href="#" className="hover:text-primary">Guides</Link></li>
                     <li><Link href="#" className="hover:text-primary">Help Center</Link></li>
                 </ul>
             </div>
