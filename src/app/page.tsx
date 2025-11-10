@@ -1,6 +1,6 @@
 
 import Link from 'next/link';
-import { ArrowRight, BookOpen, Briefcase, CheckCircle, Heart, Twitter, Linkedin, Facebook } from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle, Heart, Twitter, Linkedin, Facebook, CalendarDays, Rocket, Plane, ShieldCheck, Briefcase, GitBranch } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
@@ -93,30 +93,51 @@ export default function Home() {
         <section className="w-full py-20 md:py-28 bg-card border-y">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16 animate-fade-up">
-              <h2 className="text-4xl md:text-5xl font-bold font-heading">How It Works</h2>
-              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">Your journey to an international degree in 3 simple steps.</p>
+              <h2 className="text-4xl md:text-5xl font-bold font-heading">Your Journey with Northway</h2>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">A fully-supported path to your international degree.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12 text-center">
               <div className="flex flex-col items-center animate-fade-up" style={{ animationDelay: '200ms' }}>
                   <div className="bg-accent/10 text-accent rounded-full p-4 mb-4">
                     <Briefcase className="h-8 w-8" />
                   </div>
                   <h3 className="text-xl font-bold mb-2 font-heading">1. Profile & Budget</h3>
-                  <p className="text-foreground/70">Tell NorthWay your degree goal, budget, and preferred countries.</p>
+                  <p className="text-foreground/70">Tell us your degree goals, financial budget, and preferred countries so we can get to work.</p>
+              </div>
+              <div className="flex flex-col items-center animate-fade-up" style={{ animationDelay: '300ms' }}>
+                  <div className="bg-accent/10 text-accent rounded-full p-4 mb-4">
+                    <CalendarDays className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 font-heading">2. Personal 1-on-1 Call</h3>
+                  <p className="text-foreground/70">We’ll schedule a call within a week to discuss your profile and build a personalized strategy.</p>
               </div>
               <div className="flex flex-col items-center animate-fade-up" style={{ animationDelay: '400ms' }}>
                   <div className="bg-accent/10 text-accent rounded-full p-4 mb-4">
-                    <BookOpen className="h-8 w-8" />
+                    <Rocket className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2 font-heading">2. Matched Programs</h3>
-                  <p className="text-foreground/70">Compare real costs — tuition, living, travel, and visa expenses in one clear view.</p>
+                  <h3 className="text-xl font-bold mb-2 font-heading">3. Fast-Track Admission</h3>
+                  <p className="text-foreground/70">With your go-ahead, we leverage our network to secure your admission in as little as 48 hours.</p>
+              </div>
+              <div className="flex flex-col items-center animate-fade-up" style={{ animationDelay: '500ms' }}>
+                  <div className="bg-accent/10 text-accent rounded-full p-4 mb-4">
+                    <Plane className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 font-heading">4. Visa & Travel Prep</h3>
+                  <p className="text-foreground/70">We handle the heavy lifting: visa documents, flight booking, and securing your accommodation.</p>
               </div>
               <div className="flex flex-col items-center animate-fade-up" style={{ animationDelay: '600ms' }}>
                   <div className="bg-accent/10 text-accent rounded-full p-4 mb-4">
-                    <Heart className="h-8 w-8" />
+                    <ShieldCheck className="h-8 w-8" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2 font-heading">3. Apply & Save</h3>
-                  <p className="text-foreground/70">Auto-draft essays, track applications, and get scholarship matches.</p>
+                  <h3 className="text-xl font-bold mb-2 font-heading">5. Smooth Arrival</h3>
+                  <p className="text-foreground/70">We assist with country adaptation, finding student jobs, health insurance, and settling in.</p>
+              </div>
+              <div className="flex flex-col items-center animate-fade-up" style={{ animationDelay: '700ms' }}>
+                  <div className="bg-accent/10 text-accent rounded-full p-4 mb-4">
+                    <GitBranch className="h-8 w-8" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-2 font-heading">6. Future Career Pathways</h3>
+                  <p className="text-foreground/70">We help with exchange programs, U.S. result validation, and job applications for your future.</p>
               </div>
             </div>
           </div>
@@ -230,3 +251,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
