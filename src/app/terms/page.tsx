@@ -68,7 +68,7 @@ export default function TermsOfServicePage() {
               Terms of Service
             </h1>
             <p className="mt-4 text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
-              Our commitment to you, explained. This is the agreement between you and Northway.
+              Our commitment to you, explained. This is the agreement that makes our mission to fight student debt possible.
             </p>
              <p className="mt-2 text-sm text-muted-foreground">Last Updated: {new Date().toLocaleDateString()}</p>
           </div>
@@ -76,69 +76,72 @@ export default function TermsOfServicePage() {
 
         <section className="py-20 md:py-28">
             <div className="container max-w-4xl">
-                <Section title="1. Welcome to Northway!">
+                <Section title="1. Our Agreement">
                     <p>
-                        Hello! Welcome to Northway. These Terms of Service ("Terms") are a binding legal agreement between you and Northway Inc. ("Northway," "we," "us," or "our"). It governs your use of our website, platform, and the services we provide (collectively, the "Services"). By creating an account or using our Services, you're agreeing to these Terms. Think of this as the rulebook for our journey together.
+                        Welcome to Northway! These Terms of Service ("Terms") are a binding legal agreement between you and Northway Inc. ("Northway," "we," "us," or "our"). This agreement governs your use of our platform and the guidance services we provide (collectively, the "Services").
+                    </p>
+                    <p>
+                        By creating an account, you're agreeing to these Terms. We've written them to be as clear as possible because our relationship with you is built on trust and a shared goal: finding you a world-class education without the crippling debt that often comes with studying in the U.S.
                     </p>
                 </Section>
                 
-                <Section title="2. Our Services: What We Do">
+                <Section title="2. Our Mission-Driven Service">
                     <p>
-                        Northway is a service designed to help students, particularly from Nigeria, find and apply to affordable, high-quality international university programs. Our services include providing program information, personalized strategy calls, application assistance, and guidance on visas and travel.
+                        Northway exists to solve a huge problem: the overwhelming cost of higher education and the student debt crisis it creates. Our service is designed to provide students, particularly those in the United States and Nigeria, with a clear and affordable path to an international degree.
                     </p>
                     <p>
-                        <strong>Important:</strong> We are a guidance and facilitation service. We are not a university, a scholarship fund, or a government agency. We do not grant degrees, visas, or scholarships ourselves. Our role is to be your expert guide through the process.
+                        <strong>What We Do:</strong> We are an expert guidance and facilitation service. We've done the hard work of vetting accredited universities abroad that offer high-quality, English-taught programs at a fraction of the cost. Our service includes personalized strategy calls, application support, and guidance on everything from visas to housing.
                     </p>
-                </Section>
-
-                <Section title="3. Your Account and Responsibilities">
-                    <p>
-                        To use our full Services, you must create an account. You agree to provide accurate, complete, and current information during registration and to keep this information updated. You are responsible for everything that happens under your account, so please keep your password safe and don't share it with anyone.
-                    </p>
-                    <p>
-                        You are also responsible for being honest and transparent with us. The success of our service depends on the accuracy of the information you provide about your academic history, financial situation, and personal goals.
+                     <p>
+                        <strong>What We Are Not:</strong> We are not a university, a scholarship fund, or a government agency. We do not grant degrees, visas, or financial aid ourselves. Think of us as your dedicated co-pilot on this journey.
                     </p>
                 </Section>
 
-                <Section title="4. Fees and Payments">
+                <Section title="3. Your Part in the Journey">
                     <p>
-                        Creating an account and receiving a 1-on-1 strategy call is completely free. We believe in providing value upfront. We only charge our one-time service fee of $100 (or its equivalent) <strong>after</strong> you have successfully secured both an admission offer from a university and the corresponding student visa.
+                        To get the most out of our Services, you agree to provide accurate, complete, and current information when you create your profile. Your honesty is crucial. The more we understand about your academic background, financial situation, and goals, the better we can match you with the perfect university.
                     </p>
                     <p>
-                        You may also be responsible for separate fees charged by third parties, such as university application fees, visa application fees, or credential evaluation fees. We will always inform you of these potential costs upfront.
+                        You are responsible for keeping your account password safe. The success of this journey is a partnership, and it starts with a foundation of clear, truthful communication.
+                    </p>
+                </Section>
+
+                <Section title="4. Our 'Success-Based' Fee">
+                    <p>
+                        We are so confident in our ability to help you that we've aligned our success with yours. Creating an account, building your profile, and having a 1-on-1 strategy call with our team is completely free.
+                    </p>
+                    <p>
+                        We only charge our one-time service fee of $100 <strong>after</strong> you have successfully secured both an admission letter from a university and the student visa to go with it. This model ensures we are 100% focused on getting you the result you want.
+                    </p>
+                     <p>
+                        Please note that you may be responsible for separate fees charged by third parties, such as university application fees or visa processing fees. We will always be transparent about these potential costs.
                     </p>
                 </Section>
                 
-                <Section title="5. Intellectual Property">
+                <Section title="5. Guarantees and Reality">
                     <p>
-                        All of the content on our website and platform—including the text, graphics, logos, icons, and software—is the property of Northway or our partners. We grant you a limited, non-exclusive license to use our Services for your personal, non-commercial use. You may not copy, reproduce, or distribute our content without our written permission.
+                        We have an exceptional track record (a 99% success rate) of securing admission for qualified students who follow our guidance. However, the world of international admissions is dynamic. Final decisions always rest with the universities and national immigration authorities.
+                    </p>
+                    <p>
+                        Therefore, while we cannot offer an absolute legal guarantee of admission or visa approval, we <strong>do guarantee</strong> our unwavering commitment. We will apply our full expertise, network, and effort to give you the best possible chance of success. Your goal is our goal.
                     </p>
                 </Section>
 
-                <Section title="6. Disclaimer of Guarantees">
+                <Section title="6. Limitation of Liability">
                     <p>
-                        We are incredibly proud of our 99% success rate for qualified students who follow our guidance. However, the world of international admissions is complex and subject to change. Therefore, we cannot legally guarantee admission to any specific university or the successful issuance of a student visa. Final decisions are always made by the universities and immigration authorities, respectively.
-                    </p>
-                    <p>
-                        What we <strong>do</strong> guarantee is that we will use our full expertise, network, and effort to give you the absolute best chance of success.
+                        To the fullest extent permitted by law, Northway shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of our Services. Our service is to guide and assist, but you are ultimately responsible for your decisions and applications.
                     </p>
                 </Section>
 
-                <Section title="7. Limitation of Liability">
+                <Section title="7. The Future of Our Agreement">
                     <p>
-                        To the fullest extent permitted by law, Northway shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the services.
+                        We may update these Terms as our service evolves. If we make a change that we believe is significant, we will notify you via email or a notice on our site. By continuing to use our Services after any changes, you agree to the revised Terms.
                     </p>
                 </Section>
 
-                <Section title="8. Changes to These Terms">
+                 <Section title="8. Questions?">
                     <p>
-                        We may update these Terms from time to time. If we make a change that we believe is material, we will let you know by email or by posting a notice on our site. By continuing to use our Services after those changes become effective, you agree to be bound by the revised Terms.
-                    </p>
-                </Section>
-
-                 <Section title="9. Contact Us">
-                    <p>
-                        If you have any questions about these Terms, please don't hesitate to reach out to us. You can contact us at <a href="mailto:legal@northway.com" className="text-primary hover:underline">legal@northway.com</a>.
+                        If you have any questions about these Terms, please don't hesitate to ask. Transparency is one of our core values. You can contact us at <a href="mailto:legal@northway.com" className="text-primary hover:underline">legal@northway.com</a>.
                     </p>
                 </Section>
             </div>
