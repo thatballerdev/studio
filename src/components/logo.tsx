@@ -12,7 +12,7 @@ const Logo = ({
 }) => {
   return (
     <Image
-      src="https://images.unsplash.com/photo-1762507078313-1259fc0c6a12?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwcm9maWxlLXBhZ2V8MXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=500"
+      src="https://scontent.fabv2-2.fna.fbcdn.net/v/t39.30808-6/582415192_122098663035117932_16288885525470881_n.jpg?stp=dst-jpg_p180x540_tt6&_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeF-kk2fqJ2CpkfqxIR4rFIoRhhOX9ma8apGGE5f2ZrxqpB4Xmw_JVKh78LicTJpR5mA3MzjzmXdYpTeqwPgHfBr&_nc_ohc=-F2B40h1WRYQ7kNvwGbJtGm&_nc_oc=Admj8Gar7lMYfUPxSU2YNQBytERW_IYsqfStfVUiMP8K-OAKtQUV3ZQxriRJPqlVzgw&_nc_zt=23&_nc_ht=scontent.fabv2-2.fna&_nc_gid=8aa__VUxbBdGKwY5EM61PA&oh=00_Afh_0c_peo4I1EQeVU8Sc6-_Vjzu6QuPZiCFEZQKher2fA&oe=691AE97A"
       alt="Northway Logo"
       width={width}
       height={height}
