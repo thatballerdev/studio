@@ -251,40 +251,6 @@ export default function Home() {
           </div>
         </section>
 
-
-        {/* Featured Universities Section */}
-        <section className="w-full py-20 md:py-28">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-16 animate-fade-up">
-              <h2 className="text-4xl md:text-5xl font-bold font-heading">Featured Universities</h2>
-              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">
-                Explore top institutions that offer quality education at an affordable price.
-              </p>
-            </div>
-            <div className="relative animate-fade-up" style={{ animationDelay: '200ms' }}>
-               <Carousel 
-                opts={{
-                  align: "start",
-                  loop: true,
-                }}
-                className="w-full"
-              >
-                <CarouselContent>
-                  {universityData.map((uni, index) => (
-                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                      <div className="p-1 h-full">
-                        <UniversityCard university={uni} />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-8 hidden md:flex" />
-                <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 hidden md:flex" />
-              </Carousel>
-            </div>
-          </div>
-        </section>
-
         {/* CTA Strip */}
         <section className="w-full py-20 bg-card border-y">
             <div className="container mx-auto px-4 text-center">
