@@ -1,9 +1,12 @@
 
 import type { University } from './types';
 
+// This file is being replaced by featured-universities.json
+// It is kept for now to prevent breaking existing components, but should be deprecated.
+
 export const universityData: University[] = [
   {
-    id: '1',
+    id: 'charles-university',
     name: 'Charles University',
     country: 'Czech Republic',
     countryCode: 'CZ',
@@ -11,9 +14,10 @@ export const universityData: University[] = [
     highlights: ['Top Engineering & Research', 'Historic Prague campus', 'Strong international exchange'],
     imageId: 'university-1',
     motto: "Excellence in Research and Teaching",
+    featured: true,
   },
   {
-    id: '2',
+    id: 'university-of-warsaw',
     name: 'University of Warsaw',
     country: 'Poland',
     countryCode: 'PL',
@@ -21,9 +25,10 @@ export const universityData: University[] = [
     highlights: ['Arts & Humanities', 'Historic campus', 'Central European hub'],
     imageId: 'university-2',
     motto: "Creators of futures since 1816",
+    featured: false,
   },
     {
-    id: '3',
+    id: 'vilnius-university',
     name: 'Vilnius University',
     country: 'Lithuania',
     countryCode: 'LT',
@@ -31,9 +36,10 @@ export const universityData: University[] = [
     highlights: ['Oldest in Baltics', 'Physics & Life Sciences', 'UNESCO Heritage Campus'],
     imageId: 'university-3',
     motto: "Hinc itur ad astra",
+    featured: false,
   },
   {
-    id: '4',
+    id: 'university-of-porto',
     name: 'University of Porto',
     country: 'Portugal',
     countryCode: 'PT',
@@ -41,9 +47,10 @@ export const universityData: University[] = [
     highlights: ['Strong Engineering', 'Life Sciences', 'Coastal City Campus'],
     imageId: 'university-4',
     motto: "Virtus Unita Fortius Agit",
+    featured: false,
   },
   {
-    id: '5',
+    id: 'university-of-tartu',
     name: 'University of Tartu',
     country: 'Estonia',
     countryCode: 'EE',
@@ -51,9 +58,10 @@ export const universityData: University[] = [
     highlights: ['Top Baltic Research', 'Modern STEM', 'Social Programmes'],
     imageId: 'university-5',
     motto: "A University of the Mind",
+    featured: false,
   },
   {
-    id: '6',
+    id: 'university-of-belgrade',
     name: 'University of Belgrade',
     country: 'Serbia',
     countryCode: 'RS',
@@ -61,9 +69,10 @@ export const universityData: University[] = [
     highlights: ['Low International Tuition', 'Engineering & Humanities', 'Large Public University'],
     imageId: 'university-6',
     motto: "For the freedom of the mind",
+    featured: false,
   },
   {
-    id: '7',
+    id: 'national-taiwan-university',
     name: 'National Taiwan University',
     country: 'Taiwan',
     countryCode: 'TW',
@@ -71,9 +80,10 @@ export const universityData: University[] = [
     highlights: ['Top in Taiwan', 'Strong Engineering', 'Computer Science Research'],
     imageId: 'university-7',
     motto: "Integrity, Diligence, Fidelity, and Compassion",
+    featured: true,
   },
   {
-    id: '8',
+    id: 'universiti-malaya',
     name: 'Universiti Malaya',
     country: 'Malaysia',
     countryCode: 'MY',
@@ -81,9 +91,10 @@ export const universityData: University[] = [
     highlights: ["Malaysia's Top University", 'Affordable English Programs', 'Strong Engineering'],
     imageId: 'university-8',
     motto: "Ilmu Puncha Kemajuan",
+    featured: false,
   },
   {
-    id: '9',
+    id: 'university-of-ghana',
     name: 'University of Ghana',
     country: 'Ghana',
     countryCode: 'GH',
@@ -91,9 +102,10 @@ export const universityData: University[] = [
     highlights: ['Top in West Africa', 'Business & Social Sciences', 'Health Programs'],
     imageId: 'university-9',
     motto: "Integri Procedamus",
+    featured: false,
   },
   {
-    id: '10',
+    id: 'makerere-university',
     name: 'Makerere University',
     country: 'Uganda',
     countryCode: 'UG',
@@ -101,9 +113,10 @@ export const universityData: University[] = [
     highlights: ["East Africa's Oldest", 'Large Research University', 'Broad Program Portfolio'],
     imageId: 'university-10',
     motto: "We Build for the Future",
+    featured: false,
   },
   {
-    id: '11',
+    id: 'university-of-buenos-aires',
     name: 'University of Buenos Aires',
     country: 'Argentina',
     countryCode: 'AR',
@@ -111,9 +124,10 @@ export const universityData: University[] = [
     highlights: ['Tuition-Free Undergraduate', 'Top in Latin America', 'Strong Humanities'],
     imageId: 'university-11',
     motto: "Argentina Virtus Robur et Studium",
+    featured: true,
   },
   {
-    id: '12',
+    id: 'university-of-sao-paulo',
     name: 'University of São Paulo',
     country: 'Brazil',
     countryCode: 'BR',
@@ -121,7 +135,6 @@ export const universityData: University[] = [
     highlights: ["Brazil's Premier Public University", 'Tuition-Free Programs', 'Top Research'],
     imageId: 'university-12',
     motto: "Scientia Vinces",
-  },
+    featured: false,
+  }
 ];
-
-    

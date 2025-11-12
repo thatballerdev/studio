@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -206,9 +205,17 @@ export default function Home() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-up" style={{ animationDelay: '200ms' }}>
-              {universityData.slice(0, 3).map((uni) => (
+              {universityData.filter(uni => uni.featured).slice(0,3).map((uni) => (
                 <UniversityCard key={uni.id} university={uni} />
               ))}
+            </div>
+            <div className="mt-16 text-center animate-fade-up" style={{ animationDelay: '400ms' }}>
+                <Button size="lg" asChild style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }} className="font-bold">
+                    <Link href="/featured-100">
+                    View All 100 Universities
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
+                </Button>
             </div>
           </div>
         </section>
