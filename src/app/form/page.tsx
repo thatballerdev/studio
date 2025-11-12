@@ -4,9 +4,12 @@
 import { useEffect, Suspense } from 'react';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import { useTheme } from 'next-themes';
 
 // The TallyForm component now accepts the query string as a prop
 function TallyForm({ queryString }: { queryString: string }) {
+  const { theme } = useTheme();
+
   useEffect(() => {
     // Dynamically load the Tally embed script
     const script = document.createElement('script');
@@ -28,6 +31,13 @@ function TallyForm({ queryString }: { queryString: string }) {
 
     // Add required Tally parameters
     params.set('transparentBackground', '1');
+    params.set('layout', 'modal');
+
+    // Pass theme information if needed by Tally for styling
+    if (theme === 'dark') {
+      // Example: Tally might support a 'theme' parameter
+      // params.set('theme', 'dark'); 
+    }
 
     return `${baseUrl}?${params.toString()}`;
   }
@@ -39,6 +49,7 @@ function TallyForm({ queryString }: { queryString: string }) {
           margin: 0;
           height: 100%;
           overflow: hidden;
+          background: transparent !important;
         }
         iframe {
           position: absolute;
