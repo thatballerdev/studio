@@ -1,4 +1,6 @@
 
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, BookOpen, CheckCircle, Heart, Twitter, Linkedin, Facebook, CalendarDays, Rocket, Plane, ShieldCheck, Briefcase, GitBranch } from 'lucide-react';
 import Image from 'next/image';
@@ -16,6 +18,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import UniversityCard from '@/components/university-card';
 
 
 export default function Home() {
@@ -251,39 +261,26 @@ export default function Home() {
                 Explore top institutions that offer quality education at an affordable price.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {universityData.slice(0, 3).map((uni, index) => {
-                const placeholderImage = PlaceHolderImages.find(p => p.id === uni.imageId);
-                return (
-                  <div key={index} className="animate-fade-up" style={{ animationDelay: `${index * 150}ms` }}>
-                    <Card className="h-full overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-2 rounded-xl border">
-                      <CardContent className="p-0">
-                        {placeholderImage && (
-                           <Image
-                            src={placeholderImage.imageUrl}
-                            alt={`Campus of ${uni.name}`}
-                            width={600}
-                            height={400}
-                            className="object-cover w-full h-48"
-                            data-ai-hint={placeholderImage.imageHint}
-                          />
-                        )}
-                        <div className="p-6">
-                            <div className="flex justify-between items-start mb-2">
-                                <h3 className="text-xl font-bold font-heading flex-1 pr-2">{uni.name}</h3>
-                                <span className="text-2xl">{getFlagEmoji(uni.countryCode)}</span>
-                            </div>
-                            <p className="text-muted-foreground text-sm mb-4">{uni.country}</p>
-                            <div className="font-semibold text-primary-dark text-lg mb-4">~${uni.annualCost.toLocaleString()} / year</div>
-                            <div className="flex flex-wrap gap-2">
-                                {uni.highlights.slice(0,2).map(h => <Badge key={h} variant="secondary">{h}</Badge>)}
-                            </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                )
-              })}
+            <div className="relative animate-fade-up" style={{ animationDelay: '200ms' }}>
+               <Carousel 
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {universityData.map((uni, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                      <div className="p-1 h-full">
+                        <UniversityCard university={uni} />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-8 hidden md:flex" />
+                <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 hidden md:flex" />
+              </Carousel>
             </div>
           </div>
         </section>
@@ -371,3 +368,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
