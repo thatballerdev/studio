@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { DollarSign, Star, Globe } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,3 +59,5 @@ export default function UniversityCard({ university }: UniversityCardProps) {
     </Card>
   );
 }
+
+    
