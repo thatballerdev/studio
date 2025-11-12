@@ -204,26 +204,20 @@ export default function Home() {
               <h2 className="text-4xl md:text-5xl font-bold font-heading">Featured Universities</h2>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">Explore top institutions that offer quality education at an affordable price.</p>
             </div>
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              className="w-full animate-fade-up"
-               style={{ animationDelay: '200ms' }}
-            >
-              <CarouselContent>
-                {universityData.map((uni) => (
-                  <CarouselItem key={uni.id} className="md:basis-1/2 lg:basis-1/3">
-                    <div className="p-1">
-                      <UniversityCard university={uni} />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="hidden md:flex" />
-              <CarouselNext className="hidden md:flex" />
-            </Carousel>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-up" style={{ animationDelay: '200ms' }}>
+              {universityData.slice(0, 3).map((uni) => (
+                <UniversityCard key={uni.id} university={uni} />
+              ))}
+            </div>
+
+            <div className="text-center mt-16 animate-fade-up">
+              <Button size="lg" asChild>
+                <Link href="/programs">
+                  View All Programs <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
         
@@ -364,5 +358,3 @@ export default function Home() {
     </div>
   );
 }
-
-    

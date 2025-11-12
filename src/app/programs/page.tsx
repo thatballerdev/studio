@@ -60,23 +60,15 @@ export default function ProgramsPage() {
        {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container h-20 flex items-center">
-          <Button asChild variant="ghost" className="mr-4">
-            <Link href="/">
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Home
-            </Link>
-          </Button>
-          <div className="flex-1 flex justify-center md:justify-start">
-            <Link href="/" className="flex items-center gap-2">
-                <Logo width={120} height={48} />
-            </Link>
-          </div>
+          <Link href="/" className="flex items-center gap-2">
+            <Logo width={120} height={48} />
+          </Link>
           <nav className="ml-10 hidden md:flex items-center gap-6 text-sm font-medium">
             <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
-          <div className="ml-auto hidden md:flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-2">
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>
@@ -91,7 +83,7 @@ export default function ProgramsPage() {
         <div className="container mx-auto py-12 md:py-16 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div className="space-y-4 mb-8 text-center max-w-4xl mx-auto">
             <h1 className="text-4xl font-bold tracking-tight font-heading">Explore Programs</h1>
-            <p className="text-lg text-muted-foreground">The prices below represent the average cost in Europe, as most of our applicants choose European universities. Many universities in Europe are extremely cheap as they offer free or very low tuition, but this often requires extra steps, language learning, and time. For those willing to study in Australia, Asia, Africa, or South America, the cost may also be significantly cheaper. To know more, please register and we will discuss everything in our 1-on-1 call.</p>
+            <p className="text-lg text-muted-foreground">The prices below represent the average cost in Europe, as most of our applicants choose European universities. Many universities in Europe are extremely cheap as they offer free or very low tuition, but this often requires extra steps, language learning, and time. To know more, please register and we will discuss everything in our 1-on-1 call.</p>
           </div>
 
           <Card className="p-4 md:p-6 mb-8 shadow-sm border-border/60">
