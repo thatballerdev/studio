@@ -1,3 +1,4 @@
+
 import type { University } from './types';
 
 export const universityData: University[] = [
