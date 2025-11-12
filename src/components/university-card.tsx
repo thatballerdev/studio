@@ -22,19 +22,21 @@ export default function UniversityCard({ university }: UniversityCardProps) {
     <Card className="flex flex-col h-full w-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card rounded-xl border border-border/60">
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
-          <Image
-            src={university.image_url}
-            alt={university.alt_text}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
-            data-ai-hint={aiHint}
-          />
-          {isPlaceholder && (
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent flex flex-col justify-end p-4 text-white">
-              {/* The placeholder URL is the image, so we add text on top */}
+          {university.image_url ? (
+            <Image
+                src={university.image_url}
+                alt={university.alt_text}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover"
+                data-ai-hint={aiHint}
+              />
+          ) : (
+             <div className="w-full h-full bg-secondary flex items-center justify-center">
+                <p className="text-muted-foreground text-sm">Image not available</p>
             </div>
           )}
+          
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
           <div className="absolute bottom-4 left-4 text-white p-2">
             <CardTitle className="text-2xl [text-shadow:0_2px_4px_rgba(0,0,0,0.7)]">{university.institution}</CardTitle>
