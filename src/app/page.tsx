@@ -196,6 +196,36 @@ export default function Home() {
                 </div>
             </div>
         </section>
+
+        {/* Featured Universities Section */}
+        <section className="w-full py-20 md:py-28 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16 animate-fade-up">
+              <h2 className="text-4xl md:text-5xl font-bold font-heading">Featured Universities</h2>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">Explore top institutions that offer quality education at an affordable price.</p>
+            </div>
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full animate-fade-up"
+               style={{ animationDelay: '200ms' }}
+            >
+              <CarouselContent>
+                {universityData.map((uni) => (
+                  <CarouselItem key={uni.id} className="md:basis-1/2 lg:basis-1/3">
+                    <div className="p-1">
+                      <UniversityCard university={uni} />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="hidden md:flex" />
+              <CarouselNext className="hidden md:flex" />
+            </Carousel>
+          </div>
+        </section>
         
         {/* How It Works Section */}
         <section className="w-full py-20 md:py-28 bg-card border-y">
@@ -334,3 +364,5 @@ export default function Home() {
     </div>
   );
 }
+
+    

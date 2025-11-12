@@ -3,80 +3,80 @@
     {
       "id": "hero",
       "description": "Students studying in a library",
-      "imageUrl": "https://images.unsplash.com/20/cambridge.JPG?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHx1bml2ZXJzaXR5fGVufDB8fHx8MTc2MjU1MDQxMnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "university campus classic"
+      "imageUrl": "https://images.unsplash.com/photo-1758270703928-6a8597669abc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8dW5pdmVyc2l0eSUyMHN0dWRlbnRzJTIwc3R1ZHlpbmd8ZW58MHx8fHwxNzYyOTQ5MDkzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "university students studying"
     },
     {
       "id": "university-1",
-      "description": "A modern university campus building",
-      "imageUrl": "https://images.unsplash.com/photo-1660987286221-6e74fd13d731?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxjaGFybGVzJTIwdW5pdmVyc2l0eSUyMGN6ZWNofGVufDB8fHx8MTc2MjQ2NTMxNnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "charles university prague"
+      "description": "Charles University campus",
+      "imageUrl": "https://images.unsplash.com/photo-1759862302173-2701550ffe11?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxDaGFybGVzJTIwVW5pdmVyc2l0eSUyMFByYWd1ZSUyMGNhbXB1c3xlbnwwfHx8fDE3NjI5NDkwOTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Charles University Prague campus"
     },
     {
       "id": "university-2",
-      "description": "A classic university building with columns",
-      "imageUrl": "https://images.unsplash.com/photo-1687896689741-9b5575fe8a08?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHwlMjBVbml2ZXJzaXR5JTIwb2YlMjBXYXJzYXd8ZW58MHx8fHwxNzYyNDY1NDIyfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "warsaw university campus"
+      "description": "University of Warsaw campus",
+      "imageUrl": "https://images.unsplash.com/photo-1568986890521-d9856b35bcd3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxVbml2ZXJzaXR5JTIwb2YlMjBXYXJzYXclMjBjYW1wdXN8ZW58MHx8fHwxNzYyOTQ5MDkzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "University of Warsaw campus"
     },
     {
       "id": "university-3",
-      "description": "Church of St. Johns in Vilnius University courtyard",
-      "imageUrl": "https://images.unsplash.com/photo-1583003058853-06a4175e3a80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxWaWxuaXVzJTIwVW5pdmVyc2l0eXxlbnwwfHx8fDE3NjMwNzEyODZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "vilnius university lithuania"
+      "description": "Vilnius University campus",
+      "imageUrl": "https://images.unsplash.com/photo-1566448313292-89fa4c4b150f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxWaWxuaXVzJTIwVW5pdmVyc2l0eSUyMExpdGh1YW5pYXxlbnwwfHx8fDE3NjI5NDkwOTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Vilnius University Lithuania"
     },
     {
       "id": "university-4",
-      "description": "University of Porto main building",
-      "imageUrl": "https://images.unsplash.com/photo-1589983991244-a6b681b957e1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXR5JTIwb2YlMjBQb3J0byUyMGNhbXB1c3xlbnwwfHx8fDE3NjMyOTQ0ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "porto university campus"
+      "description": "University of Porto campus",
+      "imageUrl": "https://images.unsplash.com/photo-1623308370871-bda49d42c97e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxVbml2ZXJzaXR5JTIwb2YlMjBQb3J0byUyMGNhbXB1c3xlbnwwfHx8fDE3NjI5NDkwOTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "University of Porto campus"
     },
     {
       "id": "university-5",
-      "description": "Main building of the University of Tartu",
-      "imageUrl": "https://images.unsplash.com/photo-1596713481254-e75c6356e87a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXR5JTIwb2YlMjBUYXJ0dSUyMGNhbXB1c3xlbnwwfHx8fDE3NjMyOTQ1MTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "tartu university estonia"
+      "description": "University of Tartu campus",
+      "imageUrl": "https://images.unsplash.com/photo-1562057519-4aa0396c86c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxVbml2ZXJzaXR5JTIwb2YlMjBUYXJ0dSUyMEVzdG9uaWF8ZW58MHx8fHwxNzYyOTQ5MDkzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "University of Tartu Estonia"
     },
     {
       "id": "university-6",
-      "description": "University of Belgrade faculty building",
-      "imageUrl": "https://images.unsplash.com/photo-1631160213324-411352a92631?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXR5JTIwb2YlMjBCZWxncmFkZSUyMGNhbXB1c3xlbnwwfHx8fDE3NjMyOTQ1NDF8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "belgrade university serbia"
+      "description": "University of Belgrade campus",
+      "imageUrl": "https://images.unsplash.com/photo-1700554794159-c3391d2d3429?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxVbml2ZXJzaXR5JTIwb2YlMjBCZWxncmFkZSUyMGNhbXB1c3xlbnwwfHx8fDE3NjI5NDkwOTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "University of Belgrade campus"
     },
     {
       "id": "university-7",
-      "description": "National Taiwan University library",
-      "imageUrl": "https://images.unsplash.com/photo-1583894017726-0043815b3c5a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxOYXRpb25hbCUyMFRhaXdhbiUyMFVuaXZlcnNpdHklMjBjYW1wdXN8ZW58MHx8fHwxNzYzMjk0NTY4fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "ntu taipei campus"
+      "description": "National Taiwan University campus",
+      "imageUrl": "https://images.unsplash.com/photo-1724044443442-6ab6f1990c8c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxOVFUlMjBUYWlwZWklMjBjYW1wdXN8ZW58MHx8fHwxNzYyOTQ5MDkzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "NTU Taipei campus"
     },
     {
       "id": "university-8",
-      "description": "Universiti Malaya campus view",
-      "imageUrl": "https://images.unsplash.com/photo-1678122474441-6e93c17e3f43?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXRpJTIwTWFsYXlhJTIwY2FtcHVzfGVufDB8fHx8MTc2MzI5NDYwMHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "um kuala lumpur"
+      "description": "Universiti Malaya campus",
+      "imageUrl": "https://images.unsplash.com/photo-1654130733813-fe7839d4228b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxVbml2ZXJzaXRpJTIwTWFsYXlhJTIwY2FtcHVzfGVufDB8fHx8MTc2Mjk0OTA5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Universiti Malaya campus"
     },
     {
       "id": "university-9",
-      "description": "University of Ghana campus building",
-      "imageUrl": "https://images.unsplash.com/photo-1605792646900-6194784e1b80?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXR5JTIwb2YlMjBHaGFuYSUyMExlZ29uJTIwY2FtcHVzfGVufDB8fHx8MTc2MzI5NDYyN3ww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "legon campus accra"
+      "description": "University of Ghana campus",
+      "imageUrl": "https://images.unsplash.com/photo-1761039808254-15fe18badb9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxVbml2ZXJzaXR5JTIwb2YlMjBHaGFuYSUyMExlZ29ufGVufDB8fHx8MTc2Mjk0OTA5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "University of Ghana Legon"
     },
     {
       "id": "university-10",
-      "description": "Makerere University main building",
-      "imageUrl": "https://images.unsplash.com/photo-1621282682195-e4359d9a1e35?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxNYWtlcmVyZSUyMFVuaXZlcnNpdHklMjBjYW1wdXN8ZW58MHx8fHwxNzYzMjk0NjUxfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "makerere kampala campus"
+      "description": "Makerere University campus",
+      "imageUrl": "https://images.unsplash.com/photo-1711117078354-89a570cece17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxNYWtlcmVyZSUyMFVuaXZlcnNpdHklMjBLYW1wYWxhfGVufDB8fHx8MTc2Mjk0OTA5M3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Makerere University Kampala"
     },
     {
       "id": "university-11",
-      "description": "University of Buenos Aires faculty of law",
-      "imageUrl": "https://images.unsplash.com/photo-1580452332675-69c59f4277a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXR5JTIwb2YlMjBCdWVub3MlMjBBaXJlcyUyMGNhbXB1c3xlbnwwfHx8fDE3NjMyOTQ2NzZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "uba buenos aires"
+      "description": "University of Buenos Aires campus",
+      "imageUrl": "https://images.unsplash.com/photo-1744982593272-31620499c3ea?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxVQkElMjBCdWVub3MlMjBBaXJlcyUyMGNhbXB1c3xlbnwwfHx8fDE3NjI5NDkwOTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "UBA Buenos Aires campus"
     },
     {
       "id": "university-12",
-      "description": "University of São Paulo building",
-      "imageUrl": "https://images.unsplash.com/photo-1615288336248-1510461b9a9d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxVbml2ZXJzaXR5JTIwb2YlMjBTYW8lMjBQYXVsbyUyMGNhbXB1c3xlbnwwfHx8fDE3NjMyOTQ3MDB8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "usp sao paulo"
+      "description": "University of São Paulo campus",
+      "imageUrl": "https://images.unsplash.com/photo-1669084843109-727d9c93a8d5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxVU1AlMjBTYW8lMjBQYXVsbyUyMGNhbXB1c3xlbnwwfHx8fDE3NjI5NDkwOTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "USP Sao Paulo campus"
     },
     {
       "id": "founder-nigerian",

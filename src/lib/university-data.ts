@@ -8,7 +8,7 @@ export const universityData: University[] = [
     country: 'Czech Republic',
     countryCode: 'CZ',
     annualCost: 6000,
-    highlights: ['Top Engineering Program', 'Research Focused', 'Vibrant Student Life'],
+    highlights: ['Top Engineering & Research', 'Historic Prague campus', 'Strong international exchange'],
     imageId: 'university-1',
     motto: "Excellence in Research and Teaching",
   },
@@ -18,11 +18,11 @@ export const universityData: University[] = [
     country: 'Poland',
     countryCode: 'PL',
     annualCost: 4500,
-    highlights: ['Arts & Humanities', 'Historic Campus', 'Located in Warsaw'],
+    highlights: ['Arts & Humanities', 'Historic campus', 'Central European hub'],
     imageId: 'university-2',
     motto: "Creators of futures since 1816",
   },
-  {
+    {
     id: '3',
     name: 'Vilnius University',
     country: 'Lithuania',
@@ -123,3 +123,5 @@ export const universityData: University[] = [
     motto: "Scientia Vinces",
   },
 ];
+
+    
