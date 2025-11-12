@@ -210,14 +210,6 @@ export default function Home() {
                 <UniversityCard key={uni.id} university={uni} />
               ))}
             </div>
-
-            <div className="text-center mt-16 animate-fade-up">
-              <Button size="lg" asChild>
-                <Link href="/programs">
-                  View All Programs <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </Button>
-            </div>
           </div>
         </section>
         
