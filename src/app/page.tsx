@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Logo from '@/components/logo';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { universityData } from '@/lib/university-data';
+import universityData from '@/lib/featured-universities.json';
 import { getFlagEmoji } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -200,7 +200,7 @@ export default function Home() {
         <section className="w-full py-20 md:py-28 bg-background">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16 animate-fade-up">
-              <h2 className="text-4xl md:text-5xl font-bold font-heading">Featured Universities</h2>
+              <h2 className="text-4xl md:text-5xl font-bold font-heading">Some of our partner's university</h2>
               <p className="text-muted-foreground mt-4 max-w-2xl mx-auto text-lg">Explore top institutions that offer quality education at an affordable price.</p>
             </div>
             

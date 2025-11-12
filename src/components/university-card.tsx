@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 import { DollarSign, Star, Globe } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,17 +13,16 @@ type UniversityCardProps = {
 
 export default function UniversityCard({ university }: UniversityCardProps) {
   const isPlaceholder = university.image_source === 'placeholder';
-  const sourceUrl = university.verified_sources && university.verified_sources.length > 0 ? university.verified_sources[0] : '#';
-  const aiHint = university.unsplash_queries && university.unsplash_queries.length > 0 ? university.unsplash_queries[0] : 'university campus';
-
+  const sourceUrl = (university.verified_sources && university.verified_sources.length > 0) ? university.verified_sources[0] : '#';
+  const aiHint = (university.unsplash_queries && university.unsplash_queries.length > 0) ? university.unsplash_queries[0] : 'university campus';
 
   return (
-    <Card className="flex flex-col h-full w-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 bg-card rounded-xl border border-border/60">
+    <Card className="flex flex-col h-full w-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 bg-card rounded-xl border border-border/60">
       <CardHeader className="p-0">
         <div className="relative h-48 w-full">
           {university.image_url ? (
             <Image
-                src={university.image_url}
+                src={isPlaceholder ? `https://picsum.photos/seed/${university.id}/600/400` : university.image_url}
                 alt={university.alt_text}
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -69,9 +67,9 @@ export default function UniversityCard({ university }: UniversityCardProps) {
         <p className="text-sm italic text-muted-foreground pt-3 border-t">"{university.quote}"</p>
       </CardContent>
        <CardFooter className="flex-shrink-0 flex justify-between gap-2 bg-secondary/30 p-4">
-        <a href={sourceUrl} target="_blank" rel="noopener noreferrer">
-          <Button variant="outline" size="sm">Verify Source</Button>
-        </a>
+        <Button variant="outline" size="sm" asChild>
+          <a href={sourceUrl} target="_blank" rel="noopener noreferrer">Verify Source</a>
+        </Button>
       </CardFooter>
     </Card>
   );

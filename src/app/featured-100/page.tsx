@@ -15,7 +15,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useDebounce } from '@/hooks/use-debounce';
 
-const REGIONS = ['All', 'Europe', 'Asia', 'Africa', 'South America'];
+const REGIONS = ['All', 'Europe', 'Asia', 'Africa-North', 'Africa-South', 'South America'];
 const LANGUAGES = ['All', 'English', 'English+Local', 'Local'];
 
 export default function Featured100Page() {
