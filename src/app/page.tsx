@@ -188,7 +188,7 @@ export default function Home() {
                                 width={600}
                                 height={400}
                                 className="rounded-2xl object-cover w-full h-full shadow-2xl"
-                                data-ai-hint="student globe map abstract"
+                                data-ai-hint={heroImage.imageHint}
                                 priority
                             />
                         )}
@@ -368,7 +368,3 @@ export default function Home() {
     </div>
   );
 }
-
-    
-
-    
