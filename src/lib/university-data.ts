@@ -25,7 +25,7 @@ export const universityData: University[] = [
     highlights: ['Arts & Humanities', 'Historic campus', 'Central European hub'],
     imageId: 'university-2',
     motto: "Creators of futures since 1816",
-    featured: false,
+    featured: true,
   },
     {
     id: 'vilnius-university',
@@ -80,7 +80,7 @@ export const universityData: University[] = [
     highlights: ['Top in Taiwan', 'Strong Engineering', 'Computer Science Research'],
     imageId: 'university-7',
     motto: "Integrity, Diligence, Fidelity, and Compassion",
-    featured: true,
+    featured: false,
   },
   {
     id: 'universiti-malaya',
@@ -124,7 +124,7 @@ export const universityData: University[] = [
     highlights: ['Tuition-Free Undergraduate', 'Top in Latin America', 'Strong Humanities'],
     imageId: 'university-11',
     motto: "Argentina Virtus Robur et Studium",
-    featured: true,
+    featured: false,
   },
   {
     id: 'university-of-sao-paulo',

@@ -21,6 +21,9 @@ import { courseCategories, programData } from '@/lib/program-data';
 import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X, ArrowLeft } from 'lucide-react';
 import Logo from '@/components/logo';
 import { Input } from '@/components/ui/input';
+import type { FeaturedUniversity } from '@/lib/types';
+import universityData from '@/lib/featured-universities.json';
+import UniversityCard from '@/components/university-card';
 
 export default function ProgramsPage() {
   const [degreeLevel, setDegreeLevel] = useState<string>('all');

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -8,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Logo from '@/components/logo';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import universityData from '@/lib/featured-universities.json';
+import { universityData } from '@/lib/university-data';
 import { getFlagEmoji } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -208,14 +209,6 @@ export default function Home() {
               {universityData.filter(uni => uni.featured).slice(0,3).map((uni) => (
                 <UniversityCard key={uni.id} university={uni} />
               ))}
-            </div>
-            <div className="mt-16 text-center animate-fade-up" style={{ animationDelay: '400ms' }}>
-                <Button size="lg" asChild style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }} className="font-bold">
-                    <Link href="/featured-100">
-                    View All 100 Universities
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                </Button>
             </div>
           </div>
         </section>
