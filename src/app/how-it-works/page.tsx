@@ -8,6 +8,7 @@ import Logo from '@/components/logo';
 import { ArrowLeft, ArrowRight, Briefcase, CalendarDays, Rocket, Plane, ShieldCheck, GitBranch, Dumbbell, Twitter, Linkedin, Facebook } from 'lucide-react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -63,7 +64,8 @@ export default function HowItWorksPage() {
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground transition-colors">How it Works</Link>
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-4">
+            <ThemeToggle />
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>

@@ -22,6 +22,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 import Logo from '@/components/logo';
 import type { UserProfile } from '@/lib/types';
+import { ThemeToggle } from './theme-toggle';
 
 export default function Header({ children }: { children?: React.ReactNode}) {
   const { user } = useUser();
@@ -111,6 +112,7 @@ export default function Header({ children }: { children?: React.ReactNode}) {
 
 
         <div className="flex flex-1 items-center justify-end space-x-4">
+          <ThemeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="relative h-10 w-10 rounded-full">

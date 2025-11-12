@@ -24,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import type { FeaturedUniversity } from '@/lib/types';
 import universityData from '@/lib/featured-universities.json';
 import UniversityCard from '@/components/university-card';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function ProgramsPage() {
   const [degreeLevel, setDegreeLevel] = useState<string>('all');
@@ -71,7 +72,8 @@ export default function ProgramsPage() {
             <Link href="/programs" className="text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-4">
+            <ThemeToggle />
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>

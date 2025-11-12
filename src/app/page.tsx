@@ -26,6 +26,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel"
 import UniversityCard from '@/components/university-card';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 
 export default function Home() {
@@ -135,7 +136,8 @@ export default function Home() {
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
           </nav>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex items-center gap-4">
+            <ThemeToggle />
             <Button variant="ghost" asChild>
               <Link href="/login">Log In</Link>
             </Button>
