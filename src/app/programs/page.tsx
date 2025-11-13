@@ -199,7 +199,7 @@ export default function ProgramsPage() {
                   <PlusCircle className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
                   <h3 className="text-2xl font-bold font-heading">And many more programs!</h3>
                   <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
-                    This is just a sample of what we offer. Sign up for a free account to get personalized matches based on your budget and goals.
+                    Sign up for free to book a call and get personalized matches based on your information!
                   </p>
                   <Button asChild size="lg" className="mt-6 font-bold" style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }}>
                     <Link href="/signup">Get Started for Free</Link>
