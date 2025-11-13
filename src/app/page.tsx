@@ -119,7 +119,7 @@ export default function Home() {
     },
     {
       question: "How safe are the countries where you have partner universities?",
-      answer: "We prioritize your safety. The countries we operate in, particularly in Central and Eastern Europe, generally have very low crime rates, often lower than major U.S. cities. We provide detailed safety briefings and local contact information to ensure you feel secure in your new home."
+      answer: "Your safety is our number one priority. We exclusively partner with universities in safe and welcoming communities across Europe, Asia, South America, and Africa. As part of our service, we assist you in securing accommodation in neighborhoods that have low crime rates but also offer easy access to campus. Your general well-being is central to our process, and we provide detailed pre-departure briefings to ensure you feel secure and prepared for your new home."
     }
   ];
 
