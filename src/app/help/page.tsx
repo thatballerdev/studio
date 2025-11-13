@@ -28,10 +28,6 @@ const faqItems = [
         answer: "We have a 99% success rate for qualified students who follow our guidance. Because we work so closely with you and our partner universities, we only recommend programs where you have a very high likelihood of acceptance. In the rare case that things don't work out, we will work with you to find alternative options."
     },
     {
-        question: "How does Northway make money if the initial service is free?",
-        answer: "Our model is built on your success. We only charge our one-time service fee of $100 *after* you have successfully received both your university admission and your student visa. This aligns our success with yours and keeps us focused on getting you results."
-    },
-    {
         question: "Can I get help with my visa application?",
         answer: "Absolutely. Our Visa & Travel Prep service is a core part of our offering. We guide you through the entire process, from creating a document checklist to helping you fill out the forms and preparing you for any potential interviews."
     },
