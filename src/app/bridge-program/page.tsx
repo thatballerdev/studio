@@ -16,6 +16,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -285,3 +286,5 @@ export default function BridgeProgramPage() {
     </div>
   );
 }
+
+    
