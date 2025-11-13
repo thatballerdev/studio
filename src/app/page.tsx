@@ -59,7 +59,7 @@ export default function Home() {
     },
     {
       question: "What kind of universities do you partner with?",
-      answer: "We partner with a wide range of accredited public and private universities across Europe and other regions. Our main focus is on institutions that offer a high-quality education and excellent value, allowing students to graduate with little to no debt."
+      answer: "We partner with a wide range of accredited public and private universities across Europe and other regions. Our main focus is on institutions that offer a high-quality education and excellent value, allowing students to graduate with no debt."
     },
     {
       question: "Do I need to speak a foreign language?",
