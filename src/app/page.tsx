@@ -35,7 +35,7 @@ export default function Home() {
   const faqData = [
     {
       question: "Is using Northway completely free?",
-      answer: "Yes, our initial admission service is completely free to get you started. This includes the 1-on-1 strategy call, providing all necessary information based on your onboarding form, and finding the best university matches for you. All of that is provided at no cost. Only after you have received your official admission offer and verified it, do we charge a one-time success fee of $150. This fee covers our comprehensive support package, including visa assistance, student-job placement support, flight booking guidance, pre-departure briefings, and accommodation support."
+      answer: "Yes, our initial admission service is completely free to get you started. This includes the 1-on-1 strategy call, providing all necessary information based on your onboarding form, and finding the best university matches for you. All of that is provided at no cost. Only after you have received your official admission offer and verified it, we charge a one-time service fee of $150. This fee covers our comprehensive support package, including visa assistance, student-job placement support, flight booking guidance, pre-departure briefings, and accommodation support."
     },
     {
       question: "Are there scholarships available?",
