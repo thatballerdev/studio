@@ -11,15 +11,28 @@ const Logo = ({
   height?: number;
 }) => {
   return (
-    <Image
-      src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*34Npvco8IZMZAPGRf3Q3rQ.png"
-      alt="Northway Logo"
-      width={width}
-      height={height}
-      className={cn('object-contain', className)}
-      data-ai-hint="logo abstract"
-      priority
-    />
+    <>
+      {/* Light Mode Logo */}
+      <Image
+        src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*34Npvco8IZMZAPGRf3Q3rQ.png"
+        alt="Northway Logo Light"
+        width={width}
+        height={height}
+        className={cn('object-contain dark:hidden', className)}
+        data-ai-hint="logo abstract"
+        priority
+      />
+      {/* Dark Mode Logo */}
+      <Image
+        src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*2jCWNOB04fD_eP-0Lom-bQ.png"
+        alt="Northway Logo Dark"
+        width={width}
+        height={height}
+        className={cn('object-contain hidden dark:block', className)}
+        data-ai-hint="logo abstract white"
+        priority
+      />
+    </>
   );
 };
 
