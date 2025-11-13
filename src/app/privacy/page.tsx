@@ -38,6 +38,7 @@ export default function PrivacyPolicyPage() {
             <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
+            <Link href="/bridge-program" className="text-foreground/70 hover:text-foreground transition-colors">Bridge Program</Link>
           </nav>
           <div className="ml-auto flex items-center gap-4">
             <ThemeToggle />
@@ -180,6 +181,7 @@ export default function PrivacyPolicyPage() {
                 <h4 className="font-semibold mb-3 font-heading">Resources</h4>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                     <li><Link href="/help" className="hover:text-primary">Help Center</Link></li>
+                    <li><Link href="/bridge-program" className="hover:text-primary">Bridge Program</Link></li>
                 </ul>
             </div>
             <div>

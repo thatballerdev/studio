@@ -89,6 +89,18 @@
       "description": "Portrait of an American man",
       "imageUrl": "https://images.unsplash.com/photo-1557862921-37829c790f19?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxhbWVyaWNhbiUyMG1hbiUyMHBvcnRyYWl0fGVufDB8fHx8MTc2MjU1MTAyNnww&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "american man portrait"
+    },
+    {
+      "id": "planning",
+      "description": "Student planning future on a map",
+      "imageUrl": "https://images.unsplash.com/photo-1521791136064-7986c2920216?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxwbGFubmluZyUyMGZ1dHVyZXxlbnwwfHx8fDE3NjMwNDExNTF8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "planning future"
+    },
+    {
+      "id": "saving",
+      "description": "Person putting money in a piggy bank",
+      "imageUrl": "https://images.unsplash.com/photo-1542384403-1817637e868d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxzYXZpbmclMjBtb25leXxlbnwwfHx8fDE3NjMwNDEyMTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "saving money"
     }
   ]
 }

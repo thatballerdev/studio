@@ -6,7 +6,7 @@ import { useUser } from '@/firebase';
 import { universityData } from '@/lib/university-data';
 import UniversityCard from '@/components/university-card';
 import { Button } from '@/components/ui/button';
-import { Loader2, ArrowRight, FileText, CheckCircle } from 'lucide-react';
+import { Loader2, ArrowRight, FileText, CheckCircle, Ship } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -25,6 +25,9 @@ export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
   const router = useRouter();
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+  // This is the Tally form for the Bridge Program. 
+  const bridgeProgramFormUrl = "https://tally.so/r/w2A61o";
 
   const OnboardingFormCard = () => (
     <motion.div
@@ -60,14 +63,53 @@ export default function DashboardPage() {
     </motion.div>
   );
 
+  const BridgeProgramCard = () => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: 'easeInOut', delay: 0.2 }}
+      className="bg-card rounded-2xl shadow-lg border border-border/60 p-8 md:p-12"
+    >
+        <div className="flex flex-col md:flex-row items-center text-center md:text-left gap-8">
+            <motion.div
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
+              className="bg-primary/10 text-primary rounded-full p-4 w-20 h-20 flex items-center justify-center shrink-0"
+            >
+              <Ship className="h-10 w-10" />
+            </motion.div>
+            <div>
+                <h2 className="text-2xl md:text-3xl font-bold font-heading mb-3">Need a Gap Year?</h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto md:mx-0 mb-6">
+                    Our Bridge Program is designed to help you prepare financially, meet language requirements, and strengthen your application. Turn your gap year into a launchpad for success.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <Button variant="secondary" asChild>
+                      <Link href={bridgeProgramFormUrl} target="_blank">
+                        Fill Bridge Program Form <ArrowRight className="ml-2 h-5 w-5" />
+                      </Link>
+                    </Button>
+                     <Button variant="outline" asChild>
+                        <Link href="/bridge-program">
+                            Learn More
+                        </Link>
+                    </Button>
+                </div>
+            </div>
+        </div>
+    </motion.div>
+  );
+
   if (isUserLoading) {
     return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
 
   return (
     <>
-      <div className="container mx-auto space-y-12">
+      <div className="container mx-auto space-y-8">
         <OnboardingFormCard />
+        
+        <BridgeProgramCard />
 
         <div>
           <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
