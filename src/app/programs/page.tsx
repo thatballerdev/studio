@@ -18,7 +18,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import ProgramCard from '@/components/program-card';
 import { courseCategories, programData } from '@/lib/program-data';
-import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X, ArrowLeft } from 'lucide-react';
+import { Search, SlidersHorizontal, Twitter, Linkedin, Facebook, X, ArrowLeft, PlusCircle } from 'lucide-react';
 import Logo from '@/components/logo';
 import { Input } from '@/components/ui/input';
 import type { FeaturedUniversity } from '@/lib/types';
@@ -189,11 +189,23 @@ export default function ProgramsPage() {
           <div>
             <h3 className="text-xl font-semibold mb-4">{filteredPrograms.length} Programs Found</h3>
             {filteredPrograms.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredPrograms.map((program) => (
-                  <ProgramCard key={program.courseId} program={program} />
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredPrograms.map((program) => (
+                    <ProgramCard key={program.courseId} program={program} />
+                  ))}
+                </div>
+                <div className="text-center mt-12 py-8 px-6 rounded-lg border-2 border-dashed border-border bg-card/50">
+                  <PlusCircle className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
+                  <h3 className="text-2xl font-bold font-heading">And many more programs!</h3>
+                  <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
+                    This is just a sample of what we offer. Sign up for a free account to get personalized matches based on your budget and goals.
+                  </p>
+                  <Button asChild size="lg" className="mt-6 font-bold" style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }}>
+                    <Link href="/signup">Get Started for Free</Link>
+                  </Button>
+                </div>
+              </>
             ) : (
               <div className="text-center py-16 px-6 rounded-lg border-2 border-dashed border-border bg-card">
                 <Search className="mx-auto h-12 w-12 text-muted-foreground" />
