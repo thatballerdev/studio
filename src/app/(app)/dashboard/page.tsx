@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
 
   // This is the Tally form for the Bridge Program. 
-  const bridgeProgramFormUrl = "https://tally.so/r/w2A61o";
+  const bridgeProgramFormUrl = "/bridge-program-form";
 
   const OnboardingFormCard = () => (
     <motion.div
@@ -85,7 +85,7 @@ export default function DashboardPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                     <Button variant="secondary" asChild>
-                      <Link href={bridgeProgramFormUrl} target="_blank">
+                      <Link href={bridgeProgramFormUrl}>
                         Fill Bridge Program Form <ArrowRight className="ml-2 h-5 w-5" />
                       </Link>
                     </Button>
