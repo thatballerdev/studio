@@ -140,6 +140,44 @@
         "annualCost",
         "programHighlights"
       ]
+    },
+    "Notification": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Notification",
+      "type": "object",
+      "description": "Represents a notification sent to a user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Notification."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user this notification is for."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the notification."
+        },
+        "message": {
+          "type": "string",
+          "description": "The main content of the notification."
+        },
+        "read": {
+          "type": "boolean",
+          "description": "Whether the user has read the notification."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of when the notification was created."
+        },
+        "link": {
+          "type": "string",
+          "description": "An optional URL to navigate to when the notification is clicked."
+        }
+      },
+      "required": ["id", "userId", "title", "message", "read", "createdAt"]
     }
   },
   "auth": {
@@ -164,6 +202,26 @@
               "description": "The unique identifier of the user."
             }
           ]
+        }
+      },
+      {
+        "path": "/users/{userId}/notifications/{notificationId}",
+        "definition": {
+            "entityName": "Notification",
+            "schema": {
+                "$ref": "#/entities/Notification"
+            },
+            "description": "Stores notifications for a specific user. Accessible only by that user.",
+            "params": [
+                {
+                    "name": "userId",
+                    "description": "The unique identifier of the user."
+                },
+                {
+                    "name": "notificationId",
+                    "description": "The unique identifier of the notification."
+                }
+            ]
         }
       },
       {

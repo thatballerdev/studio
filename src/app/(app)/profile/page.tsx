@@ -10,7 +10,7 @@ import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore'
 import { sendPasswordResetEmail, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { Check, Loader2, KeyRound } from 'lucide-react';
 
-import { useUser, useAuth, useFirestore } from '@/firebase';
+import { useUser, useAuth, useFirestore, useMemoFirebase } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -49,15 +49,23 @@ export default function ProfilePage() {
       phoneNumber: '',
     },
   });
+  
+  const userProfileRef = useMemoFirebase(() => {
+    if (user && db) {
+      return doc(db, 'users', user.uid);
+    }
+    return null;
+  }, [user, db]);
 
   useEffect(() => {
-    if (user && db) {
-      const unsub = onSnapshot(doc(db, 'users', user.uid), (doc) => {
+    if (userProfileRef) {
+      setLoadingProfile(true);
+      const unsub = onSnapshot(userProfileRef, (doc) => {
         if (doc.exists()) {
           const profileData = doc.data() as UserProfile;
           form.reset({
             fullName: profileData.fullName || profileData.name || '',
-            email: profileData.email || user.email || '',
+            email: profileData.email || user?.email || '',
             phoneNumber: profileData.phoneNumber || '',
           });
         }
@@ -67,7 +75,7 @@ export default function ProfilePage() {
     } else if (!isUserLoading) {
       setLoadingProfile(false);
     }
-  }, [user, isUserLoading, db, form]);
+  }, [userProfileRef, form, user, isUserLoading]);
 
 
   const onSubmit: SubmitHandler<ProfileFormValues> = async (data) => {

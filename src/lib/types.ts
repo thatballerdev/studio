@@ -1,5 +1,5 @@
 
-import type { FieldValue } from 'firebase/firestore';
+import type { FieldValue, Timestamp } from 'firebase/firestore';
 
 export interface UserProfile {
   uid: string;
@@ -55,4 +55,14 @@ export interface Program {
     easternEurope: { min: number; max: number };
     westernEurope: { min: number; max: number };
   };
+}
+
+export interface Notification {
+    id: string;
+    userId: string;
+    title: string;
+    message: string;
+    read: boolean;
+    createdAt: Date | Timestamp;
+    link?: string;
 }
