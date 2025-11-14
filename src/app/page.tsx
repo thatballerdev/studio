@@ -2,7 +2,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, BookOpen, CheckCircle, Heart, Twitter, Linkedin, Facebook, CalendarDays, Rocket, Plane, ShieldCheck, Briefcase, GitBranch } from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle, Heart, Twitter, Linkedin, Facebook, CalendarDays, Rocket, Plane, ShieldCheck, Briefcase, GitBranch, Instagram, Phone } from 'lucide-react';
 import Image from 'next/image';
 
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,24 @@ import {
 } from "@/components/ui/carousel"
 import UniversityCard from '@/components/university-card';
 import { ThemeToggle } from '@/components/theme-toggle';
+
+
+const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+  </svg>
+);
 
 
 export default function Home() {
@@ -148,6 +166,25 @@ export default function Home() {
           </div>
         </div>
       </header>
+
+       {/* Floating Social Bar */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 p-2 bg-card border-l border-y rounded-l-lg shadow-lg">
+        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
+          <WhatsAppIcon className="h-6 w-6 text-green-500" />
+        </a>
+        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
+          <Instagram className="h-6 w-6 text-pink-500" />
+        </a>
+        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
+          <Facebook className="h-6 w-6 text-blue-600" />
+        </a>
+        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
+          <Twitter className="h-6 w-6 text-sky-500" />
+        </a>
+         <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
+          <Phone className="h-6 w-6 text-foreground" />
+        </a>
+      </div>
 
       <main className="flex-1">
         {/* Hero Section */}
@@ -354,3 +391,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
