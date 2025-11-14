@@ -6,9 +6,9 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, onSnapshot, addDoc, collection } from 'firebase/firestore';
 import { sendPasswordResetEmail, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
-import { Check, Loader2, KeyRound } from 'lucide-react';
+import { Check, Loader2, KeyRound, BellPlus } from 'lucide-react';
 
 import { useUser, useAuth, useFirestore, useMemoFirebase } from '@/firebase';
 import { Button } from '@/components/ui/button';
@@ -40,6 +40,7 @@ export default function ProfilePage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [resetError, setResetError] = useState<string | null>(null);
   const [isReauthenticating, setIsReauthenticating] = useState(false);
+  const [isSendingTest, setIsSendingTest] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
@@ -136,6 +137,31 @@ export default function ProfilePage() {
     }
   }
 
+  const handleSendTestNotification = async () => {
+    if (!user || !db) {
+        toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to send a notification.' });
+        return;
+    }
+
+    setIsSendingTest(true);
+
+    try {
+        const notificationsColRef = collection(db, 'users', user.uid, 'notifications');
+        await addDoc(notificationsColRef, {
+            userId: user.uid,
+            title: 'Test Notification',
+            message: 'This is a test notification sent from your profile page.',
+            read: false,
+            createdAt: serverTimestamp(),
+        });
+        toast({ title: 'Notification Sent!', description: 'Check the bell icon in the header.' });
+    } catch (error: any) {
+        toast({ variant: 'destructive', title: 'Failed to Send', description: error.message });
+    } finally {
+        setIsSendingTest(false);
+    }
+  };
+
   if (isUserLoading || loadingProfile) {
     return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   }
@@ -197,6 +223,19 @@ export default function ProfilePage() {
             </CardContent>
         </Card>
 
+        <Card className="mt-8">
+            <CardHeader>
+                <CardTitle>Developer</CardTitle>
+                 <CardDescription>Actions for testing and development.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button variant="secondary" onClick={handleSendTestNotification} disabled={isSendingTest}>
+                    {isSendingTest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <BellPlus className="mr-2 h-4 w-4" />}
+                    Send Test Notification
+                </Button>
+            </CardContent>
+        </Card>
+
         <Dialog open={isResetDialogOpen} onOpenChange={setIsResetDialogOpen}>
             <DialogContent>
                 <DialogHeader>
@@ -231,3 +270,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    
