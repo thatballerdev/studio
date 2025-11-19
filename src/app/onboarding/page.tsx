@@ -26,8 +26,7 @@ export default function OnboardingRedirectPage() {
   return (
     <AuthCheck>
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
-        <div className="animate-pulse"><Logo width={150} height={60} /></div>
-        <p className="mt-4 text-muted-foreground">Redirecting to your dashboard...</p>
+        <p className="text-muted-foreground">Redirecting to your dashboard...</p>
       </div>
     </AuthCheck>
   );

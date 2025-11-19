@@ -87,7 +87,6 @@ export default function SignupPage() {
   if (isUserLoading || (!isUserLoading && user)) {
      return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="animate-pulse"><Logo width={150} height={60} /></div>
       </div>
     );
   }

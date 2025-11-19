@@ -102,7 +102,11 @@ export default function DashboardPage() {
   );
 
   if (isUserLoading) {
-    return <div className="flex justify-center items-center h-full"><div className="animate-pulse"><Logo width={150} height={60} /></div></div>;
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
   return (
