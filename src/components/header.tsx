@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
-import { LayoutGrid, LogOut, User, Menu, FileText, BookOpen, Bell, Check } from 'lucide-react';
+import { LayoutGrid, LogOut, User, Menu, FileText, BookOpen, Bell, Check, Clapperboard } from 'lucide-react';
 import { collection, doc, onSnapshot, query, orderBy, limit, writeBatch } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -172,6 +172,12 @@ export default function Header({ children }: { children?: React.ReactNode}) {
           Dashboard
         </Link>
       </SheetClose>
+       <SheetClose asChild>
+        <Link href="/webinars" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
+          <Clapperboard className="mr-2 h-5 w-5" />
+          Webinars
+        </Link>
+      </SheetClose>
       <SheetClose asChild>
         <Link href="/profile" className="flex items-center gap-2 p-3 rounded-md hover:bg-secondary font-medium">
           <User className="mr-2 h-5 w-5" />
@@ -241,6 +247,10 @@ export default function Header({ children }: { children?: React.ReactNode}) {
                   <DropdownMenuItem onClick={() => router.push('/dashboard')}>
                     <LayoutGrid className="mr-2 h-4 w-4" />
                     <span>Dashboard</span>
+                  </DropdownMenuItem>
+                   <DropdownMenuItem onClick={() => router.push('/webinars')}>
+                    <Clapperboard className="mr-2 h-4 w-4" />
+                    <span>Webinars</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => router.push('/profile')}>
                     <User className="mr-2 h-4 w-4" />
