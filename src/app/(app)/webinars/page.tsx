@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ArrowRight, Clapperboard, Video } from "lucide-react";
 import Link from "next/link";
 import { motion } from 'framer-motion';
+import { Badge } from "@/components/ui/badge";
 
 export default function WebinarsPage() {
 
