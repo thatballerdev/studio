@@ -4,8 +4,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/firebase';
-import { Loader2 } from 'lucide-react';
 import AuthCheck from '@/components/auth-check';
+import Logo from '@/components/logo';
 
 // This page is now a redirector.
 // Onboarding is handled by an external Tally form.
@@ -26,7 +26,7 @@ export default function OnboardingRedirectPage() {
   return (
     <AuthCheck>
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background">
-        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+        <div className="animate-pulse"><Logo width={150} height={60} /></div>
         <p className="mt-4 text-muted-foreground">Redirecting to your dashboard...</p>
       </div>
     </AuthCheck>

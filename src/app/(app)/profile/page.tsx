@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { doc, updateDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
+import { doc, updateDoc, serverTimestamp, onSnapshot, addDoc, collection } from 'firebase/firestore';
 import { sendPasswordResetEmail, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { Check, Loader2, KeyRound } from 'lucide-react';
 
@@ -19,6 +19,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import type { UserProfile } from '@/lib/types';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import Logo from '@/components/logo';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
@@ -137,7 +138,7 @@ export default function ProfilePage() {
   }
 
   if (isUserLoading || loadingProfile) {
-    return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+    return <div className="flex justify-center items-center h-full"><div className="animate-pulse"><Logo width={150} height={60} /></div></div>;
   }
   
   return (

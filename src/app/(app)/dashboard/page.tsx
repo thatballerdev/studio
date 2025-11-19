@@ -20,6 +20,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import Logo from '@/components/logo';
 
 export default function DashboardPage() {
   const { user, isUserLoading } = useUser();
@@ -101,7 +102,7 @@ export default function DashboardPage() {
   );
 
   if (isUserLoading) {
-    return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
+    return <div className="flex justify-center items-center h-full"><div className="animate-pulse"><Logo width={150} height={60} /></div></div>;
   }
 
   return (
