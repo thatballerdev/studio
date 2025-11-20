@@ -193,6 +193,13 @@ export default function Home() {
             <div className="container mx-auto text-left px-4 relative z-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                     <div className="animate-fade-up">
+                        <Badge 
+                            variant="outline" 
+                            className="mb-6 py-2 px-4 rounded-full border-accent text-accent font-semibold text-sm animate-fade-up"
+                            style={{ animationDelay: '100ms' }}
+                        >
+                            Your Journey to a Debt-Free Degree Starts Here
+                        </Badge>
                         <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-4 !leading-tight font-heading">
                             Study smart. Spend less. Graduate abroad.
                         </h1>
