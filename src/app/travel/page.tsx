@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -137,7 +138,7 @@ export default function TravelPage() {
                         P.S. While studying in Europe, it is relatively cheaper to explore the continent and have amazing vacations due to the seamless borders and extensive travel networks. A weekend trip from Prague to Berlin or from Lisbon to Madrid is often just a short, affordable train ride away. This is an unparalleled opportunity to experience dozens of cultures in a way that's much more difficult from other continents.
                     </p>
                 </motion.div>
-        </section>
+            </section>
 
         {/* How It Works Section */}
         <section id="get-started" className="py-20 md:py-28 bg-background">
@@ -234,3 +235,5 @@ export default function TravelPage() {
     </div>
   );
 }
+
+    
