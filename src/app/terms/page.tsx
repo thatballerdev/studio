@@ -38,6 +38,7 @@ export default function TermsOfServicePage() {
             <Link href="/about" className="text-foreground/70 hover:text-foreground transition-colors">About</Link>
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
+            <Link href="/travel" className="text-foreground/70 hover:text-foreground transition-colors">Travel</Link>
             <Link href="/bridge-program" className="text-foreground/70 hover:text-foreground transition-colors">Bridge Program</Link>
           </nav>
           <div className="ml-auto flex items-center gap-4">
