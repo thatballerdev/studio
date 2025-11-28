@@ -39,7 +39,6 @@ export default function PrivacyPolicyPage() {
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
             <Link href="/bridge-program" className="text-foreground/70 hover:text-foreground transition-colors">Bridge Program</Link>
-            <Link href="/travel" className="text-foreground/70 hover:text-foreground transition-colors">Travel</Link>
           </nav>
           <div className="ml-auto flex items-center gap-4">
             <ThemeToggle />
@@ -76,7 +75,7 @@ export default function PrivacyPolicyPage() {
             </p>
              <p className="mt-2 text-sm text-muted-foreground">Last Updated: {new Date().toLocaleDateString()}</p>
           </div>
-        </motion.section>
+        </section>
 
         <section className="py-20 md:py-28">
             <div className="container max-w-4xl">

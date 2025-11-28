@@ -72,7 +72,6 @@ export default function ProgramsPage() {
             <Link href="/programs" className="text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground/70 hover:text-foreground transition-colors">How it Works</Link>
             <Link href="/bridge-program" className="text-foreground/70 hover:text-foreground transition-colors">Bridge Program</Link>
-            <Link href="/travel" className="text-foreground/70 hover:text-foreground transition-colors">Travel</Link>
           </nav>
           <div className="ml-auto flex items-center gap-4">
             <ThemeToggle />

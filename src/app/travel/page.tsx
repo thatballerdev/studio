@@ -25,7 +25,7 @@ const features = [
 ];
 
 export default function TravelPage() {
-    const planningImage = PlaceHolderImages.find(p => p.id === 'planning');
+  const planningImage = PlaceHolderImages.find(p => p.id === 'planning');
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-body">

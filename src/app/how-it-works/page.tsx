@@ -40,7 +40,7 @@ const stepData = [
   {
     icon: ShieldCheck,
     title: "5. Smooth Arrival & Adaptation",
-    description: "Your support system doesn't disappear when you land. We are your partners on the ground. Our 'Smooth Arrival' service is designed to help you settle into your new life. We provide guidance on everything from opening a local bank account and getting health insurance to navigating public transport and finding a part-time job to cover living expenses. We're here to help you adapt and thrive, not just survive."
+    description: "Your support system doesn't disappear when you land. We are your partners on the ground. Our 'Smooth Arrival' service is designed to help you settle into your new life. We provide guidance on everything from opening a local bank account and gettin g health insurance to navigating public transport and finding a part-time job to cover living expenses. We're here to help you adapt and thrive, not just survive."
   },
   {
     icon: GitBranch,
@@ -64,7 +64,6 @@ export default function HowItWorksPage() {
             <Link href="/programs" className="text-foreground/70 hover:text-foreground transition-colors">Programs</Link>
             <Link href="/how-it-works" className="text-foreground transition-colors">How it Works</Link>
             <Link href="/bridge-program" className="text-foreground/70 hover:text-foreground transition-colors">Bridge Program</Link>
-            <Link href="/travel" className="text-foreground/70 hover:text-foreground transition-colors">Travel</Link>
           </nav>
           <div className="ml-auto flex items-center gap-4">
             <ThemeToggle />
