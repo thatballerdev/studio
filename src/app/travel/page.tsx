@@ -137,12 +137,12 @@ export default function TravelPage() {
               </motion.div>
               <motion.div initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true, amount: 0.5 }} transition={{ duration: 0.7, delay: 0.2 }}>
                 <Image
-                    src="https://images.unsplash.com/photo-1519677100203-a0e668c97487?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxldXJvcGUlMjB0cmF2ZWx8ZW58MHx8fHwxNzYzMDQwODUxfDA&ixlib=rb-4.1.0&q=80&w=1080"
-                    alt="A scenic view of a European city"
+                    src="https://images.unsplash.com/photo-1499856871958-5b9627545d1a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwYXJpc3xlbnwwfHx8fDE3NjQzNTYyOTR8MA&ixlib=rb-4.1.0&q=80&w=1080"
+                    alt="A scenic view of Paris"
                     width={600}
                     height={400}
                     className="rounded-2xl object-cover w-full h-full shadow-xl"
-                    data-ai-hint="europe travel"
+                    data-ai-hint="paris"
                   />
               </motion.div>
             </div>
