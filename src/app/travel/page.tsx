@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -10,6 +11,16 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useState } from 'react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -18,6 +29,7 @@ const fadeIn = {
 
 export default function TravelPage() {
     const travelImage = PlaceHolderImages.find(p => p.id === 'planning');
+    const [isWaitlistAlertOpen, setIsWaitlistAlertOpen] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground font-body">
@@ -65,10 +77,8 @@ export default function TravelPage() {
                   Get tailored vacation plans that fit your class schedule and budget, so you can explore the world while you study abroad, without the stress of planning.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button size="lg" asChild className="font-bold text-base" style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }}>
-                    <Link href="#waitlist">
+                  <Button size="lg" onClick={() => setIsWaitlistAlertOpen(true)} className="font-bold text-base" style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }}>
                       Join The Waitlist <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
                   </Button>
                 </div>
               </div>
@@ -163,11 +173,9 @@ export default function TravelPage() {
                         The Northway Travel Package is coming soon.
                     </p>
                     <div className="mt-8">
-                        <Button size="lg" asChild className="font-bold text-base" style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }}>
-                            <Link href="#">
+                        <Button size="lg" onClick={() => setIsWaitlistAlertOpen(true)} className="font-bold text-base" style={{ background: 'linear-gradient(90deg, #4DA1FF 0%, #0093E9 100%)' }}>
                             Join the waitlist to be the first to know when it launches
                             <ArrowRight className="ml-2 h-5 w-5" />
-                            </Link>
                         </Button>
                     </div>
                 </motion.div>
@@ -212,6 +220,23 @@ export default function TravelPage() {
             </div>
         </div>
       </footer>
+
+       {/* Waitlist Confirmation Dialog */}
+       <AlertDialog open={isWaitlistAlertOpen} onOpenChange={setIsWaitlistAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>You're on the list!</AlertDialogTitle>
+            <AlertDialogDescription>
+              Thanks for your interest! We'll notify you by email as soon as the Northway Travel Package is ready for launch.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction onClick={() => setIsWaitlistAlertOpen(false)}>
+                Awesome!
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
