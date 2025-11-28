@@ -75,7 +75,7 @@ export default function TermsOfServicePage() {
             </p>
              <p className="mt-2 text-sm text-muted-foreground">Last Updated: {new Date().toLocaleDateString()}</p>
           </div>
-        </section>
+        </motion.section>
 
         <section className="py-20 md:py-28">
             <div className="container max-w-4xl">
