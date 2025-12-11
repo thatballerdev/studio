@@ -45,14 +45,6 @@ export default function RootLayout({
             disableTransitionOnChange
         >
             <FirebaseClientProvider>
-            {/* Watermark Div */}
-            <div className="fixed inset-0 z-[200] flex items-center justify-center pointer-events-none">
-              <div className="text-center transform -rotate-45">
-                <p className="text-[8vw] md:text-[6vw] lg:text-[5rem] font-black tracking-widest uppercase text-black/5 dark:text-white/5 opacity-70 dark:opacity-100 whitespace-nowrap">
-                  Work In Progress
-                </p>
-              </div>
-            </div>
             {children}
             <Toaster />
             </FirebaseClientProvider>
