@@ -171,19 +171,7 @@ export default function Home() {
        {/* Floating Social Bar */}
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-2 p-2 bg-card border-l border-y rounded-l-lg shadow-lg">
         <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
-          <WhatsAppIcon className="h-6 w-6 text-green-500" />
-        </a>
-        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
           <Instagram className="h-6 w-6 text-pink-500" />
-        </a>
-        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
-          <Facebook className="h-6 w-6 text-blue-600" />
-        </a>
-        <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
-          <Twitter className="h-6 w-6 text-sky-500" />
-        </a>
-         <a href="#" className="p-2 rounded-md hover:bg-accent transition-colors">
-          <Phone className="h-6 w-6 text-foreground" />
         </a>
       </div>
 
